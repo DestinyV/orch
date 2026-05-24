@@ -78,4 +78,4 @@
 | test | `orch-spec/{req_id}/testing/diagrams/` | 闭环验证矩阵、覆盖率雷达图 |
 | archive | `orch-spec/spec/diagrams/` | 合并冲突关系图、规范演进时间线 |
 
-> 各阶段使用自己的 diagrams/ 目录，避免跨阶段文件冲突。design 阶段应优先检查 spec/diagrams/ 是否已有所需图（来自 spec），避免重复生成。
+> 各阶段独立输出到自己的 diagrams/ 目录，图表类型不同不交叉检查：spec=ER图/场景流程图/决策树；design=UML类图/时序图/状态图/组件图/部署图/用例图；contract=接口依赖图/响应结构图；task=任务依赖DAG/provides-consumes图；test=闭环验证矩阵。不存在跨阶段重复。
