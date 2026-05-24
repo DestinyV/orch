@@ -133,17 +133,17 @@ done
 
 # Agent A: 文档探索
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
-      prompt="扫描 CLAUDE.md/README.md/docs/ 提取架构约定和项目文档摘要。工具优先：使用 Skill('orch:scripts') 进行文件定位和关键词提取。输出到 project-context.md 的 ## 文档摘要 章节")
+      prompt="扫描 CLAUDE.md/README.md/docs/ 提取架构约定和项目文档摘要。工具优先：使用 Skill('orch:scripts') 进行文件定位和关键词提取。输出到 orch-spec/{req_id}/project-context.md 的 ## 文档摘要 章节")
 
 # Agent B: 历史需求探索（标准模式）
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
-      prompt="扫描 orch-spec/ 下最近 3-5 个已完成需求的 requirement.md，提取：1)常用数据模型 2)典型业务规则 3)命名惯例。输出到 project-context.md 的 ## 历史模式 章节")
+      prompt="扫描 orch-spec/ 下最近 3-5 个已完成需求的 requirement.md，提取：1)常用数据模型 2)典型业务规则 3)命名惯例。输出到 orch-spec/{req_id}/project-context.md 的 ## 历史模式 章节")
 
 # Agent C: 代码模式探索
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
-      prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索。输出到 project-context.md 的 ## 代码模式 章节")
+      prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索。输出到 orch-spec/{req_id}/project-context.md 的 ## 代码模式 章节")
 
-# 全部完成后，合并 A+B+C 三部分为完整 project-context.md
+# 全部完成后，合并 A+B+C 三部分为完整 orch-spec/{req_id}/project-context.md
 # 小型项目(<200文件)可保持串行
 
 # ═══ 步骤2-3: test-design + design（并行） ═══
