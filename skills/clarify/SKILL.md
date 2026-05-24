@@ -220,11 +220,7 @@ else:
 
 ## Phase 5: 桥接 spec
 
-澄清完成后，自动级联到 spec：
-
-```bash
-Skill("orch:spec", args="{requirement_desc} (clarification: orch-spec/{req_id}/spec/clarification.md)")
-```
+澄清完成后输出澄清报告，由 workflow 步骤0.5 级联到 spec。详见 `skills/workflow/SKILL.md` 步骤0.5。
 
 spec 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问卷。
 

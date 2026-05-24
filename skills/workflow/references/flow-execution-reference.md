@@ -219,6 +219,19 @@
 - `src/` — 源代码
 - `execution/execution-report.md`
 
+**并行执行协议**：
+1. 从 tasks.md 读取所有 Task 及其依赖，按拓扑排序划分批次（Batch 1 = 无依赖，Batch N = 依赖 Batch N-1）
+2. <HARD-GATE>standard 模式每批次必须包含对应的测试 Task，禁止将所有测试 Task 排在最后批次</HARD-GATE>
+3. 同批次无依赖 Task 并行启动（`run_in_background=true`），测试 Task 优先执行（RED 先于 GREEN）
+4. **批次内并行**：N 个无依赖 Task 必须启动 N 个子代理，禁止串行化到主上下文
+5. **批次间串行**：前一批全部完成后才能启动下一批
+6. **失败策略**：某 Task 失败阻塞同批次，不继续下一批
+7. **跨批次阻塞**：Task 标注 `consumes: API-X` 时，等待提供该 API 的批次全部完成后才可执行
+8. **多批次循环**：Task > 3 批次 → `Skill("orch:ralph-loop")` 接管
+9. **失败诊断**：同一 Task 失败 ≥ 2 次 → `Skill("orch:debug")` 因果追踪
+10. **子代理重试**：第1次失败补充上下文重试；2次均失败 → AskUserQuestion
+11. **最大并发数**：≤5，避免资源竞争
+
 **校验规则**：
 1. src/ 非空
 2. execution-report.md 存在

@@ -101,15 +101,9 @@ description: |
 
 - 用 AskUserQuestion 与用户确认推断结果（模式/数据库需求/SQL方言/快速或标准），结果写入 requirement.md 的「模式标签」。
 
-- **项目探索**（标准模式必须，三路并行，失败不阻塞）：
-  1. 文档探索 → `Agent(subagent_type="orch:code-explorer", prompt="扫描 CLAUDE.md/README.md/docs/ 提取架构约定和项目文档摘要。工具优先：使用 Skill('orch:scripts') 进行文件定位和关键词提取", run_in_background=true)`
-  2. 历史需求探索 → general-purpose subagent 扫描 orch-spec/ 最近3-5个需求
-  3. 代码模式探索 → `Agent(subagent_type="orch:code-explorer", prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索", run_in_background=true)`
-  - 小型项目(<200文件)保持串行
-  - 两路 code-explorer 可并行派遣（`run_in_background=true`）
-  - 探索过程使用 scripts 工具优先策略：搜索→Grep，批量过滤→Python3，兜底→Read
+- **项目探索**：由 workflow 步骤1 统一调度（文档/历史/代码三路并行）。详见 `skills/workflow/SKILL.md` 步骤1。
 
-**探索结果输出**：标准模式将三路探索结果写入 `orch-spec/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
+**探索结果输出**：标准模式将探索结果写入 `orch-spec/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
 
 **数据库需求判定**（当需求涉及数据持久化时）：
 ```

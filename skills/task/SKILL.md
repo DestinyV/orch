@@ -87,9 +87,7 @@ Task ≥6 个时生成任务依赖 DAG（拓扑排序批次图）；provides/con
 
 - 任务独立可实现 | 依赖关系准确无环 | 验收标准可验证 | Test Case 100%覆盖 | 无遗留TODO
 
-**TDD 任务排序规则**（standard 模式）：
-<HARD-GATE>每实现 Task 必须在同批次配测试 Task。禁止将所有测试 Task 集中到最后批次。</HARD-GATE>
-测试 Task 的 `depends_on` 指向同批次实现 Task，确保 RED→GREEN→REFACTOR→REVIEW 在同一批次完成。
+**TDD 任务配对**：每实现 Task 须在同批次配测试 Task（`depends_on` 指向实现 Task），确保 RED→GREEN→REFACTOR→REVIEW 同批次完成。批次校验由 workflow 步骤5 执行。
 
 - 任务不宜过大(>8h)或过小
 

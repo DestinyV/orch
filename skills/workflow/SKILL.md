@@ -105,15 +105,15 @@ done
 
 | 批次 | 步骤 | Agent | 调度策略 |
 |------|------|-------|---------|
-| 批次1 | 1 | `code-explorer` | 后台单 Agent，产出 project-context.md |
+| 批次1 | 1 | `code-explorer` ×3 | **三路并行**：A 技术栈 / B 目录结构 / C 项目约定，全部完成后合并 |
 | **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞** |
 | — | 3.5 | `contract-creator` | 批次2 全部完成后串行，仅 fullstack |
 | — | 4 | `tasker` | 批次2+3.5 完成后串行 |
 | 批次3 | 5 | `executor` ×N + `code-reviewer` | 批次4 完成后，同批次内无依赖 Task 并行启动 (for 循环 `run_in_background=true`) |
 | — | 5.5 | `exception` | 步骤5 子过程自动 |
-| — | 6 | `tester` + `test-verifier` | 步骤5+5.5 完成后串行 |
+| — | 6 | `tester` ×3 + `test-verifier` | **三路并行**：集成/E2E/性能同时跑，全部完成后 test-verifier 串行验证 |
 | — | 7 | `archiver` | 步骤6 完成后串行 |
-| — | 8 | evaluation | 步骤7 完成后自动：`context-budget` 估算 → `cost` 实记 → `diagnosis` 对比 |
+| — | 8 | evaluation | **双路并行**：`context-budget` 估算 + `cost` DB 实记同时跑，后合并诊断对比 |
 | — | 9 | `knowledge-curator` | 步骤8 完成后串行 |
 
 | 辅助 Agent | 触发条件 | 集成点 |
@@ -128,9 +128,23 @@ done
 ### 派遣代码块
 
 ```bash
-# ═══ 步骤1: spec — 项目探索补偿 ═══
+# ═══ 步骤1: spec — 项目探索补偿（三路并行） ═══
+<HARD-GATE>code-explorer 必须三路并行启动，不允许串行。全部完成后合并为完整 project-context.md。</HARD-GATE>
+
+# Agent A: 文档探索
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
-      prompt="扫描项目 CLAUDE.md/README.md/docs/ 提取：1)技术栈/框架版本 2)目录结构/分层 3)命名规范 4)API模式。输出 project-context.md")
+      prompt="扫描 CLAUDE.md/README.md/docs/ 提取架构约定和项目文档摘要。工具优先：使用 Skill('orch:scripts') 进行文件定位和关键词提取。输出到 project-context.md 的 ## 文档摘要 章节")
+
+# Agent B: 历史需求探索（标准模式）
+Agent(subagent_type="orch:code-explorer", run_in_background=true,
+      prompt="扫描 orch-spec/ 下最近 3-5 个已完成需求的 requirement.md，提取：1)常用数据模型 2)典型业务规则 3)命名惯例。输出到 project-context.md 的 ## 历史模式 章节")
+
+# Agent C: 代码模式探索
+Agent(subagent_type="orch:code-explorer", run_in_background=true,
+      prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索。输出到 project-context.md 的 ## 代码模式 章节")
+
+# 全部完成后，合并 A+B+C 三部分为完整 project-context.md
+# 小型项目(<200文件)可保持串行
 
 # ═══ 步骤2-3: test-design + design（并行） ═══
 Agent(subagent_type="orch:test-designer", run_in_background=true,
@@ -162,37 +176,50 @@ Agent(subagent_type="orch:tdd-guide",
 Agent(subagent_type="orch:exception",
       prompt="扫描 src/ 异常场景。1)项目约定扫描(异常类名/错误码/RPC模式) 2)识别场景(数据库/RPC/JSON/参数) 3)按约定生成异常代码。RPC→远程异常|业务→业务异常|参数→参数异常|系统→系统异常。禁止硬编码")
 
-# ═══ 步骤6: test ═══
-Agent(subagent_type="orch:tester",
-      prompt="对 src/ 高层测试: 1)环境检查 2)集成测试(Repository/Service/API协作) 3)E2E(npx playwright test --grep @e2e) 4)契约(fullstack验证字段/类型) 5)性能(P95<500ms) 6)闭环(TV→Test→Code→Result)。返回 testing-report.md")
+# ═══ 步骤6: test（三路并行） ═══
+<HARD-GATE>集成/E2E/性能三路必须并行启动，不允许串行。全部完成后由 test-verifier 统一验证。</HARD-GATE>
 
+# Agent A: 集成测试
+Agent(subagent_type="orch:tester", run_in_background=true,
+      prompt="执行集成测试(Repository/Service/API协作): 1)检查测试环境 2)npx vitest run --reporter=json 3)输出通过率/失败详情。写入 testing-report.md 的 ## 集成测试 章节")
+
+# Agent B: E2E 测试（前端/全栈）
+Agent(subagent_type="orch:tester", run_in_background=true,
+      prompt="执行 E2E 测试: 1)npx playwright test --grep @e2e --reporter=json 2)输出通过率/失败截图路径。写入 testing-report.md 的 ## E2E 测试 章节")
+
+# Agent C: 性能测试
+Agent(subagent_type="orch:tester", run_in_background=true,
+      prompt="执行性能测试: 1)运行性能用例 2)输出 P50/P95/P99 延迟 3)标记 >500ms 为失败。写入 testing-report.md 的 ## 性能测试 章节")
+
+# 全部完成后，统一验证
 Agent(subagent_type="orch:test-verifier",
-      prompt="对 testing-report.md 每条验收标准：独立运行验证命令(不接受历史输出)。标记 VERIFIED/PARTIAL/MISSING。拒绝'应该能工作'类声明")
+      prompt="读取 testing-report.md 全部章节，对每条验收标准独立运行验证命令(不接受历史输出)。标记 VERIFIED/PARTIAL/MISSING。拒绝'应该能工作'类声明")
 
 # ═══ 步骤7: archive ═══
 Agent(subagent_type="orch:archiver",
       prompt="归档到 orch-spec/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
 
-# ═══ 步骤8: evaluation（archive 后自动执行）═══
-<HARD-GATE>archive 完成后不允许跳过 evaluation。必须执行三段式：估算 → 实记 → 对比。</HARD-GATE>
-
-1. **估算**：`Skill("orch:context-budget", args="write-to-eval")` 读取各组件大小，写入 `.workflow-eval.json` 的 `stages[].estimated_tokens`
-2. **实记**：查询 `~/.claude/orch-costs/usage.db` 获取本需求所有实际 token 消耗，写入 `.workflow-eval.json` 的 `stages[].actual_tokens` 和 `token_usage`
-3. **对比**：逐阶段比较 `estimated_tokens` vs `actual_tokens`，偏差率写入 `diagnosis.偏差`，输出汇总诊断
-4. 更新 `.workflow-state.json` 中 `current_stage: evaluation, status: done`
-5. 上下文过大时，先调用 `context-budget` 审计 → `compact` 建议 compaction
+# ═══ 步骤8: evaluation（双路并行） ═══
+<HARD-GATE>archive 完成后不允许跳过 evaluation。context-budget 估算和 cost DB 查询必须并行启动。</HARD-GATE>
 
 ```bash
-# 估算
-context-budget --write-eval
+# ═══ 并行启动：估算 + 实记 ═══
 
-# 实记（DB 存在时）
-sqlite3 ~/.claude/orch-costs/usage.db "
-  SELECT stage, SUM(input_tokens) AS in_tok, SUM(output_tokens) AS out_tok,
-         ROUND(SUM(cost_usd), 4) AS cost
-  FROM usage WHERE project = '{project_name}'
-  GROUP BY stage ORDER BY stage;
-"
+# Agent A: context-budget 估算（后台）
+Agent(run_in_background=true,
+      prompt='Skill("orch:context-budget", args="write-to-eval") 读取各组件大小，写入 .workflow-eval.json 的 estimated_tokens')
+
+# Agent B: cost DB 实记（后台）
+Agent(run_in_background=true,
+      prompt="查询 ~/.claude/orch-costs/usage.db 获取本需求实际 token 消耗，写入 .workflow-eval.json 的 stages[].actual_tokens 和 token_usage")
+
+# ═══ 串行合并：对比诊断 ═══
+# A+B 都完成后：
+# 1. 读取 estimated_tokens 和 actual_tokens
+# 2. 逐阶段计算偏差率，写入 diagnosis.偏差
+# 3. 输出汇总诊断报告
+# 4. 更新 .workflow-state.json: current_stage=evaluation, status=done
+# 5. 上下文过大时 → context-budget 审计 → compact 建议
 ```
 
 # ═══ 步骤9: continuous-learning（evaluation 后自动执行）═══
