@@ -18,7 +18,7 @@
 | 6 | test | tester, test-verifier | src/ + tasks.md | tests/ + testing/testing-report.md | 步骤5 done | 串行 |
 | 7 | archive | archiver | spec/ + tests/ | orch-spec/spec/（已合并）+ archive-log.md | 步骤6 done + 全通过 | 串行 |
 | 8 | evaluation | — | .workflow-eval.json | 诊断报告 + context-budget + cost | 步骤7 done | 串行 |
-| 9 | continuous-learning | knowledge-curator | .workflow-eval.json | patterns/ + instincts/ + solutions/ | 步骤8 done | 串行 |
+| 9 | continuous-learning | knowledge-curator | .workflow-eval.json | orch-spec/patterns/ + orch-spec/user-preferences/ | 步骤8 done | 串行 |
 
 ### 辅助技能集成
 
@@ -348,8 +348,8 @@
 - `.workflow-eval.json` — 含 diagnosis
 
 **输出契约**（必须）：
-- patterns/ — 模式文件更新
-- user-preferences/preferences.json — always_check[] 更新
+- orch-spec/patterns/ — 模式文件更新
+- orch-spec/user-preferences/preferences.json — always_check[] 更新
 
 **输出契约**（可选）：
 - instincts/ — 新 instinct 文件

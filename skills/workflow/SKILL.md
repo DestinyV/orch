@@ -24,12 +24,12 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 
 ## 通用规则
 
-| 规则 | 策略 |
-|------|------|
-| 失败处理 | 自动重试 1 次；仍失败 → AskUserQuestion（重试/跳过/人工/降级） |
-| 状态持久化 | 每阶段完成后立即写入 `.workflow-state.json`，不依赖会话内存 |
+| 规则       | 策略                                                                           |
+| ---------- | ------------------------------------------------------------------------------ |
+| 失败处理   | 自动重试 1 次；仍失败 → AskUserQuestion（重试/跳过/人工/降级）                 |
+| 状态持久化 | 每阶段完成后立即写入 `.workflow-state.json`，不依赖会话内存                    |
 | Token 记录 | 每阶段完成后调用 `context-budget` 记录上下文消耗，记录到 `.workflow-eval.json` |
-| 上下文监控 | 阶段切换时检测上下文余量，不足时建议 compact 或精简后续步骤 |
+| 上下文监控 | 阶段切换时检测上下文余量，不足时建议 compact 或精简后续步骤                    |
 
 <HARD-GATE>禁止在正式流程前执行代码探索，由 spec 内部负责。</HARD-GATE>
 <HARD-GATE>禁止跳过阶段。即使已有 spec 目录，也必须从步骤0开始，由状态检测决定中断恢复。</HARD-GATE>
@@ -69,8 +69,6 @@ done
 
 ---
 
----
-
 ## 步骤1-9: 督导闭环
 
 每阶段：**前置校验 → 派遣 → 产出校验 → Token记录 → 纠正**。
@@ -80,18 +78,18 @@ done
 完成后写入 `.workflow-eval.json`（含 stage/tokens_input/tokens_output/duration），步骤8 汇总诊断。
 校验脚本和纠正措施详见 `references/flow-execution-reference.md`。
 
-| 步骤 | 前置 | 产出 | 记录 | 纠正 |
-|------|------|------|------|------|
-| 1 spec | state.json 已初始化 | requirement/scenarios/data/business/glossary 非空 + 模式标签 + 异常场景 | stage/stats/agent 写入 eval.json | 缺失回溯 |
-| 2-3 parallel | scenarios 含 TEST-VERIFY | test-spec非空+fixtures可解析 / design.md含架构+组件+决策 | stage/stats/agent×2 写入 eval.json | 缺失重新派遣 |
-| 3.5 contract | design done + fullstack | contract.md + review-report无blocking | stage/stats 写入 eval.json | blocking修复后重审 |
-| 4 task | design.md 存在 | tasks.md 每Task有 provides/consumes/验收标准/DAG | stage/stats 写入 eval.json | 补全后继续 |
-| 5 execute | tasks.md存在 + TDD出口验证 | src/非空 + execution-report.md + TDD四阶段日志(RED/GREEN/REFACTOR/REVIEW) | stage/batch_stats 写入 eval.json | 回溯/补测试/拆批次 |
-| 5.5 exception | 后端/全栈自动 | 异常代码生成 | — | — |
-| 6 test | src/存在 + report存在 | testing-report.md存在 + E2E执行 | stage/stats/agent×2 写入 eval.json | 失败回execute |
-| 7 archive | 全部测试通过 | 主规范已合并 + archive-log.md | stage/stats 写入 eval.json | 失败回溯 |
-| **8 evaluation** | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
-| **9 continuous-learning** | evaluation done | pattern-index.json 更新 + instincts | — | — |
+| 步骤                      | 前置                                  | 产出                                                                      | 记录                               | 纠正               |
+| ------------------------- | ------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- | ------------------ |
+| 1 spec                    | state.json 已初始化                   | requirement/scenarios/data/business/glossary 非空 + 模式标签 + 异常场景   | stage/stats/agent 写入 eval.json   | 缺失回溯           |
+| 2-3 parallel              | scenarios 含 TEST-VERIFY              | test-spec非空+fixtures可解析 / design.md含架构+组件+决策                  | stage/stats/agent×2 写入 eval.json | 缺失重新派遣       |
+| 3.5 contract              | design done + fullstack               | contract.md + review-report无blocking                                     | stage/stats 写入 eval.json         | blocking修复后重审 |
+| 4 task                    | design.md 存在                        | tasks.md 每Task有 provides/consumes/验收标准/DAG                          | stage/stats 写入 eval.json         | 补全后继续         |
+| 5 execute                 | tasks.md存在 + TDD出口验证            | src/非空 + execution-report.md + TDD四阶段日志(RED/GREEN/REFACTOR/REVIEW) | stage/batch_stats 写入 eval.json   | 回溯/补测试/拆批次 |
+| 5.5 exception             | 后端/全栈自动                         | 异常代码生成                                                              | —                                  | —                  |
+| 6 test                    | src/存在 + report存在                 | testing-report.md存在 + E2E执行                                           | stage/stats/agent×2 写入 eval.json | 失败回execute      |
+| 7 archive                 | 全部测试通过                          | 主规范已合并 + archive-log.md                                             | stage/stats 写入 eval.json         | 失败回溯           |
+| 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
+| 9 continuous-learning | evaluation done | orch-spec/patterns/ + preferences.json 更新 | — | — |
 
 <HARD-GATE>步骤8(evaluation)和步骤9(continuous-learning)不可跳过。archive完成后必须自动执行。</HARD-GATE>
 
@@ -103,27 +101,27 @@ done
 
 ### 派遣索引
 
-| 批次 | 步骤 | Agent | 调度策略 |
-|------|------|-------|---------|
-| 批次1 | 1 | `code-explorer` ×3 | **三路并行**：A 技术栈 / B 目录结构 / C 项目约定，全部完成后合并 |
-| **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞** |
-| — | 3.5 | `contract-creator` | 批次2 全部完成后串行，仅 fullstack |
-| — | 4 | `tasker` | 批次2+3.5 完成后串行 |
-| 批次3 | 5 | `executor` ×N + `code-reviewer` | 批次4 完成后，同批次内无依赖 Task 并行启动 (for 循环 `run_in_background=true`) |
-| — | 5.5 | `exception` | 步骤5 子过程自动 |
-| — | 6 | `tester` ×3 + `test-verifier` | **三路并行**：集成/E2E/性能同时跑，全部完成后 test-verifier 串行验证 |
-| — | 7 | `archiver` | 步骤6 完成后串行 |
-| — | 8 | evaluation | **双路并行**：`context-budget` 估算 + `cost` DB 实记同时跑，后合并诊断对比 |
-| — | 9 | `knowledge-curator` | 步骤8 完成后串行 |
+| 批次      | 步骤    | Agent                                  | 调度策略                                                                       |
+| --------- | ------- | -------------------------------------- | ------------------------------------------------------------------------------ |
+| 批次1     | 1       | `code-explorer` ×3                     | **三路并行**：A 技术栈 / B 目录结构 / C 项目约定，全部完成后合并               |
+| **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞**                           |
+| —         | 3.5     | `contract-creator`                     | 批次2 全部完成后串行，仅 fullstack                                             |
+| —         | 4       | `tasker`                               | 批次2+3.5 完成后串行                                                           |
+| 批次3     | 5       | `executor` ×N + `code-reviewer`        | 批次4 完成后，同批次内无依赖 Task 并行启动 (for 循环 `run_in_background=true`) |
+| —         | 5.5     | `exception`                            | 步骤5 子过程自动                                                               |
+| —         | 6       | `tester` ×3 + `test-verifier`          | **三路并行**：集成/E2E/性能同时跑，全部完成后 test-verifier 串行验证           |
+| —         | 7       | `archiver`                             | 步骤6 完成后串行                                                               |
+| —         | 8       | evaluation                             | **双路并行**：`context-budget` 估算 + `cost` DB 实记同时跑，后合并诊断对比     |
+| —         | 9       | `knowledge-curator`                    | 步骤8 完成后串行                                                               |
 
-| 辅助 Agent | 触发条件 | 集成点 |
-|-----------|---------|--------|
-| `socratic-clarifier` | 模糊度 > 0.2 | clarify |
-| `tracer` | Task 失败 ≥ 2 次 | execute |
-| `e2e-runner` | 前端/全栈 E2E | test |
-| `loop-operator` | Task > 3 批次 | execute |
-| `planner` | 用户要求 | design |
-| `tdd-guide` | standard 模式, 每批次审查TDD四阶段日志, 不满足驳回 | execute 每批次 | | execute 启动 |
+| 辅助 Agent           | 触发条件                                           | 集成点         |
+| -------------------- | -------------------------------------------------- | -------------- |
+| `socratic-clarifier` | 模糊度 > 0.2                                       | clarify        |
+| `tracer`             | Task 失败 ≥ 2 次                                   | execute        |
+| `e2e-runner`         | 前端/全栈 E2E                                      | test           |
+| `loop-operator`      | Task > 3 批次                                      | execute        |
+| `planner`            | 用户要求                                           | design         |
+| `tdd-guide` | standard 模式, 每批次审查TDD四阶段日志, 不满足驳回 | execute 每批次 |
 
 ### 派遣代码块
 
@@ -164,7 +162,7 @@ Agent(subagent_type="orch:tasker",
 # ═══ 步骤5: execute（每Task独立子代理并行） ═══
 for task in $(python3 -c "import json;tasks=json.load(open('orch-spec/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
   Agent(subagent_type="orch:executor", run_in_background=true,
-        prompt="TDD: RED(写测试确认FAIL)->GREEN(最少代码PASS)->REFACTOR(优化保PASS)->REVIEW(lint/type/覆盖>=85%/无伪代码)。出口验证: 任一不满足阻塞。Git+Trailers(Constraint/Rejected/Spec)")
+        prompt="<HARD-GATE>禁止编造测试结果。每阶段必须执行命令并将stdout粘贴为证据。RED: 运行测试确认FAIL粘贴失败输出; GREEN: 运行测试确认PASS粘贴通过输出; REFACTOR: 再次运行确认全部PASS; REVIEW: 运行lint+typecheck+coverage粘贴结果。出口验证: TDD四阶段日志缺任一个命令输出则驳回。Git+Trailers(Constraint/Rejected/Spec)")
 done
 
 # TDD监督派遣
@@ -181,15 +179,21 @@ Agent(subagent_type="orch:exception",
 
 # Agent A: 集成测试
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行集成测试(Repository/Service/API协作): 1)检查测试环境 2)npx vitest run --reporter=json 3)输出通过率/失败详情。写入 orch-spec/{req}/testing/testing-report.md 的 ## 集成测试 章节")
+      prompt="<HARD-GATE>禁止分析代码后编造测试结果。必须先执行测试命令，将命令原文和stdout粘贴到报告中。</HARD-GATE>
+运行集成测试: 1)确认测试命令(go test ./... -v -count=1 或 npx vitest run --reporter=json) 2)执行命令，将完整stdout作为 ```bash 代码块粘贴 3)从命令输出中提取PASS/FAIL/覆盖率统计 4)基于命令输出写报告，禁止基于代码阅读写报告。
+出口验证: 报告含命令原文+stdout代码块; 无'经分析''推测''应该'等推断措辞。写入 orch-spec/{req}/testing/testing-report.md ## 集成测试")
 
 # Agent B: E2E 测试（前端/全栈）
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行 E2E 测试: 1)npx playwright test --grep @e2e --reporter=json 2)输出通过率/失败截图路径。写入 orch-spec/{req}/testing/testing-report.md 的 ## E2E 测试 章节")
+      prompt="<HARD-GATE>禁止分析代码后编造测试结果。必须先执行测试命令，将命令原文和stdout粘贴到报告中。</HARD-GATE>
+运行 E2E 测试: 1)确认命令(npx playwright test --grep @e2e --reporter=json) 2)执行命令，完整stdout粘贴 3)提取通过率/失败截图路径 4)基于命令输出写报告，禁止基于代码阅读写报告。
+出口验证: 报告含命令原文+stdout代码块; 无推断措辞。写入 orch-spec/{req}/testing/testing-report.md ## E2E 测试")
 
 # Agent C: 性能测试
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行性能测试: 1)运行性能用例 2)输出 P50/P95/P99 延迟 3)标记 >500ms 为失败。写入 orch-spec/{req}/testing/testing-report.md 的 ## 性能测试 章节")
+      prompt="<HARD-GATE>禁止分析代码后编造测试结果。必须先执行测试命令，将命令原文和stdout粘贴到报告中。</HARD-GATE>
+运行性能测试: 1)确认测试命令 2)执行命令，完整stdout粘贴 3)提取P50/P95/P99延迟标记>500ms为失败 4)基于命令输出写报告，禁止基于代码阅读写报告。
+出口验证: 报告含命令原文+stdout代码块; 无推断措辞。写入 orch-spec/{req}/testing/testing-report.md ## 性能测试")
 
 # 全部完成后，统一验证
 Agent(subagent_type="orch:test-verifier",
@@ -199,42 +203,35 @@ Agent(subagent_type="orch:test-verifier",
 Agent(subagent_type="orch:archiver",
       prompt="归档到 orch-spec/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
 
-# ═══ 步骤8: evaluation（双路并行） ═══
-<HARD-GATE>archive 完成后不允许跳过 evaluation。context-budget 估算和 cost DB 查询必须并行启动。</HARD-GATE>
+# ═══ 步骤8: evaluation（双路并行，三维度九指标） ═══
+<HARD-GATE>archive 完成后不允许跳过 evaluation。</HARD-GATE>
+# 成功度: 阶段完成率/Agent派遣/用户干预/HARD-GATE触发/回退 — 数据源 eval.json
+# 效率:   并行利用/批次并发/阶段耗时比/Token效率 — 数据源 eval.json + cost DB
+# 质量:   覆盖率(≥85%)/审查通过(≥80)/规范一致性/归档冲突(≤3) — 数据源 execute+reviewer+archive
 
-```bash
-# ═══ 并行启动：估算 + 实记 ═══
-
-# Agent A: context-budget 估算（后台）
+# Agent A: context-budget 估算
 Agent(run_in_background=true,
-      prompt='Skill("orch:context-budget", args="write-to-eval") 读取各组件大小，写入 orch-spec/{req}/.workflow-eval.json 的 estimated_tokens')
+      prompt='Skill("orch:context-budget", args="write-to-eval") 写入 orch-spec/{req}/.workflow-eval.json 的 estimated_tokens')
 
-# Agent B: cost DB 实记（后台）
+# Agent B: cost DB 实记
 Agent(run_in_background=true,
-      prompt="查询 ~/.claude/orch-costs/usage.db 获取本需求实际 token 消耗，写入 orch-spec/{req}/.workflow-eval.json 的 stages[].actual_tokens 和 token_usage")
+      prompt="查询 ~/.claude/orch-costs/usage.db 写入 orch-spec/{req}/.workflow-eval.json 的 actual_tokens 和 token_usage")
 
-# ═══ 串行合并：对比诊断 ═══
-# A+B 都完成后：
-# 1. 读取 estimated_tokens 和 actual_tokens
-# 2. 逐阶段计算偏差率，写入 diagnosis.偏差
-# 3. 输出汇总诊断报告
-# 4. 更新 .workflow-state.json: current_stage=evaluation, status=done
-# 5. 上下文过大时 → context-budget 审计 → compact 建议
-```
+# A+B完成后: 逐阶段对比 estimated vs actual → 写入 diagnosis.偏差
+# 按三维度评分(✅/⚠️/❌) → 写入 diagnosis.成功度/效率/质量 + 建议[] + score(0-100)
+# 更新 .workflow-state.json: current_stage=evaluation, status=done
 
-# ═══ 步骤9: continuous-learning（evaluation 后自动执行）═══
-<HARD-GATE>evaluation 完成后不允许跳过 continuous-learning。必须执行知识沉淀。</HARD-GATE>
+# ═══ 步骤9: continuous-learning（四维知识沉淀） ═══
+<HARD-GATE>evaluation 完成后不允许跳过。learnings[] 为空时不允许标记 status=completed。</HARD-GATE>
+# 用户纠正: clarify追问轮数→always_check[] / 否决决策→rejected_approaches[] / 手动改代码→corrections → preferences.json+patterns/
+# 流程效率: 瓶颈阶段→bottlenecks[] / 重复Task→task_sizing / 并行失效→concurrency → preferences.json
+# 质量模式: code-reviewer高频→quality / test失败类型→testing / archive冲突→naming → patterns/
+# 项目约定: design ADR→architecture / exception模式→exception_patterns / tech_stack → patterns/+preferences.json
 
-1. 读取 `.workflow-eval.json` 中的 diagnosis
-2. 派遣 `knowledge-curator` 提取模式、更新 instincts
-3. 更新 `.workflow-state.json` 中 `current_stage: knowledge, status: done`
-4. 全部完成后更新 `.workflow-state.json` 中 `status: completed`
-
-```bash
 Agent(subagent_type="orch:knowledge-curator",
-      prompt="知识复利：读取 .workflow-eval.json 和 .workflow-state.json，从 evaluation 诊断中提取可复用模式。1)沉淀到 patterns/ 2)更新 instincts 3)刷新 preferences.json")
-```
-```
+      prompt="从 .workflow-eval.json 提取知识四维度: 1)events[type=user_intervention]→用户纠正 2)stages[耗时>50%]→瓶颈 3)diagnosis[覆盖率<85%/审查<80]→质量 4)design ADR+exception→项目约定。写入 orch-spec/patterns/ 和 orch-spec/user-preferences/preferences.json。eval.json 追加 learnings[]")
+
+# 全部完成后: .workflow-state.json → status: completed
 
 ## 中断恢复
 
@@ -253,16 +250,16 @@ Agent(subagent_type="orch:knowledge-curator",
 
 ## 关键约束
 
-| ✅ 必须 | ❌ 禁止 |
-|---------|--------|
-| 状态实时持久化（含Token） | HARD-GATE 失败静默跳过 |
-| 卡点暂停用户确认 | 模式锁定后更改 |
-| project_mode 步骤0 锁定 | 跨越入口直接调用下游 Skill |
+| ✅ 必须                    | ❌ 禁止                     |
+| ------------------------- | -------------------------- |
+| 状态实时持久化（含Token） | HARD-GATE 失败静默跳过     |
+| 卡点暂停用户确认          | 模式锁定后更改             |
+| project_mode 步骤0 锁定   | 跨越入口直接调用下游 Skill |
 
 ## 参考文档
 
-| 文档 | 场景 |
-|------|------|
+| 文档                                     | 场景                                      |
+| ---------------------------------------- | ----------------------------------------- |
 | `references/flow-execution-reference.md` | 全部阶段输入/输出契约、校验脚本、纠正措施 |
-| `references/workflow-data-schema.md` | JSON 数据格式 |
-| `../../commands/start-dev.md` | 流程步骤表 |
+| `references/workflow-data-schema.md`     | JSON 数据格式                             |
+| `../../commands/start-dev.md`            | 流程步骤表                                |

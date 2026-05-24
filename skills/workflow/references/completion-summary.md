@@ -12,7 +12,7 @@
 - 源代码:   src/                                     [execute done]
 - 测试代码: tests/                                   [test done]
 - 归档规范: orch-spec/spec/                           [archive done]
-- 知识沉淀: skills/continuous-learning/patterns/     [continuous-learning done]
+- 知识沉淀: orch-spec/patterns/     [continuous-learning done]
 
 📊 耗时统计:
 | 阶段 | 状态 | 耗时 | Token消耗 | Agent |
