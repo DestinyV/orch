@@ -57,7 +57,7 @@ Creates/updates instinct YAML files in the project-scoped instincts directory.
 ```yaml
 ---
 id: hardgate-missing-spec-handling
-trigger: "when spec-dev/{req}/spec/ 核心文件缺失"
+trigger: "when orch-spec/{req}/spec/ 核心文件缺失"
 confidence: 0.65
 domain: "workflow"
 source: "session-observation"

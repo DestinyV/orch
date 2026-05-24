@@ -5,7 +5,7 @@
 ```markdown
 # 测试规范 - {功能名称}
 
-**来源**：spec-dev/{req}/spec/
+**来源**：orch-spec/{req}/spec/
 **TEST-VERIFY 总数**：{N}
 **Test Case 总数**：{M}
 

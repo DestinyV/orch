@@ -63,7 +63,7 @@ standard模式下耗时<5min → 项目可能更适合quick模式
 
 ## 输出格式
 
-评估报告写入 `spec-dev/{requirement_id}/.workflow-eval.json`:
+评估报告写入 `orch-spec/{requirement_id}/.workflow-eval.json`:
 
 ```json
 {

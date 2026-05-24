@@ -231,7 +231,7 @@ jq '.key' → python3 -c "json.load" → 兜底 Read
 
 **调用方式**：
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/scripts/scripts/extract-test-verify.py" spec-dev/{req}/spec/scenarios/
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/scripts/scripts/extract-test-verify.py" orch-spec/{req}/spec/scenarios/
 bash "${CLAUDE_PLUGIN_ROOT}/skills/scripts/scripts/validate-outputs.sh" file1 file2 --dir dir1 dir2
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/scripts/scripts/scan-exceptions.py" src/
 ```

@@ -1,7 +1,7 @@
 # eval-summary
 
 # 从 .workflow-eval.json 生成评估摘要
-# 用法: bash eval-summary.sh spec-dev/{requirement_id}/.workflow-eval.json
+# 用法: bash eval-summary.sh orch-spec/{requirement_id}/.workflow-eval.json
 
 set -e
 

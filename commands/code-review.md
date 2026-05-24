@@ -48,7 +48,7 @@ Agent(
 
 检查代码是否符合 SDD+TDD 设计的架构约定：
 
-- 引用 `spec-dev/{req}/design/design.md` 中的关键架构决策
+- 引用 `orch-spec/{req}/design/design.md` 中的关键架构决策
 - **组件一致性**：是否按设计实现了关键模块
 - **命名规范**：文件/函数/类型命名是否符合规范
 - **结构合规**：目录结构、模块划分是否与设计一致
@@ -128,7 +128,7 @@ gh pr diff <NUMBER>
 
 ### Phase 2 — CONTEXT
 
-1. 读取项目规范：`CLAUDE.md`, `spec-dev/{req}/design/design.md`
+1. 读取项目规范：`CLAUDE.md`, `orch-spec/{req}/design/design.md`
 2. 审查工件：检查 `.claude/prds/`, `.claude/plans/`, `.claude/reviews/`
 3. PR 意图：解析 PR description 中的目标、关联 issue、测试计划
 4. 变更分类：按类型分组（source, test, config, docs）

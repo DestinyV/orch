@@ -3,8 +3,8 @@ name: test
 description: |
   测试验证和闭环（Test阶段）
 
-  输入：src/ + spec-dev/{requirement_desc_abstract}/
-  输出：tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md
+  输入：src/ + orch-spec/{requirement_desc_abstract}/
+  输出：tests/ + orch-spec/{requirement_desc_abstract}/testing/testing-report.md
 
   功能：对execute生成的代码进行全面审查和高层测试（集成、E2E、性能），执行闭环验证。
   单元测试由execute的TDD流程保证，此处不重复。
@@ -28,7 +28,7 @@ description: |
 对生成代码进行静态分析、高层测试和闭环验证。
 
 **流程**：静态分析 → 代码审查 → 高层测试 → 闭环验证 → 生成报告
-**输出**：`spec-dev/{requirement_desc_abstract}/testing/testing-report.md`
+**输出**：`orch-spec/{requirement_desc_abstract}/testing/testing-report.md`
 
 ## 工作流程
 
@@ -47,7 +47,7 @@ Agent(
   prompt="
     对 execute 生成的代码进行全面审查：
     - 源代码: src/
-    - 设计规范: spec-dev/{requirement_desc_abstract}/design/design.md
+    - 设计规范: orch-spec/{requirement_desc_abstract}/design/design.md
     
     检查维度：
     - 功能完整性：所有 Task 验收标准是否满足
@@ -74,8 +74,8 @@ Agent(
   prompt="
     对代码执行高层测试：
     - 源代码: src/
-    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec.md
-    - 接口契约: spec-dev/{requirement_desc_abstract}/contract/contract.md（fullstack时）
+    - 测试规范: orch-spec/{requirement_desc_abstract}/tests/test-spec.md
+    - 接口契约: orch-spec/{requirement_desc_abstract}/contract/contract.md（fullstack时）
 
     执行：
     1. 环境检查（Playwright/pytest/go test/mvn test）
@@ -162,7 +162,7 @@ Agent(
 
 standard 模式下生成闭环验证矩阵图（TEST-VERIFY→Test Case→Code→Result 关系图）和覆盖率雷达图（Unit/Integration/E2E/Browser/Performance 5维分布）。
 
-模板见 `templates/diagrams/`，输出到 `spec-dev/{req_id}/testing/diagrams/`。
+模板见 `templates/diagrams/`，输出到 `orch-spec/{req_id}/testing/diagrams/`。
 
 ### 生成测试报告
 

@@ -3,8 +3,8 @@ name: execute
 description: |
   代码执行实现（Execute阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/tasks/tasks.md + tests/（test-design 输出）
-  输出：src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md
+  输入：orch-spec/{requirement_desc_abstract}/tasks/tasks.md + tests/（test-design 输出）
+  输出：src/ + orch-spec/{requirement_desc_abstract}/execution/execution-report.md
 
   功能：根据任务列表和设计，通过子代理逐个实现代码，并进行多阶段审查（规范/质量）。
   采用git-worktree隔离每个Task，支持全栈开发的各类代码实现。
@@ -24,7 +24,7 @@ RED ──→ GREEN ──→ REFACTOR ──→ REVIEW
 ```
 每阶段有明确出口验证标准，不满足则阻塞在该阶段。
 
-**输出**：`spec-dev/{requirement_desc_abstract}/execution/execution-report.md`
+**输出**：`orch-spec/{requirement_desc_abstract}/execution/execution-report.md`
 
 ## 何时使用
 
@@ -215,7 +215,7 @@ Agent(
   prompt="
     对 Task-{id} 的代码进行**规范审查**：
     - 代码路径: src/{task-files}
-    - 设计规范: spec-dev/{requirement_desc_abstract}/design/design.md
+    - 设计规范: orch-spec/{requirement_desc_abstract}/design/design.md
     
     检查维度：
     1. 代码是否符合 design.md 的架构规范

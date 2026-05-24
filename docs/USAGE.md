@@ -21,7 +21,7 @@
 | 阶段 | Skill | 输入 | 输出 | Agent |
 |------|-------|------|------|-------|
 | 编排 | `/workflow` | 需求描述 | .workflow-state.json | 无（主控Skill） |
-| 规范 | `/spec` | 需求描述 | `spec-dev/{id}/spec/` | code-explorer |
+| 规范 | `/spec` | 需求描述 | `orch-spec/{id}/spec/` | code-explorer |
 | 测试设计 | `/test-design` | spec | `tests/test-spec.md + fixtures.json + test-*.template` | test-designer |
 | 设计 | `/design` | spec | `design/design.md` | code-architect |
 | 接口契约 | `/contract` | design.md | `contract.md + review-report.md` | contract-creator |
@@ -54,7 +54,7 @@
 
 ## 中断恢复
 
-workflow 自动维护 `spec-dev/{id}/.workflow-state.json`，会话中断后重新执行 `/workflow` 即可从中断处继续。
+workflow 自动维护 `orch-spec/{id}/.workflow-state.json`，会话中断后重新执行 `/workflow` 即可从中断处继续。
 
 ## 关键约束
 

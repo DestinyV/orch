@@ -148,6 +148,6 @@ def extract_metrics(eval_file):
 
 
 if __name__ == '__main__':
-    eval_file = sys.argv[1] if len(sys.argv) > 1 else 'spec-dev/default/.workflow-eval.json'
+    eval_file = sys.argv[1] if len(sys.argv) > 1 else 'orch-spec/default/.workflow-eval.json'
     result = extract_metrics(eval_file)
     print(json.dumps(result, ensure_ascii=False, indent=2))

@@ -19,7 +19,7 @@ description: 保存当前会话状态 + 工作流状态到 session 文件和 .wo
 ### Step 1: 收集上下文
 - 读取所有本会话中修改的文件（git diff 或会话记忆）
 - 收集工作流状态：`.workflow-state.json`
-- 检查当前 spec-dev/ 进度
+- 检查当前 orch-spec/ 进度
 - 记录错误/失败及其根因
 
 ### Step 2: 保存工作流状态
@@ -28,7 +28,7 @@ description: 保存当前会话状态 + 工作流状态到 session 文件和 .wo
 
 ```bash
 # 检查当前状态文件
-test -f spec-dev/*/.workflow-state.json && echo "State file found" || echo "No workflow state (non-workflow session)"
+test -f orch-spec/*/.workflow-state.json && echo "State file found" || echo "No workflow state (non-workflow session)"
 ```
 
 如有状态文件，记录当前 stage 和进度百分比。
@@ -130,5 +130,5 @@ Does this look accurate? Anything to correct or add before we close?
 | 文件 | 用途 | 位置 |
 |------|------|------|
 | Session 文件 | 会话上下文 | `~/.claude/session-data/YYYY-MM-DD-<id>-session.tmp` |
-| 工作流状态 | 阶段状态 | `spec-dev/{req}/.workflow-state.json` |
-| 工作流评估 | Token/效果 | `spec-dev/{req}/.workflow-eval.json` |
+| 工作流状态 | 阶段状态 | `orch-spec/{req}/.workflow-state.json` |
+| 工作流评估 | Token/效果 | `orch-spec/{req}/.workflow-eval.json` |

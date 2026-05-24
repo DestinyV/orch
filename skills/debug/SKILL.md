@@ -58,7 +58,7 @@ Agent(
 
 ## 输出
 
-输出到 `spec-dev/{req_id}/testing/debug-report.md`。
+输出到 `orch-spec/{req_id}/testing/debug-report.md`。
 
 
 ## Constraints

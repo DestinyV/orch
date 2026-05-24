@@ -100,7 +100,7 @@ The skill files (`SKILL.md`) are standard Markdown and can be loaded as context 
 
 **Solution**:
 1. First run `/spec` to generate spec specifications
-2. Ensure spec files were generated to `spec-dev/{requirement_desc_abstract}/spec/` directory
+2. Ensure spec files were generated to `orch-spec/{requirement_desc_abstract}/spec/` directory
 
 ---
 

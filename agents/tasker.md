@@ -24,7 +24,7 @@ color: green
 
 读取 design.md（和 contract.md），将设计分解为可独立实现的编码任务，定义每个 Task 的交付物、依赖、验收标准，规划并行批次。
 
-**输出**：`spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
+**输出**：`orch-spec/{requirement_desc_abstract}/tasks/tasks.md`
 
 ## 工作流程
 

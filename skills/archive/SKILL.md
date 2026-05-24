@@ -3,8 +3,8 @@ name: archive
 description: |
   规范归档和优化（Archive阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/spec/ + spec-dev/spec/（主规范目录）
-  输出：spec-dev/spec/（已合并的主规范）
+  输入：orch-spec/{requirement_desc_abstract}/spec/ + orch-spec/spec/（主规范目录）
+  输出：orch-spec/spec/（已合并的主规范）
 
   功能：在测试通过后，将需求的规范文档合并集成到主规范中，建立企业级规范库。
 ---
@@ -16,7 +16,7 @@ description: |
 将测试通过的需求规范合并到企业级主规范库中。
 
 **核心流程**：分析 → 对标 → 合并去重 → 一致性检查 → 归档报告。
-**输出路径**：`spec-dev/spec/`（主规范目录）
+**输出路径**：`orch-spec/spec/`（主规范目录）
 
 ## 何时使用
 
@@ -34,11 +34,11 @@ description: |
 
 ```bash
 Agent(subagent_type="orch:code-explorer",
-      prompt="扫描 spec-dev/{req}/src/ 提取实际实现的接口路由/数据模型/组件结构:
+      prompt="扫描 orch-spec/{req}/src/ 提取实际实现的接口路由/数据模型/组件结构:
               1) API 路由和响应格式 vs contract.md
               2) 数据模型字段 vs data-models.md
               3) 组件目录结构 vs design.md 组件树
-              输出差异报告到 spec-dev/{req}/testing/spec-code-diff.md")
+              输出差异报告到 orch-spec/{req}/testing/spec-code-diff.md")
 ```
 
 **不匹配处理**：
@@ -57,8 +57,8 @@ Agent(
   subagent_type="orch:archiver",
   prompt="
     对新需求规范进行归档合并：
-    - 新需求 spec: spec-dev/{requirement_desc_abstract}/spec/
-    - 主规范: spec-dev/spec/（若不存在则创建）
+    - 新需求 spec: orch-spec/{requirement_desc_abstract}/spec/
+    - 主规范: orch-spec/spec/（若不存在则创建）
     
     执行以下任务：
     1. 场景对标：逐场景比对，分类为完全新增/部分重叠/完全覆盖/冲突
@@ -77,11 +77,11 @@ Agent(
 
 存在 DECISION_NEEDED 冲突时生成合并冲突关系图（冲突类型+严重度+影响范围）；主规范存在且本次有新增时生成规范演进时间线。
 
-模板见 `templates/diagrams/`，输出到 `spec-dev/spec/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
+模板见 `templates/diagrams/`，输出到 `orch-spec/spec/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
 
 ### 生成归档报告
 
-基于 archiver 返回结果，输出到 `spec-dev/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
+基于 archiver 返回结果，输出到 `orch-spec/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
 
 ### 可选清理
 
@@ -103,16 +103,16 @@ Agent(
 
 <HARD-GATE>归档不是只写 log，必须实际合并 spec 文件到主规范库。log 仅用于审计，不能替代合并。</HARD-GATE>
 
-1. **场景合并** — 复制 `scenarios/*.md` 到主规范 `spec-dev/spec/scenarios/`。场景ID冲突时追加新Case到末尾（不覆盖），完全重复则跳过。
-2. **数据模型合并** — 新增实体/字段追加到 `spec-dev/spec/data-models.md`。
-3. **业务规则合并** — 新增规则追加到 `spec-dev/spec/business-rules.md`。规则冲突标注 `DECISION_NEEDED`。
-4. **术语合并** — 新术语追加到 `spec-dev/spec/glossary.md`。重复跳过。
+1. **场景合并** — 复制 `scenarios/*.md` 到主规范 `orch-spec/spec/scenarios/`。场景ID冲突时追加新Case到末尾（不覆盖），完全重复则跳过。
+2. **数据模型合并** — 新增实体/字段追加到 `orch-spec/spec/data-models.md`。
+3. **业务规则合并** — 新增规则追加到 `orch-spec/spec/business-rules.md`。规则冲突标注 `DECISION_NEEDED`。
+4. **术语合并** — 新术语追加到 `orch-spec/spec/glossary.md`。重复跳过。
 5. **标记已归档** — 在原需求 `requirement.md` 追加 `archived: true`。
 
 ## Output
 
-- `spec-dev/spec/` — 已合并的主规范库（场景/模型/规则/术语）
-- `spec-dev/spec/archive-log.md` — 归档日志（审计用）
+- `orch-spec/spec/` — 已合并的主规范库（场景/模型/规则/术语）
+- `orch-spec/spec/archive-log.md` — 归档日志（审计用）
 
 ## 关键约束
 

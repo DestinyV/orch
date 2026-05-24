@@ -4,14 +4,14 @@
 
 ```
 ✅ SDD+TDD 工作流完成！
-- 规范文档: spec-dev/{requirement_id}/spec/          [按状态]
-- 设计方案: spec-dev/{requirement_id}/design/        [design done]
-- 测试规范: spec-dev/{requirement_id}/tests/         [test-design done]
-- 接口契约: spec-dev/{requirement_id}/contract/  [contract done]
-- 任务清单: spec-dev/{requirement_id}/tasks/         [task done]
+- 规范文档: orch-spec/{requirement_id}/spec/          [按状态]
+- 设计方案: orch-spec/{requirement_id}/design/        [design done]
+- 测试规范: orch-spec/{requirement_id}/tests/         [test-design done]
+- 接口契约: orch-spec/{requirement_id}/contract/  [contract done]
+- 任务清单: orch-spec/{requirement_id}/tasks/         [task done]
 - 源代码:   src/                                     [execute done]
 - 测试代码: tests/                                   [test done]
-- 归档规范: spec-dev/spec/                           [archive done]
+- 归档规范: orch-spec/spec/                           [archive done]
 - 知识沉淀: skills/continuous-learning/patterns/     [continuous-learning done]
 
 📊 耗时统计:

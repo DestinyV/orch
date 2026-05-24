@@ -11,7 +11,7 @@ const { readStdinSync } = require('../lib/stdin');
 const HOOK_ID = 'stop:evaluate';
 
 function checkIncompleteWorkflows(rootDir) {
-  const specDev = path.join(rootDir, 'spec-dev');
+  const specDev = path.join(rootDir, 'orch-spec');
   if (!fs.existsSync(specDev)) return;
 
   const entries = fs.readdirSync(specDev);

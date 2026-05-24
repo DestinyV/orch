@@ -2,7 +2,7 @@
 
 ## 阶段1: 读取和分析需求
 
-读取 `spec-dev/{req}/spec/` 目录，提取 TEST-VERIFY 验收标准和 Mock Data。分析每个场景的 WHEN/THEN 条件、数据模型、业务规则。
+读取 `orch-spec/{req}/spec/` 目录，提取 TEST-VERIFY 验收标准和 Mock Data。分析每个场景的 WHEN/THEN 条件、数据模型、业务规则。
 
 ## 阶段2: 测试用例设计
 

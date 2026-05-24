@@ -22,7 +22,7 @@ def extract_api_list(design_md):
     return result
 
 if __name__ == '__main__':
-    design_file = sys.argv[1] if len(sys.argv) > 1 else 'spec-dev/default/design/design.md'
+    design_file = sys.argv[1] if len(sys.argv) > 1 else 'orch-spec/default/design/design.md'
     if not os.path.isfile(design_file):
         print(json.dumps({'error': f'File not found: {design_file}'}))
         sys.exit(1)

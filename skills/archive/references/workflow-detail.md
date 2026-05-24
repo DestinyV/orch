@@ -2,7 +2,7 @@
 
 ## 步骤1: 分析需求Spec和主规范
 
-读取 `spec-dev/{requirement_desc_abstract}/spec/` 各文件（README.md、scenarios/、data-models.md、business-rules.md、glossary.md），提取场景数、模型、规则、术语。检查 `spec-dev/spec/` 是否存在（存在→合并，不存在→初始化）。
+读取 `orch-spec/{requirement_desc_abstract}/spec/` 各文件（README.md、scenarios/、data-models.md、business-rules.md、glossary.md），提取场景数、模型、规则、术语。检查 `orch-spec/spec/` 是否存在（存在→合并，不存在→初始化）。
 
 ## 步骤2: 场景对标和差异分析
 
@@ -21,7 +21,7 @@
 
 ## 步骤5: 生成归档报告
 
-输出到 `spec-dev/spec/archive-log.md`：
+输出到 `orch-spec/spec/archive-log.md`：
 - 归档内容（需求ID、日期、场景/模型/规则/术语数）
 - 合并结果（各维度新增数）
 - 一致性检查结果

@@ -6,7 +6,7 @@
   "observe": {
     "preToolUse": {
       "description": "Before each tool call, check if workflow state exists and log progress",
-      "script": "if [ -f \"spec-dev/{requirement_desc_abstract}/.workflow-state.json\" ]; then echo \"Workflow active\"; fi"
+      "script": "if [ -f \"orch-spec/{requirement_desc_abstract}/.workflow-state.json\" ]; then echo \"Workflow active\"; fi"
     },
     "postToolUse": {
       "description": "After tool call, record compact suggestion metrics",

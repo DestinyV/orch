@@ -38,7 +38,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 
 ## 步骤0: 初始化
 
-1. 接收需求 → 检查 `spec-dev/` 下 `.workflow-state.json`（存在则中断恢复）
+1. 接收需求 → 检查 `orch-spec/` 下 `.workflow-state.json`（存在则中断恢复）
 2. 自动推断 project-mode：
 
 | 需求特征 | 推断 |
@@ -67,7 +67,7 @@ Skill("orch:clarify", args="{requirement_desc}")
 <HARD-GATE>检测到未完成状态时提示用户，不允许静默退出。</HARD-GATE>
 
 ```bash
-for f in spec-dev/*/.workflow-state.json; do
+for f in orch-spec/*/.workflow-state.json; do
   [ -f "$f" ] || continue
   STATUS=$(python3 -c "import json; d=json.load(open('$f')); print(d.get('status',''))" 2>/dev/null)
   [ "$STATUS" = "in_progress" ] && echo "[INFO] 工作流进行中: $(basename $(dirname $f))"
@@ -139,10 +139,10 @@ Agent(subagent_type="orch:code-explorer", run_in_background=true,
 
 # ═══ 步骤2-3: test-design + design（并行） ═══
 Agent(subagent_type="orch:test-designer", run_in_background=true,
-      prompt="读取 spec-dev/{req}/spec/scenarios/ 中 TEST-VERIFY，生成：1)test-spec.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
+      prompt="读取 orch-spec/{req}/spec/scenarios/ 中 TEST-VERIFY，生成：1)test-spec.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
 
 Agent(subagent_type="orch:code-architect", run_in_background=true,
-      prompt="基于 spec-dev/{req}/spec/ 架构设计：1)技术栈/模块边界 2)架构模式(Layered/Clean/Hexagonal) 3)组件(文件路径/职责/接口/依赖) 4)数据流/构建序列。后端额外：数据库/服务依赖/可观测性。前端额外：构建/CDN/性能监控。输出 design.md")
+      prompt="基于 orch-spec/{req}/spec/ 架构设计：1)技术栈/模块边界 2)架构模式(Layered/Clean/Hexagonal) 3)组件(文件路径/职责/接口/依赖) 4)数据流/构建序列。后端额外：数据库/服务依赖/可观测性。前端额外：构建/CDN/性能监控。输出 design.md")
 
 # ═══ 步骤3.5: contract（fullstack） ═══
 Agent(subagent_type="orch:contract-creator",
@@ -153,7 +153,7 @@ Agent(subagent_type="orch:tasker",
       prompt="读取 design.md 拆解 Task 清单。每Task标注：id/名称/描述/provides/consumes/depends_on/验收标准/预估文件。依赖DAG无环。输出 tasks.md")
 
 # ═══ 步骤5: execute（每Task独立子代理并行） ═══
-for task in $(python3 -c "import json;tasks=json.load(open('spec-dev/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
+for task in $(python3 -c "import json;tasks=json.load(open('orch-spec/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
   Agent(subagent_type="orch:executor", run_in_background=true,
         prompt="TDD: RED(写测试确认FAIL)->GREEN(最少代码PASS)->REFACTOR(优化保PASS)->REVIEW(lint/type/覆盖>=85%/无伪代码)。出口验证: 任一不满足阻塞。Git+Trailers(Constraint/Rejected/Spec)")
 done
@@ -176,7 +176,7 @@ Agent(subagent_type="orch:test-verifier",
 
 # ═══ 步骤7: archive ═══
 Agent(subagent_type="orch:archiver",
-      prompt="归档到 spec-dev/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
+      prompt="归档到 orch-spec/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
 
 # ═══ 步骤9: continuous-learning ═══
 Agent(subagent_type="orch:knowledge-curator",
@@ -185,7 +185,7 @@ Agent(subagent_type="orch:knowledge-curator",
 
 ## 中断恢复
 
-检测 `spec-dev/{req}/.workflow-state.json`：
+检测 `orch-spec/{req}/.workflow-state.json`：
 
 1. 无文件 → 新需求，步骤0开始
 2. JSON 校验失败 → 默认从上一 done 阶段续接

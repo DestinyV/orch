@@ -96,6 +96,6 @@ graph TD
 ## 输出规范
 
 - 每图一个 `.md` 文件，含解释性标题和简要说明
-- 输出到 `spec-dev/{req_id}/{stage}/diagrams/` 目录
+- 输出到 `orch-spec/{req_id}/{stage}/diagrams/` 目录
 - design.md 等主文档中引用图文件路径
 - 快速模式下跳过所有图生成

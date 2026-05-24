@@ -4,7 +4,7 @@
 
 ## 输出目录
 
-`spec-dev/{req}/design/sql/`
+`orch-spec/{req}/design/sql/`
 
 ## 模板结构
 

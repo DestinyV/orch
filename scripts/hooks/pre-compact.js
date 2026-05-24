@@ -10,7 +10,7 @@ const { isHookEnabled } = require('../lib/hook-flags');
 const HOOK_ID = 'precompact:state';
 
 function saveStateBeforeCompact(rootDir) {
-  const specDev = path.join(rootDir, 'spec-dev');
+  const specDev = path.join(rootDir, 'orch-spec');
   if (!fs.existsSync(specDev)) return;
 
   const entries = fs.readdirSync(specDev);

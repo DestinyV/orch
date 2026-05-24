@@ -3,8 +3,8 @@ name: design
 description: |
   代码设计规划（Design阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/spec/
-  输出：spec-dev/{requirement_desc_abstract}/design/design.md
+  输入：orch-spec/{requirement_desc_abstract}/spec/
+  输出：orch-spec/{requirement_desc_abstract}/design/design.md
 
   功能：根据规范进行架构和技术设计，生成设计方案。
   核心原则：数据库先行 + 接口契约驱动。
@@ -41,7 +41,7 @@ description: |
 
 ### 需求理解
 
-**优先读取**：`spec-dev/{req_id}/project-context.md`（spec 阶段1的探索结果），直接复用，避免重复扫描。
+**优先读取**：`orch-spec/{req_id}/project-context.md`（spec 阶段1的探索结果），直接复用，避免重复扫描。
 
 **项目上下文提取**：若 project-context.md 不存在，使用 `Skill("orch:scripts")` 调用 `extract-project-context.py` 从项目根目录提取技术栈/分层/命名约定。
 
@@ -52,8 +52,8 @@ Agent(
   subagent_type="orch:code-architect",
   prompt="
     对需求进行架构蓝图分析：
-    - 规范文档: spec-dev/{requirement_desc_abstract}/spec/
-    - 项目上下文: spec-dev/{requirement_desc_abstract}/project-context.md（如存在）
+    - 规范文档: orch-spec/{requirement_desc_abstract}/spec/
+    - 项目上下文: orch-spec/{requirement_desc_abstract}/project-context.md（如存在）
     - 设计图标签: 读取 spec/requirement.md 的「设计图」标签，按 diagram-trigger-rules.md 阈值生成对应 UML 图
     
     执行：
@@ -64,7 +64,7 @@ Agent(
        - 用途：根据设计图标签和阈值判断生成（类图/时序图/状态图/组件图/部署图/用例图）
        - 语法：Mermaid
        - 模板：templates/diagrams/（use-case.md, class-diagram.md, sequence-diagram.md, state-diagram.md, component-diagram.md, deployment-diagram.md）
-       - 输出路径：spec-dev/{requirement_desc_abstract}/design/diagrams/
+       - 输出路径：orch-spec/{requirement_desc_abstract}/design/diagrams/
        - 附加：在每个图中标注与 spec/ 场景的关系
     
     后端/全栈额外：分析服务依赖/数据库方案/日志可观测性/上线回滚
@@ -85,8 +85,8 @@ Agent(
   subagent_type="orch:code-architect",
   prompt="
     对设计执行架构审查：
-    - 设计方案: spec-dev/{requirement_desc_abstract}/design/design.md
-    - 规范文档: spec-dev/{requirement_desc_abstract}/spec/
+    - 设计方案: orch-spec/{requirement_desc_abstract}/design/design.md
+    - 规范文档: orch-spec/{requirement_desc_abstract}/spec/
 
     审查维度：
     1. 架构合理性：所选模式是否适合当前需求规模
@@ -167,12 +167,12 @@ Agent(
 | 组件图 | ≥3 架构分层 |
 | 部署图 | fullstack + needs-database |
 
-使用 Mermaid 语法，模板见 `templates/diagrams/`，输出到 `spec-dev/{req_id}/design/diagrams/`。UML 标准参考 `references/uml-diagram-guide.md`。
+使用 Mermaid 语法，模板见 `templates/diagrams/`，输出到 `orch-spec/{req_id}/design/diagrams/`。UML 标准参考 `references/uml-diagram-guide.md`。
 
 **生成后校验**：
 ```bash
 # 验证输出文件存在且非空
-ls -la spec-dev/{req_id}/design/diagrams/
+ls -la orch-spec/{req_id}/design/diagrams/
 ```
 - 匹配预期图类型数，若少于预期需要原因说明
 - 每个 .md 文件须包含有效的 Mermaid 代码块

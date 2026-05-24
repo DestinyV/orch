@@ -3,8 +3,8 @@ name: contract
 description: |
   接口契约定义与审查（Api-Contract 阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/design/design.md
-  输出：spec-dev/{requirement_desc_abstract}/contract/contract.md + review-report.md
+  输入：orch-spec/{requirement_desc_abstract}/design/design.md
+  输出：orch-spec/{requirement_desc_abstract}/contract/contract.md + review-report.md
 
   功能：将设计阶段的接口清单转化为正式的接口契约文档，进行审查。
   确保前后端接口定义一致、命名规范、类型匹配、错误处理完整。
@@ -46,8 +46,8 @@ Agent(
   subagent_type="orch:contract-creator",
   prompt="
     执行接口契约定义与六维度审查：
-    - 设计文档: spec-dev/{requirement_desc_abstract}/design/design.md
-    - 规范文档: spec-dev/{requirement_desc_abstract}/spec/
+    - 设计文档: orch-spec/{requirement_desc_abstract}/design/design.md
+    - 规范文档: orch-spec/{requirement_desc_abstract}/spec/
     - 现有项目 API 约定（从 design.md 提取）
     
     执行：
@@ -73,7 +73,7 @@ Agent(
 
 API 端点 ≥8 个时生成接口依赖图（前后端调用关系）；响应 JSON 嵌套 ≥3 层时生成响应结构图（字段树形结构）。
 
-模板见 `templates/diagrams/`，输出到 `spec-dev/{req_id}/contract/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
+模板见 `templates/diagrams/`，输出到 `orch-spec/{req_id}/contract/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
 
 ## 关键约束
 

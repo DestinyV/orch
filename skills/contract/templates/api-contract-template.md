@@ -2,7 +2,7 @@
 
 **版本**: v1
 **生成日期**: YYYY-MM-DD
-**关联设计**: [spec-dev/{requirement_desc_abstract}/design/design.md](../design/design.md)
+**关联设计**: [orch-spec/{requirement_desc_abstract}/design/design.md](../design/design.md)
 
 ## 现有项目约定
 

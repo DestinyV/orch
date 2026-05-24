@@ -3,8 +3,8 @@ name: task
 description: |
   任务列表生成（Task阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/design/design.md
-  输出：spec-dev/{requirement_desc_abstract}/tasks/tasks.md
+  输入：orch-spec/{requirement_desc_abstract}/design/design.md
+  输出：orch-spec/{requirement_desc_abstract}/tasks/tasks.md
 
   功能：将设计方案转换为详细的代码级别任务列表，为开发者定义具体的实现任务和交付物。
   支持全栈开发的各类任务拆解（前端、后端、数据库、微服务等）。
@@ -16,7 +16,7 @@ description: |
 
 根据设计方案，分解为可独立实现的编码任务，规划并行执行计划。
 
-**输出**：`spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
+**输出**：`orch-spec/{requirement_desc_abstract}/tasks/tasks.md`
 
 ## 何时使用
 
@@ -54,10 +54,10 @@ Agent(
   subagent_type="orch:tasker",
   prompt="
     将设计方案拆解为编码任务列表：
-    - 设计文档: spec-dev/{requirement_desc_abstract}/design/design.md
-    - 接口契约: spec-dev/{requirement_desc_abstract}/contract/contract.md（fullstack时）
-    - 规范文档: spec-dev/{requirement_desc_abstract}/spec/（提取项目约定和TEST-VERIFY）
-    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec.md（如存在）
+    - 设计文档: orch-spec/{requirement_desc_abstract}/design/design.md
+    - 接口契约: orch-spec/{requirement_desc_abstract}/contract/contract.md（fullstack时）
+    - 规范文档: orch-spec/{requirement_desc_abstract}/spec/（提取项目约定和TEST-VERIFY）
+    - 测试规范: orch-spec/{requirement_desc_abstract}/tests/test-spec.md（如存在）
     
     执行：
     1. 分析架构和项目约定
@@ -77,7 +77,7 @@ Agent(
 
 Task ≥6 个时生成任务依赖 DAG（拓扑排序批次图）；provides/consumes ≥3 对时生成接口依赖图。
 
-模板见 `templates/diagrams/`，输出到 `spec-dev/{req_id}/tasks/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
+模板见 `templates/diagrams/`，输出到 `orch-spec/{req_id}/tasks/diagrams/`。触发规则见 `../design/references/diagram-trigger-rules.md`。
 
 ### 生成文档
 

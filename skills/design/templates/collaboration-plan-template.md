@@ -5,7 +5,7 @@
 ## 文件路径
 
 ```
-spec-dev/{requirement_desc_abstract}/collaboration-plan.md
+orch-spec/{requirement_desc_abstract}/collaboration-plan.md
 ```
 
 ---

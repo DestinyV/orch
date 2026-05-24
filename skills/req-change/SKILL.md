@@ -3,7 +3,7 @@ name: req-change
 description: |
   需求变更管理。在规范/设计/编码完成后需求发生变更时，进行影响分析和增量调整。
   输入：变更描述 + 目标需求 ID
-  输出：spec-dev/{req_id}/changelogs/change-{ts}.md + 更新后的 spec/design/tasks
+  输出：orch-spec/{req_id}/changelogs/change-{ts}.md + 更新后的 spec/design/tasks
 ---
 
 # req-change — 需求变更管理
@@ -22,9 +22,9 @@ description: |
 
 ### Phase 0: 前置验证
 
-<HARD-GATE>必须先扫描 spec-dev/ 确认目标需求，不允许跳过。</HARD-GATE>
+<HARD-GATE>必须先扫描 orch-spec/ 确认目标需求，不允许跳过。</HARD-GATE>
 
-1. 扫描 `spec-dev/` 下列出的所有需求目录
+1. 扫描 `orch-spec/` 下列出的所有需求目录
 2. 读取每个需求的 `.workflow-state.json`，获取状态（done/in_progress/pending）、当前阶段、scenario/Task 数量
 3. 用 AskUserQuestion 让用户确认要修改哪个需求：
 
@@ -71,7 +71,7 @@ description: |
 
 ### Phase 3: 变更记录
 
-输出 `spec-dev/{req_id}/changelogs/change-{timestamp}.md`：
+输出 `orch-spec/{req_id}/changelogs/change-{timestamp}.md`：
 
 ```markdown
 # 变更记录
@@ -86,13 +86,13 @@ description: |
 
 ## Output
 
-- `spec-dev/{req_id}/changelogs/change-{ts}.md`
+- `orch-spec/{req_id}/changelogs/change-{ts}.md`
 - 更新后的 spec/design/tasks 文件
 - 受影响 Task 状态更新
 
 ## Constraints
 
-- ✅ 必须先扫描 spec-dev/ 确认目标需求
+- ✅ 必须先扫描 orch-spec/ 确认目标需求
 - ❌ 不直接修改代码（引导用户重新执行 Task）
 - ✅ 变更记录必须完整（原值→新值）
 - ❌ 不能静默更新（必须展示影响报告）

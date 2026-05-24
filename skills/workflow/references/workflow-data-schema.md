@@ -2,7 +2,7 @@
 
 ## .workflow-state.json
 
-流程状态追踪，路径 `spec-dev/{requirement_desc_abstract}/.workflow-state.json`：
+流程状态追踪，路径 `orch-spec/{requirement_desc_abstract}/.workflow-state.json`：
 
 ```json
 {

@@ -62,15 +62,15 @@
 |-------|------|------|------|
 | **scripts** | 工具 | 工具优先策略：Grep/Bash/Glob/Edit 优先完成文件搜索/提取/编辑/校验，仅脚本无法处理时兜底Read | 脚本化文件操作 |
 | **workflow** | 编排器 | 统一入口+流程编排：自动检测模式、串联9个Skill、HARD-GATE卡点、中断恢复 | .workflow-state.json + 全流程自动执行 |
-| **spec** | Spec | 需求分析和规范生成，输出BDD格式规范文档（WHEN-THEN格式） | spec-dev/{requirement_desc_abstract}/spec/ |
+| **spec** | Spec | 需求分析和规范生成，输出BDD格式规范文档（WHEN-THEN格式） | orch-spec/{requirement_desc_abstract}/spec/ |
 | **test-design** | Test-Design | 从TEST-VERIFY生成测试规范、数据和框架代码 | test-spec.md + fixtures.json + test-*.template |
-| **design** | Design | 根据规范进行代码设计规划，生成架构和技术方案 | spec-dev/{requirement_desc_abstract}/design/design.md |
+| **design** | Design | 根据规范进行代码设计规划，生成架构和技术方案 | orch-spec/{requirement_desc_abstract}/design/design.md |
 | **contract** | Api-Contract | 接口契约定义与审查（fullstack强制） | contract.md + review-report.md |
-| **task** | Task | 将设计转换为代码级别任务列表，支持前后端、数据库、微服务任务 | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
-| **execute** | Execute | 通过子代理执行任务，支持多语言多框架，进行规范+质量两阶段审查，TDD流程保证单元测试。**v2.3.1+**：使用git-worktree为每个Task创建隔离工作环境，确保修复循环的安全性、可追踪性和可恢复性 | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
+| **task** | Task | 将设计转换为代码级别任务列表，支持前后端、数据库、微服务任务 | orch-spec/{requirement_desc_abstract}/tasks/tasks.md |
+| **execute** | Execute | 通过子代理执行任务，支持多语言多框架，进行规范+质量两阶段审查，TDD流程保证单元测试。**v2.3.1+**：使用git-worktree为每个Task创建隔离工作环境，确保修复循环的安全性、可追踪性和可恢复性 | src/ + orch-spec/{requirement_desc_abstract}/execution/execution-report.md |
 | **exception** | Exception | 异常场景识别 + 项目约定扫描 + 异常代码生成（后端/全栈，零硬编码） | src/** (添加异常处理) |
-| **test** | Test | 高层测试（集成/E2E/性能测试）和闭环验证 | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
-| **archive** | Archive | 规范归档和优化，将需求规范通过场景拆分合并到主规范中 | spec-dev/spec/ (已合并的主规范) |
+| **test** | Test | 高层测试（集成/E2E/性能测试）和闭环验证 | tests/ + orch-spec/{requirement_desc_abstract}/testing/testing-report.md |
+| **archive** | Archive | 规范归档和优化，将需求规范通过场景拆分合并到主规范中 | orch-spec/spec/ (已合并的主规范) |
 
 详细说明：[查看skills详细文档](./skills/README.md)
 
@@ -128,7 +128,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 2. 场景细化和多轮确认
 3. 生成BDD格式规范
 
-生成结果：`spec-dev/{requirement_desc_abstract}/spec/` 目录
+生成结果：`orch-spec/{requirement_desc_abstract}/spec/` 目录
 - requirement.md (需求文档总览 - **入口文件**)
 - scenarios/*.md (BDD场景 - WHEN-THEN格式)
 - data-models.md (数据模型定义)
@@ -144,19 +144,19 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 **第2步：测试设计** (自动，与第3步并行)
 - 从规范中提取TEST-VERIFY和Mock数据
 - 生成测试规范、测试数据和框架代码
-- 输出：`spec-dev/{requirement_desc_abstract}/tests/` (test-spec.md + fixtures.json + test-*.template)
+- 输出：`orch-spec/{requirement_desc_abstract}/tests/` (test-spec.md + fixtures.json + test-*.template)
 
 **第3步：代码设计** (自动，与第2步并行)
 - 读取规范文档，分配code-architect分析项目
-- 生成设计方案：`spec-dev/{requirement_desc_abstract}/design/design.md`
+- 生成设计方案：`orch-spec/{requirement_desc_abstract}/design/design.md`
 
 **第3.5步：接口契约** (自动，fullstack强制)
 - 定义接口契约并进行五维度审查
-- 输出：`spec-dev/{requirement_desc_abstract}/contract/`
+- 输出：`orch-spec/{requirement_desc_abstract}/contract/`
 
 **第4步：任务列表** (自动)
 - 基于设计方案自动分解任务
-- 生成任务清单：`spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
+- 生成任务清单：`orch-spec/{requirement_desc_abstract}/tasks/tasks.md`
 
 **第5步：代码执行** (自动)
 - 为每个Task分配子代理并行实现
@@ -167,7 +167,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
   - 支持cherry-pick或squash merge两种提交方案
 - 进行多阶段审查（规范审查 + 质量审查）
 - TDD流程：RED-GREEN-REFACTOR-REVIEW
-- 生成执行报告：`spec-dev/{requirement_desc_abstract}/execution/execution-report.md`
+- 生成执行报告：`orch-spec/{requirement_desc_abstract}/execution/execution-report.md`
 - 输出源代码到 `src/` 目录
 
 **第5.5步：异常处理** (自动，后端/全栈)
@@ -178,15 +178,15 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 **第6步：测试验证** (自动)
 - 进行代码质量审查和高层测试（集成/E2E/性能）
 - 生成测试报告和闭环验证矩阵
-- 生成测试报告：`spec-dev/{requirement_desc_abstract}/testing/testing-report.md`
+- 生成测试报告：`orch-spec/{requirement_desc_abstract}/testing/testing-report.md`
 - 输出测试代码到 `tests/` 目录
 
 **第7步：规范归档** (自动)
 - 当所有测试通过后，自动触发规范归档流程
 - 分配archiver进行对标分析和智能合并
 - 将需求规范通过场景拆分集成到主规范库
-- 生成归档报告：`spec-dev/spec/archive-log.md`
-- 更新主规范：`spec-dev/spec/` (data-models、business-rules、glossary等)
+- 生成归档报告：`orch-spec/spec/archive-log.md`
+- 更新主规范：`orch-spec/spec/` (data-models、business-rules、glossary等)
 
 ---
 
@@ -199,7 +199,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 | Task | design.md | tasks.md | 自动执行 |
 | Execute | tasks.md | src/ + 执行报告 | 自动执行 |
 | Test | tasks.md | tests/ + 测试报告 | 自动执行 |
-| Archive | spec/ | spec-dev/spec/ + 归档报告 | 自动执行 |
+| Archive | spec/ | orch-spec/spec/ + 归档报告 | 自动执行 |
 
 总体耗时：规范化阶段取决于用户交互，后续全流程自动执行（通常2-5分钟）
 
@@ -226,23 +226,23 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 
 # 1. 分析需求并生成规范文档
 /spec
-# 输出：spec-dev/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md等)
+# 输出：orch-spec/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md等)
 
 # 2. 根据规范进行架构设计
 /design 需要新增订单表单
-# 输出：spec-dev/order-form/design/design.md
+# 输出：orch-spec/order-form/design/design.md
 
 # 3. 将设计分解为具体任务
-/task spec-dev/order-form/design/design.md
-# 输出：spec-dev/order-form/tasks/tasks.md
+/task orch-spec/order-form/design/design.md
+# 输出：orch-spec/order-form/tasks/tasks.md
 
 # 4. 执行代码实现（带两阶段审查）
-/execute spec-dev/order-form/tasks/tasks.md
-# 输出：src/... + spec-dev/order-form/execution/execution-report.md
+/execute orch-spec/order-form/tasks/tasks.md
+# 输出：src/... + orch-spec/order-form/execution/execution-report.md
 
 # 5. 测试验证和闭环检查
-/test spec-dev/order-form/tasks/tasks.md
-# 输出：tests/... + spec-dev/order-form/testing/testing-report.md
+/test orch-spec/order-form/tasks/tasks.md
+# 输出：tests/... + orch-spec/order-form/testing/testing-report.md
 ```
 
 ### 场景2：Vue项目 - 新增仪表板组件
@@ -254,23 +254,23 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 
 # 1. 分析需求并生成规范文档
 /spec
-# 输出：spec-dev/dashboard/spec/ (requirement.md, scenarios/*.md等)
+# 输出：orch-spec/dashboard/spec/ (requirement.md, scenarios/*.md等)
 
 # 2. 根据规范进行架构设计
 /design 需要创建数据仪表板
-# 输出：spec-dev/dashboard/design/design.md
+# 输出：orch-spec/dashboard/design/design.md
 
 # 3. 将设计分解为具体任务
-/task spec-dev/dashboard/design/design.md
-# 输出：spec-dev/dashboard/tasks/tasks.md
+/task orch-spec/dashboard/design/design.md
+# 输出：orch-spec/dashboard/tasks/tasks.md
 
 # 4. 执行代码实现
-/execute spec-dev/dashboard/tasks/tasks.md
-# 输出：src/... + spec-dev/dashboard/execution/execution-report.md
+/execute orch-spec/dashboard/tasks/tasks.md
+# 输出：src/... + orch-spec/dashboard/execution/execution-report.md
 
 # 5. 测试验证和闭环检查
-/test spec-dev/dashboard/tasks/tasks.md
-# 输出：tests/... + spec-dev/dashboard/testing/testing-report.md
+/test orch-spec/dashboard/tasks/tasks.md
+# 输出：tests/... + orch-spec/dashboard/testing/testing-report.md
 ```
 
 ---
@@ -288,7 +288,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 │  Step 1: /spec 需求分析和规范生成              │
 │  - 分析需求和初步拆解                                    │
 │  - 场景细化和多轮确认                                    │
-│  - 输出：spec-dev/{name}/spec/                          │
+│  - 输出：orch-spec/{name}/spec/                          │
 │    (requirement.md, scenarios/*.md, data-models.md等)   │
 └────────────────┬─────────────────────────────────────────┘
                  │
@@ -297,7 +297,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 │  Step 2: /design 架构和技术设计                  │
 │  - 分配code-architect分析项目模式                       │
 │  - 进行架构设计和技术方案规划                             │
-│  - 输出：spec-dev/{name}/design/design.md              │
+│  - 输出：orch-spec/{name}/design/design.md              │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
@@ -305,7 +305,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 │  Step 3: /task 任务分解和定义                       │
 │  - 将设计方案分解为编码任务                               │
 │  - 定义每个Task的目标、交付物、验收标准                   │
-│  - 输出：spec-dev/{name}/tasks/tasks.md                 │
+│  - 输出：orch-spec/{name}/tasks/tasks.md                 │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
@@ -346,7 +346,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 │  - 分配archiver进行规范对标分析                    │
 │  - 通过场景拆分和智能合并集成到主规范                     │
 │  - 冲突检测和决策处理                                    │
-│  - 输出：spec-dev/spec/ + archive-report.md            │
+│  - 输出：orch-spec/spec/ + archive-report.md            │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓

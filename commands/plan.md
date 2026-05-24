@@ -1,20 +1,20 @@
 ---
-description: 从 SDD+TDD 规范（spec-dev/）中读取需求，生成实现计划与任务清单。等待用户确认后再开始编码。
+description: 从 SDD+TDD 规范（orch-spec/）中读取需求，生成实现计划与任务清单。等待用户确认后再开始编码。
 argument-hint: "[feature description | path/to/spec-dir | path/to/design.md]"
 ---
 
 # Plan Command (SDD+TDD 适配版)
 
-根据 SDD+TDD 规范（spec-dev/）创建实现计划。从已有的规范文档或设计文档出发，生成结构化的实施清单。
+根据 SDD+TDD 规范（orch-spec/）创建实现计划。从已有的规范文档或设计文档出发，生成结构化的实施清单。
 
 ## 数据来源优先级
 
 | 输入 | 来源 | 行为 |
 |------|------|------|
-| free-form text | 用户描述 | 搜索 `spec-dev/` 匹配的 spec，若无则参考 `/plan` 流程 |
-| path to spec dir | `spec-dev/{req}/spec/` | 读取 requirement.md + scenarios/*.md + data-models.md |
-| path to design.md | `spec-dev/{req}/design/design.md` | 从设计方案生成实现计划 |
-| path to tasks.md | `spec-dev/{req}/tasks/tasks.md` | 对现有任务清单做分步实施计划 |
+| free-form text | 用户描述 | 搜索 `orch-spec/` 匹配的 spec，若无则参考 `/plan` 流程 |
+| path to spec dir | `orch-spec/{req}/spec/` | 读取 requirement.md + scenarios/*.md + data-models.md |
+| path to design.md | `orch-spec/{req}/design/design.md` | 从设计方案生成实现计划 |
+| path to tasks.md | `orch-spec/{req}/tasks/tasks.md` | 对现有任务清单做分步实施计划 |
 | `.prd.md` path | PRD 文件 | PRD artifact 模式：创建 `.claude/plans/{name}.plan.md` |
 
 ## 与 SDD+TDD 工作流的集成
@@ -60,7 +60,7 @@ spec → test-design ⟷ design → contract(fullstack) → task
 ```
 # Plan: {Feature Name}
 
-**Source**: {spec-dev/req path}
+**Source**: {orch-spec/req path}
 **Complexity**: {Small | Medium | Large}
 
 ## Summary
@@ -113,7 +113,7 @@ WAITING FOR CONFIRMATION: Proceed with this plan? (yes/no/modify)
 
 - 有 `.prd.md` 输入 → `.claude/plans/{kebab-case-name}.plan.md`
 - 纯文本输入 → 内联呈现，不写文件（除非用户要求保存）
-- 已有 `tasks.md` → 在 `spec-dev/{req}/` 下创建 `implementation-plan.md`
+- 已有 `tasks.md` → 在 `orch-spec/{req}/` 下创建 `implementation-plan.md`
 
 ## 模式采集
 

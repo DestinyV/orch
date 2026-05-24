@@ -3,7 +3,7 @@
 import sys, json, re, glob, os
 
 def extract_test_verify(scenarios_dir):
-    """从 spec-dev/{req}/spec/scenarios/ 提取所有 TEST-VERIFY"""
+    """从 orch-spec/{req}/spec/scenarios/ 提取所有 TEST-VERIFY"""
     results = []
     files = sorted(glob.glob(os.path.join(scenarios_dir, '*.md')))
     for f in files:
@@ -36,7 +36,7 @@ def extract_test_verify(scenarios_dir):
     return results
 
 if __name__ == '__main__':
-    scenarios_dir = sys.argv[1] if len(sys.argv) > 1 else 'spec-dev'
+    scenarios_dir = sys.argv[1] if len(sys.argv) > 1 else 'orch-spec'
     if not os.path.isdir(scenarios_dir):
         print(json.dumps({'error': f'Directory not found: {scenarios_dir}'}))
         sys.exit(1)

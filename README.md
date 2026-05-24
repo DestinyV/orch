@@ -65,15 +65,15 @@
 |-------|-------|----------|--------|
 | **scripts** | Utility | 工具优先策略：Grep/Bash/Glob/Edit 优先完成文件搜索/提取/编辑/校验，仅脚本无法处理时兜底Read | 脚本化文件操作 |
 | **workflow** | Orchestrator | 统一入口+流程编排：自动检测模式、串联9个Skill、HARD-GATE卡点、中断恢复 | .workflow-state.json + 全流程自动执行 |
-| **spec** | Spec | Requirements analysis and spec generation, outputs BDD format spec documents (WHEN-THEN format) | spec-dev/{requirement_desc_abstract}/spec/ |
+| **spec** | Spec | Requirements analysis and spec generation, outputs BDD format spec documents (WHEN-THEN format) | orch-spec/{requirement_desc_abstract}/spec/ |
 | **test-design** | Test-Design | Generate test specs, fixtures, and test templates from TEST-VERIFY | test-spec.md + fixtures.json + test-*.template |
-| **design** | Design | Code design planning based on specs, generates architecture and technical solutions | spec-dev/{requirement_desc_abstract}/design/design.md |
+| **design** | Design | Code design planning based on specs, generates architecture and technical solutions | orch-spec/{requirement_desc_abstract}/design/design.md |
 | **contract** | Api-Contract | Interface contract definition and review (fullstack mandatory) | contract.md + review-report.md |
-| **task** | Task | Converts designs to code-level task lists, supports frontend, backend, database, microservice tasks | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
-| **execute** | Execute | Task execution via sub-agents, supports multi-language multi-framework, two-stage review (spec + quality), TDD process with unit tests. **v2.3.1+**: Uses git-worktree to create isolated work environments for each Task, ensuring safety, debugability, and recoverability of fix cycles | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
+| **task** | Task | Converts designs to code-level task lists, supports frontend, backend, database, microservice tasks | orch-spec/{requirement_desc_abstract}/tasks/tasks.md |
+| **execute** | Execute | Task execution via sub-agents, supports multi-language multi-framework, two-stage review (spec + quality), TDD process with unit tests. **v2.3.1+**: Uses git-worktree to create isolated work environments for each Task, ensuring safety, debugability, and recoverability of fix cycles | src/ + orch-spec/{requirement_desc_abstract}/execution/execution-report.md |
 | **exception** | Exception | Exception scene recognition + project convention scanning + exception code generation (backend/fullstack, zero hardcoding) | src/** (with exception handling) |
-| **test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
-| **archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | spec-dev/spec/ (merged main spec) |
+| **test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + orch-spec/{requirement_desc_abstract}/testing/testing-report.md |
+| **archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | orch-spec/spec/ (merged main spec) |
 
 Detailed documentation: [View skills documentation](./skills/README_EN.md)
 
@@ -173,7 +173,7 @@ Interactive dialogue with the plugin for requirements analysis and confirmation:
 2. Scenario refinement and multi-round confirmation
 3. Generate BDD format specifications
 
-Output: `spec-dev/{requirement_desc_abstract}/spec/` directory
+Output: `orch-spec/{requirement_desc_abstract}/spec/` directory
 - requirement.md (Requirements document overview - **entry file**)
 - scenarios/*.md (BDD scenarios - WHEN-THEN format)
 - data-models.md (Data model definitions)
@@ -189,19 +189,19 @@ After spec confirmation, subsequent steps will **execute automatically**:
 **Step 2: Test Design** (Automatic, parallel with Step 3)
 - Reads TEST-VERIFY and Mock Data from spec
 - Generates test specifications, fixtures, and test templates
-- Output: `spec-dev/{requirement_desc_abstract}/tests/` (test-spec.md + fixtures.json + test-*.template)
+- Output: `orch-spec/{requirement_desc_abstract}/tests/` (test-spec.md + fixtures.json + test-*.template)
 
 **Step 3: Code Design** (Automatic, parallel with Step 2)
 - Reads spec documents, assigns code-architect to analyze project
-- Generates design solution: `spec-dev/{requirement_desc_abstract}/design/design.md`
+- Generates design solution: `orch-spec/{requirement_desc_abstract}/design/design.md`
 
 **Step 3.5: Api-Contract** (Automatic, fullstack only)
 - Defines interface contract and conducts five-dimension review
-- Output: `spec-dev/{requirement_desc_abstract}/contract/`
+- Output: `orch-spec/{requirement_desc_abstract}/contract/`
 
 **Step 4: Task List** (Automatic)
 - Automatically decomposes tasks based on design solution
-- Generates task checklist: `spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
+- Generates task checklist: `orch-spec/{requirement_desc_abstract}/tasks/tasks.md`
 
 **Step 5: Code Execution** (Automatic)
 - Assigns sub-agents to each Task for parallel implementation
@@ -212,7 +212,7 @@ After spec confirmation, subsequent steps will **execute automatically**:
   - Supports cherry-pick or squash merge submission approaches
 - Conducts multi-stage review (spec review + quality review)
 - TDD process: RED-GREEN-REFACTOR-REVIEW
-- Generates execution report: `spec-dev/{requirement_desc_abstract}/execution/execution-report.md`
+- Generates execution report: `orch-spec/{requirement_desc_abstract}/execution/execution-report.md`
 - Outputs source code to `src/` directory
 
 **Step 5.5: Exception Handling** (Automatic, backend/fullstack)
@@ -223,15 +223,15 @@ After spec confirmation, subsequent steps will **execute automatically**:
 **Step 6: Test Verification** (Automatic)
 - Conducts code quality review and high-level testing (Integration/E2E/Performance)
 - Generates test reports and closed-loop verification matrix
-- Generates test report: `spec-dev/{requirement_desc_abstract}/testing/testing-report.md`
+- Generates test report: `orch-spec/{requirement_desc_abstract}/testing/testing-report.md`
 - Outputs test code to `tests/` directory
 
 **Step 7: Spec Archiving** (Automatic)
 - Automatically triggers spec archiving process after all tests pass
 - Assigns archiver for benchmark analysis and smart merging
 - Integrates requirement specs into main spec library through scenario splitting
-- Generates archive report: `spec-dev/spec/archive-log.md`
-- Updates main specs: `spec-dev/spec/` (data-models, business-rules, glossary, etc.)
+- Generates archive report: `orch-spec/spec/archive-log.md`
+- Updates main specs: `orch-spec/spec/` (data-models, business-rules, glossary, etc.)
 
 ---
 
@@ -244,7 +244,7 @@ After spec confirmation, subsequent steps will **execute automatically**:
 | Task | design.md | tasks.md | Automatic |
 | Execute | tasks.md | src/ + execution report | Automatic |
 | Test | tasks.md | tests/ + test report | Automatic |
-| Archive | spec/ | spec-dev/spec/ + archive report | Automatic |
+| Archive | spec/ | orch-spec/spec/ + archive report | Automatic |
 
 Total time: Specification stage depends on user interaction, subsequent full workflow executes automatically (typically 2-5 minutes)
 
@@ -269,23 +269,23 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 # 1. Analyze requirements and generate spec
 /spec
-# Output: spec-dev/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md, etc.)
+# Output: orch-spec/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md, etc.)
 
 # 2. Architecture design based on spec
 /design Need to add order form
-# Output: spec-dev/order-form/design/design.md
+# Output: orch-spec/order-form/design/design.md
 
 # 3. Decompose design into specific tasks
-/task spec-dev/order-form/design/design.md
-# Output: spec-dev/order-form/tasks/tasks.md
+/task orch-spec/order-form/design/design.md
+# Output: orch-spec/order-form/tasks/tasks.md
 
 # 4. Execute code implementation (with two-stage review)
-/execute spec-dev/order-form/tasks/tasks.md
-# Output: src/... + spec-dev/order-form/execution/execution-report.md
+/execute orch-spec/order-form/tasks/tasks.md
+# Output: src/... + orch-spec/order-form/execution/execution-report.md
 
 # 5. Test verification and closed-loop check
-/test spec-dev/order-form/tasks/tasks.md
-# Output: tests/... + spec-dev/order-form/testing/testing-report.md
+/test orch-spec/order-form/tasks/tasks.md
+# Output: tests/... + orch-spec/order-form/testing/testing-report.md
 ```
 
 ### Scenario 2: Vue Project - New Dashboard Component
@@ -297,23 +297,23 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 # 1. Analyze requirements and generate spec
 /spec
-# Output: spec-dev/dashboard/spec/ (requirement.md, scenarios/*.md, etc.)
+# Output: orch-spec/dashboard/spec/ (requirement.md, scenarios/*.md, etc.)
 
 # 2. Architecture design based on spec
 /design Need to create data dashboard
-# Output: spec-dev/dashboard/design/design.md
+# Output: orch-spec/dashboard/design/design.md
 
 # 3. Decompose design into specific tasks
-/task spec-dev/dashboard/design/design.md
-# Output: spec-dev/dashboard/tasks/tasks.md
+/task orch-spec/dashboard/design/design.md
+# Output: orch-spec/dashboard/tasks/tasks.md
 
 # 4. Execute code implementation
-/execute spec-dev/dashboard/tasks/tasks.md
-# Output: src/... + spec-dev/dashboard/execution/execution-report.md
+/execute orch-spec/dashboard/tasks/tasks.md
+# Output: src/... + orch-spec/dashboard/execution/execution-report.md
 
 # 5. Test verification and closed-loop check
-/test spec-dev/dashboard/tasks/tasks.md
-# Output: tests/... + spec-dev/dashboard/testing/testing-report.md
+/test orch-spec/dashboard/tasks/tasks.md
+# Output: tests/... + orch-spec/dashboard/testing/testing-report.md
 ```
 
 ---
@@ -331,7 +331,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 │  Step 1: /spec Requirements Analysis & Spec      │
 │  - Analyze requirements and initial decomposition        │
 │  - Scenario refinement and multi-round confirmation      │
-│  - Output: spec-dev/{name}/spec/                          │
+│  - Output: orch-spec/{name}/spec/                          │
 │    (requirement.md, scenarios/*.md, data-models.md, etc.) │
 └────────────────┬─────────────────────────────────────────┘
                  │
@@ -340,7 +340,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 │  Step 2: /design Architecture & Technical Design   │
 │  - Assign code-architect to analyze project patterns     │
 │  - Conduct architecture design and technical planning    │
-│  - Output: spec-dev/{name}/design/design.md               │
+│  - Output: orch-spec/{name}/design/design.md               │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
@@ -348,7 +348,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 │  Step 3: /task Task Decomposition & Definition       │
 │  - Decompose design into coding tasks                     │
 │  - Define goals, deliverables, acceptance criteria        │
-│  - Output: spec-dev/{name}/tasks/tasks.md                 │
+│  - Output: orch-spec/{name}/tasks/tasks.md                 │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓
@@ -389,7 +389,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 │  - Assign archiver for spec benchmark analysis       │
 │  - Integrate into main spec through scenario splitting    │
 │  - Conflict detection and decision handling               │
-│  - Output: spec-dev/spec/ + archive-report.md             │
+│  - Output: orch-spec/spec/ + archive-report.md             │
 └────────────────┬─────────────────────────────────────────┘
                  │
                  ↓

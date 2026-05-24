@@ -3,8 +3,8 @@ name: test-design
 description: |
   测试设计和规范生成（Test Design阶段）
 
-  输入：spec-dev/{requirement_desc_abstract}/spec/
-  输出：spec-dev/{requirement_desc_abstract}/tests/test-spec.md + fixtures.json + test-*.template
+  输入：orch-spec/{requirement_desc_abstract}/spec/
+  输出：orch-spec/{requirement_desc_abstract}/tests/test-spec.md + fixtures.json + test-*.template
 
   功能：将规范中的TEST-VERIFY和Mock数据转换为详细测试规范和框架代码。
 ---
@@ -20,7 +20,7 @@ description: |
 
 将规范中的TEST-VERIFY和Mock数据转换为可执行的测试规范和框架代码。
 
-**输出**：`spec-dev/{requirement_desc_abstract}/tests/test-spec.md` + `fixtures.json` + `test-*.template`
+**输出**：`orch-spec/{requirement_desc_abstract}/tests/test-spec.md` + `fixtures.json` + `test-*.template`
 
 ## 工作流程
 
@@ -35,7 +35,7 @@ Agent(
   subagent_type="orch:test-designer",
   prompt="
     对规范中的 TEST-VERIFY 进行测试设计：
-    - 规范目录: spec-dev/{requirement_desc_abstract}/spec/
+    - 规范目录: orch-spec/{requirement_desc_abstract}/spec/
     
     执行：
     1. TEST-VERIFY 提取：识别所有 TEST-VERIFY，理解含义，识别正常/边界/特殊场景

@@ -77,8 +77,8 @@ description: |
 ### 输入依赖校验
 
 ```bash
-test -f spec-dev/{req}/.workflow-eval.json || echo "[WARN] .workflow-eval.json 缺失"
-python3 -c "import json; d=json.load(open('spec-dev/{req}/.workflow-eval.json')); assert d.get('diagnosis')" || echo "[INFO] diagnosis 为空"
+test -f orch-spec/{req}/.workflow-eval.json || echo "[WARN] .workflow-eval.json 缺失"
+python3 -c "import json; d=json.load(open('orch-spec/{req}/.workflow-eval.json')); assert d.get('diagnosis')" || echo "[INFO] diagnosis 为空"
 
 test -f "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/patterns/pattern-index.json" || echo "[WARN] pattern-index.json 缺失"
 ```
@@ -364,7 +364,7 @@ ${KNC_HOMUNCULUS_DIR:-~/.local/share/knc-homunculus}/
 
 ### 输出路径
 
-`spec-dev/{req_id}/knowledge/solutions/{category}/{slug}.md`
+`orch-spec/{req_id}/knowledge/solutions/{category}/{slug}.md`
 
 ### 计划扩展
 

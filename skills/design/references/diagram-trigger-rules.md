@@ -71,11 +71,11 @@
 
 | 阶段 | 输出路径 | 说明 |
 |------|---------|------|
-| spec | `spec-dev/{req_id}/spec/diagrams/` | ER图、场景流程图、决策树 |
-| design | `spec-dev/{req_id}/design/diagrams/` | UML 6类图（用例/类/时序/状态/组件/部署） |
-| contract | `spec-dev/{req_id}/contract/diagrams/` | 接口依赖图、响应结构图 |
-| task | `spec-dev/{req_id}/tasks/diagrams/` | 任务依赖DAG、provides/consumes图 |
-| test | `spec-dev/{req_id}/testing/diagrams/` | 闭环验证矩阵、覆盖率雷达图 |
-| archive | `spec-dev/spec/diagrams/` | 合并冲突关系图、规范演进时间线 |
+| spec | `orch-spec/{req_id}/spec/diagrams/` | ER图、场景流程图、决策树 |
+| design | `orch-spec/{req_id}/design/diagrams/` | UML 6类图（用例/类/时序/状态/组件/部署） |
+| contract | `orch-spec/{req_id}/contract/diagrams/` | 接口依赖图、响应结构图 |
+| task | `orch-spec/{req_id}/tasks/diagrams/` | 任务依赖DAG、provides/consumes图 |
+| test | `orch-spec/{req_id}/testing/diagrams/` | 闭环验证矩阵、覆盖率雷达图 |
+| archive | `orch-spec/spec/diagrams/` | 合并冲突关系图、规范演进时间线 |
 
 > 各阶段使用自己的 diagrams/ 目录，避免跨阶段文件冲突。design 阶段应优先检查 spec/diagrams/ 是否已有所需图（来自 spec），避免重复生成。

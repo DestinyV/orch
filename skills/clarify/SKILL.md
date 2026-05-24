@@ -5,7 +5,7 @@ description: |
   在 spec 之前，通过数学化模糊度评分的逐轮深度访谈澄清需求。
   
   输入：需求描述（文本）
-  输出：spec-dev/{req_id}/spec/clarification.md（澄清报告 + 模糊度分数）
+  输出：orch-spec/{req_id}/spec/clarification.md（澄清报告 + 模糊度分数）
 ---
 
 # clarify — 苏格拉底需求澄清
@@ -18,7 +18,7 @@ description: |
 
 ## Output
 
-- `spec-dev/{req_id}/spec/clarification.md` — 苏格拉底澄清报告
+- `orch-spec/{req_id}/spec/clarification.md` — 苏格拉底澄清报告
 
 ## 职责
 
@@ -216,14 +216,14 @@ else:
 | 1 | {n} | - |
 ```
 
-输出到 `spec-dev/{req_id}/spec/clarification.md`。
+输出到 `orch-spec/{req_id}/spec/clarification.md`。
 
 ## Phase 5: 桥接 spec
 
 澄清完成后，自动级联到 spec：
 
 ```bash
-Skill("orch:spec", args="{requirement_desc} (clarification: spec-dev/{req_id}/spec/clarification.md)")
+Skill("orch:spec", args="{requirement_desc} (clarification: orch-spec/{req_id}/spec/clarification.md)")
 ```
 
 spec 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问卷。
@@ -243,7 +243,7 @@ spec 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问
 | 每轮只问一个问题 | 批量提问 |
 | 显示每轮模糊度分数 | 评分不透明的推进 |
 | 第3轮后支持提前退出 | 低于3轮退出 |
-| 澄清输出到 spec-dev/{id}/spec/ | 写入其他目录 |
+| 澄清输出到 orch-spec/{id}/spec/ | 写入其他目录 |
 | 完成后桥接 spec | 跳过 spec 直接编码 |
 | Opus 模型用于评分（temperature 0.1） | Haiku/Sonnet 评分 |
 | 棕地模式先 explore 再问用户 | 让用户复述代码已有信息 |

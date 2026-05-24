@@ -4,7 +4,7 @@ description: |
   需求分析和规范生成（Spec阶段）
 
   输入：需求描述
-  输出：spec-dev/{requirement_desc_abstract}/spec/ 目录
+  输出：orch-spec/{requirement_desc_abstract}/spec/ 目录
 
   功能：接收需求内容，通过交互式分析进行多次确认，输出BDD格式的规范文档（WHEN-THEN格式）。
   支持全栈开发（前端、后端、移动端、全栈应用）的需求规范化。
@@ -32,7 +32,7 @@ description: |
 
 ## 职责
 
-接收需求，交互式分析拆解为BDD场景，生成规范文档到 `spec-dev/[需求ID]/spec/`。
+接收需求，交互式分析拆解为BDD场景，生成规范文档到 `orch-spec/[需求ID]/spec/`。
 
 ## 工作流程
 
@@ -44,7 +44,7 @@ description: |
 
 ## Output
 
-- `spec-dev/{req_id}/spec/` — 完整规范目录（requirement.md + scenarios/*.md + data-models.md + business-rules.md + glossary.md）
+- `orch-spec/{req_id}/spec/` — 完整规范目录（requirement.md + scenarios/*.md + data-models.md + business-rules.md + glossary.md）
 
 ## Phase 0: 苏格拉底澄清检测（前置）
 
@@ -52,7 +52,7 @@ description: |
 
 在进入标准流程前，先检测是否已有苏格拉底澄清结果：
 
-1. 检查 `spec-dev/{req_id}/spec/clarification.md` 是否存在
+1. 检查 `orch-spec/{req_id}/spec/clarification.md` 是否存在
 2. **存在** → 读取澄清报告，直接进入 Phase 1（跳过需求理解问卷，从澄清报告提取目标/约束/验收标准）
 3. **不存在** → 评估需求描述模糊度：
    - 需求描述包含具体文件路径、函数名、验收标准 → 模糊度低，直接进入 Phase 1
@@ -103,13 +103,13 @@ description: |
 
 - **项目探索**（标准模式必须，三路并行，失败不阻塞）：
   1. 文档探索 → `Agent(subagent_type="orch:code-explorer", prompt="扫描 CLAUDE.md/README.md/docs/ 提取架构约定和项目文档摘要。工具优先：使用 Skill('orch:scripts') 进行文件定位和关键词提取", run_in_background=true)`
-  2. 历史需求探索 → general-purpose subagent 扫描 spec-dev/ 最近3-5个需求
+  2. 历史需求探索 → general-purpose subagent 扫描 orch-spec/ 最近3-5个需求
   3. 代码模式探索 → `Agent(subagent_type="orch:code-explorer", prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索", run_in_background=true)`
   - 小型项目(<200文件)保持串行
   - 两路 code-explorer 可并行派遣（`run_in_background=true`）
   - 探索过程使用 scripts 工具优先策略：搜索→Grep，批量过滤→Python3，兜底→Read
 
-**探索结果输出**：标准模式将三路探索结果写入 `spec-dev/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
+**探索结果输出**：标准模式将三路探索结果写入 `orch-spec/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
 
 **数据库需求判定**（当需求涉及数据持久化时）：
 ```
@@ -188,7 +188,7 @@ description: |
 | 场景流程图 | 场景 ≥5 或 单场景 Case ≥4 | 流程是否有遗漏路径 |
 | 业务规则决策树 | 规则 ≥5 条 或 嵌套 IF-THEN | 规则逻辑是否互斥 |
 
-模板见 `templates/diagrams/` 目录，输出到 `spec-dev/{req_id}/spec/diagrams/`。
+模板见 `templates/diagrams/` 目录，输出到 `orch-spec/{req_id}/spec/diagrams/`。
 
 ### 方案对比（复杂需求）
 
@@ -228,7 +228,7 @@ description: |
 
 输出结构：
 ```
-spec-dev/[需求ID]/
+orch-spec/[需求ID]/
 ├── spec/
 │   ├── requirement.md              # 入口文件+导航
 │   ├── scenarios/*.md              # BDD场景(功能名命名)
@@ -262,7 +262,7 @@ spec-dev/[需求ID]/
 
 ## 关键约束
 
-- 所有场景必须使用WHEN-THEN格式 | 至少3轮确认 | 输出到 `spec-dev/[需求ID]/spec/`
+- 所有场景必须使用WHEN-THEN格式 | 至少3轮确认 | 输出到 `orch-spec/[需求ID]/spec/`
 
 ## 参考文档速查
 

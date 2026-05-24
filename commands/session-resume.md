@@ -44,7 +44,7 @@ argument-hint: "[date | file-path]"
 
 ```bash
 # 搜索 session 文件所在项目的 .workflow-state.json
-test -f spec-dev/*/.workflow-state.json && echo "Workflow state found" || echo "No workflow state"
+test -f orch-spec/*/.workflow-state.json && echo "Workflow state found" || echo "No workflow state"
 ```
 
 如找到工作流状态文件，读取当前 stage、已完成步骤、待办步骤和 HARD-GATE 状态。

@@ -163,7 +163,7 @@ orch/
 ```
 用户需求
   ↓
-[spec]  生成 spec-dev/{req_id}/spec/（含 TEST-VERIFY + Mock Data）
+[spec]  生成 orch-spec/{req_id}/spec/（含 TEST-VERIFY + Mock Data）
   ↓
   ├── [test-design]  ← 并行 →  [design]
   │   生成 test-spec + fixtures      生成 design.md

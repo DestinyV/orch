@@ -16,7 +16,7 @@ color: green
 
 ## 输出
 
-- `spec-dev/spec/archive-log.md` — 归档日志
+- `orch-spec/spec/archive-log.md` — 归档日志
 
 ## 约束
 

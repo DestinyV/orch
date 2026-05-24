@@ -29,7 +29,7 @@ This prevents cross-task interference during parallel implementation.
 ## Workflow State
 
 - `.workflow-state.json` is git-ignored (session-local)
-- Execution reports under `spec-dev/` are committed as artifacts
+- Execution reports under `orch-spec/` are committed as artifacts
 - Never commit worktree directories (`.worktrees/`)
 
 ## Safety

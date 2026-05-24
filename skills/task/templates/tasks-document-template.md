@@ -15,11 +15,11 @@
 > 数据库相关 Task 请参考以下 SQL 脚本：
 | 脚本类型 | 文件路径 | 关联 Task |
 |---------|---------|----------|
-| DDL (新建表) | `spec-dev/{req}/sql-ddl.md` 第1.1节 | [T-DB1, ...] |
-| DDL (修改表) | `spec-dev/{req}/sql-ddl.md` 第1.2节 | [T-DB2, ...] |
-| DML (种子数据) | `spec-dev/{req}/sql-ddl.md` 第2.1节 | [T-DB3, ...] |
-| DML (数据迁移) | `spec-dev/{req}/sql-ddl.md` 第2.2节 | [T-DB4, ...] |
-| 回滚脚本 | `spec-dev/{req}/sql-ddl.md` 第4节 | 全部 |
+| DDL (新建表) | `orch-spec/{req}/sql-ddl.md` 第1.1节 | [T-DB1, ...] |
+| DDL (修改表) | `orch-spec/{req}/sql-ddl.md` 第1.2节 | [T-DB2, ...] |
+| DML (种子数据) | `orch-spec/{req}/sql-ddl.md` 第2.1节 | [T-DB3, ...] |
+| DML (数据迁移) | `orch-spec/{req}/sql-ddl.md` 第2.2节 | [T-DB4, ...] |
+| 回滚脚本 | `orch-spec/{req}/sql-ddl.md` 第4节 | 全部 |
 | SQL 方言 | [mysql | postgresql] | - |
 
 ## 数据库和接口契约确认 ⭐🆕（fullstack 模式时必填）

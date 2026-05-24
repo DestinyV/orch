@@ -21,15 +21,15 @@ argument-hint: "[path|.] [--fix] [--strict]"
 
 ### Phase 1: 规范合规 (Spec Compliance)
 
-检查 `spec-dev/` 下当前需求的规范完整性：
+检查 `orch-spec/` 下当前需求的规范完整性：
 
 ```bash
 # 核心文件检查
-test -f spec-dev/*/spec/requirement.md || echo "[HARD-GATE] requirement.md 缺失"
-test -f spec-dev/*/spec/data-models.md || echo "[HARD-GATE] data-models.md 缺失"
-ls spec-dev/*/spec/scenarios/*.md >/dev/null 2>&1 || echo "[HARD-GATE] scenarios/ 缺失"
-test -f spec-dev/*/spec/business-rules.md || echo "[WARN] business-rules.md 缺失"
-test -f spec-dev/*/design/design.md || echo "[WARN] design.md 缺失（阶段3未完成）"
+test -f orch-spec/*/spec/requirement.md || echo "[HARD-GATE] requirement.md 缺失"
+test -f orch-spec/*/spec/data-models.md || echo "[HARD-GATE] data-models.md 缺失"
+ls orch-spec/*/spec/scenarios/*.md >/dev/null 2>&1 || echo "[HARD-GATE] scenarios/ 缺失"
+test -f orch-spec/*/spec/business-rules.md || echo "[WARN] business-rules.md 缺失"
+test -f orch-spec/*/design/design.md || echo "[WARN] design.md 缺失（阶段3未完成）"
 ```
 
 **阻断条件**：requirement.md + data-models.md + scenarios 任一缺失 → HARD-GATE BLOCKED

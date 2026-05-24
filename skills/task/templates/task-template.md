@@ -33,8 +33,8 @@
 - [ ] `src/path/to/file.css` - [文件说明]
 
 **SQL 参考** ⭐🆕（当类型=数据库DDL/数据库DML/数据库迁移时必填）：
-- SQL 脚本路径：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第[X]节
-- 回滚脚本：[spec-dev/{req}/sql-ddl.md](../../spec-dev/{req}/sql-ddl.md) 第4节
+- SQL 脚本路径：[orch-spec/{req}/sql-ddl.md](../../orch-spec/{req}/sql-ddl.md) 第[X]节
+- 回滚脚本：[orch-spec/{req}/sql-ddl.md](../../orch-spec/{req}/sql-ddl.md) 第4节
 - SQL 方言：[mysql | postgresql]
 
 **依赖**：

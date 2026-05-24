@@ -2,7 +2,7 @@
 
 **审查日期**: YYYY-MM-DD
 **审查状态**: [通过/不通过]
-**关联契约**: [spec-dev/{requirement_desc_abstract}/contract/contract.md](../contract.md)
+**关联契约**: [orch-spec/{requirement_desc_abstract}/contract/contract.md](../contract.md)
 
 ## 审查维度
 

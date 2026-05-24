@@ -10,7 +10,7 @@
 
 | Stage | Command | Input | Output |
 |-------|---------|-------|--------|
-| Spec | `/spec [req]` | Description | `spec-dev/{id}/spec/` |
+| Spec | `/spec [req]` | Description | `orch-spec/{id}/spec/` |
 | Test Design | `/test-design` | spec | `tests/test-spec.md + fixtures.json + test-*.template` |
 | Design | `/design` | spec | `design/design.md` |
 | Task | `/task` | design.md | `tasks/tasks.md` |

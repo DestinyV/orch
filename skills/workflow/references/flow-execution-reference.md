@@ -16,7 +16,7 @@
 | 5 | execute | code-executor, code-reviewer | tasks.md | src/ + execution/execution-report.md | 步骤4 done | 串行 |
 | 5.5 | exception | exception | src/ | src/（异常处理代码） | 步骤5 内部 | 子过程 |
 | 6 | test | tester, test-verifier | src/ + tasks.md | tests/ + testing/testing-report.md | 步骤5 done | 串行 |
-| 7 | archive | archiver | spec/ + tests/ | spec-dev/spec/（已合并）+ archive-log.md | 步骤6 done + 全通过 | 串行 |
+| 7 | archive | archiver | spec/ + tests/ | orch-spec/spec/（已合并）+ archive-log.md | 步骤6 done + 全通过 | 串行 |
 | 8 | evaluation | — | .workflow-eval.json | 诊断报告 + context-budget + cost | 步骤7 done | 串行 |
 | 9 | continuous-learning | knowledge-curator | .workflow-eval.json | patterns/ + instincts/ + solutions/ | 步骤8 done | 串行 |
 
@@ -279,18 +279,18 @@
 ### 步骤7: archive
 
 **输入契约**（必须）：
-- `spec-dev/{req_id}/spec/` — 需求规范
+- `orch-spec/{req_id}/spec/` — 需求规范
 
 **输入契约**（必须）：
 - `testing/testing-report.md` — 全部测试通过
 
 **输出契约**（必须）：
-- `spec-dev/spec/` — 已合并的主规范库（场景/模型/规则/术语文件）
-- `spec-dev/spec/archive-log.md`
+- `orch-spec/spec/` — 已合并的主规范库（场景/模型/规则/术语文件）
+- `orch-spec/spec/archive-log.md`
 
 **归档合并协议**（非仅 log）：
 1. 场景合并 — 复制 `scenarios/*.md` 到主规范，ID冲突追加不覆盖
-2. 数据模型合并 — 新增实体/字段追加到 `spec-dev/spec/data-models.md`
+2. 数据模型合并 — 新增实体/字段追加到 `orch-spec/spec/data-models.md`
 3. 业务规则合并 — 新增规则追加，冲突标注 `DECISION_NEEDED`
 4. 术语合并 — 新术语追加，重复跳过
 5. 标记已归档 — 在原需求 `requirement.md` 追加 `archived: true`
