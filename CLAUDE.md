@@ -55,7 +55,7 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.4.1 (2026-05-24)
+**版本**：v0.5.0 (2026-05-24)
 
 ## 架构与文件结构
 
@@ -90,6 +90,7 @@ orch/
 | Skill | 职责 | 阶段 |
 |-------|------|------|
 | scripts | 工具优先策略 | Utility |
+| spec-import | 规范迁移导入 | Utility |
 | workflow | 统一入口+流程编排 | 入口 |
 | spec | 需求分析和规范生成 | Spec |
 | test-design | 测试规范 + Fixture 生成 | Test-Design |
