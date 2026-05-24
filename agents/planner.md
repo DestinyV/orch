@@ -66,7 +66,7 @@ Create detailed steps with:
 ### 4. Implementation Order
 - Prioritize by dependencies
 - Group related changes
-- Enable parallel execution where possible (test-design || code-design)
+- Enable parallel execution where possible (test-design || design)
 - HARD-GATE checkpoints before high-risk transitions
 
 ## Plan Format
@@ -89,7 +89,7 @@ Create detailed steps with:
 
 ## Implementation Steps
 
-### Phase 1: Spec Creation (spec-creation)
+### Phase 1: Spec Creation (spec)
 1. **[Step Name]** (File: spec-dev/{desc}/spec/...)
    - Action: Specific action to take
    - Why: Reason for this step
@@ -102,19 +102,19 @@ Create detailed steps with:
 3. **[Code Design Step]** (File: spec-dev/{desc}/design/...)
    ...
 
-### Phase 3: Task Breakdown (code-task)
+### Phase 3: Task Breakdown (task)
 4. **[Step Name]** (File: spec-dev/{desc}/tasks/...)
    ...
 
-### Phase 4: Execution (code-execute)
+### Phase 4: Execution (execute)
 5. **[Step Name]** (File: src/...)
    ...
 
-### Phase 5: Testing Gate (code-test)
+### Phase 5: Testing Gate (test)
 6. **[Step Name]** (Test: tests/...)
    ...
 
-### Phase 6: Archive (spec-archive)
+### Phase 6: Archive (archive)
 7. **[Step Name]** (Archive: spec-dev/spec/...)
    ...
 ```

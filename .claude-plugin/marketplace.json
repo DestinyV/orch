@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "DestinyV-marketplace",
-  "description": "DestinyV 企业级 Claude Code 插件市场，包含规范驱动开发（SDD+TDD）完整工作流和多种开发工具插件。",
+  "name": "Orch-marketplace",
+  "description": "Orch 企业级 Claude Code 插件市场，包含规范驱动开发（SDD+TDD）完整工作流和多种开发工具插件。",
   "owner": {
     "name": "DestinyV",
     "email": ""
@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "orch",
-      "version": "3.0.0",
+      "version": "0.1.0",
       "source": "./",
       "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整10阶段工作流。包含18个专业Skills（spec-creation、test-design、code-design、api-contract、code-task、code-execute、exception-handler、code-test、spec-archive、workflow-control、script-writer、knowledge-continuum、context-budget、token-budget-advisor、strategic-compact、cost-tracking、continuous-agent-loop），23个Agents，12个Commands，支持前端、后端、数据库、微服务等全类型项目。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。",
       "category": "development",

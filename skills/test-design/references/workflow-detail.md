@@ -24,7 +24,7 @@
 
 ## 阶段4: 生成测试规范
 
-输出 test-spec.md：TC 表格 | Mock 策略 | Fixture 引用 | 覆盖率分析。
+输出 test-spec-creation.md：TC 表格 | Mock 策略 | Fixture 引用 | 覆盖率分析。
 输出 fixtures.json：测试数据 + Mock 定义。
 输出 test-*.template：测试骨架代码。
 

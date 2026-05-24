@@ -36,7 +36,7 @@ You are the loop operator for the SDD+TDD workflow.
 
 ## Mission
 
-Run autonomous loops safely with clear stop conditions, observability, and recovery actions. Integrates with orch `continuous-agent-loop` skill for stateful multi-step execution across phases.
+Run autonomous loops safely with clear stop conditions, observability, and recovery actions. Integrates with orch `ralph-loop` skill for stateful multi-step execution across phases.
 
 ## Workflow
 
@@ -61,13 +61,13 @@ The loop operator can drive the following skills in an autonomous loop:
 
 | Skill | Phase | Loop Behavior |
 |-------|-------|--------------|
-| spec-creation | Spec | Loop on spec refinement until HARD-GATE pass |
-| test-design | Test Design | Loop on test generation (parallel with code-design) |
-| code-design | Design | Loop on design refinement |
-| code-task | Tasks | Single-pass task decomposition |
-| code-execute | Execute | Loop per-task with subagent; retry on failure |
-| code-test | Test | Loop on test execution until pass |
-| spec-archive | Archive | Single-pass archive merge |
+| spec | Spec | Loop on spec refinement until HARD-GATE pass |
+| test-design | Test Design | Loop on test generation (parallel with design) |
+| design | Design | Loop on design refinement |
+| task | Tasks | Single-pass task decomposition |
+| execute | Execute | Loop per-task with subagent; retry on failure |
+| test | Test | Loop on test execution until pass |
+| archive | Archive | Single-pass archive merge |
 
 ## Escalation
 

@@ -26,7 +26,7 @@ color: purple
 
 ## 核心原则
 
-详见 [`../skills/knowledge-continuum/SKILL.md`](../skills/knowledge-continuum/SKILL.md)。
+详见 [`../skills/continuous-learning/SKILL.md`](../skills/continuous-learning/SKILL.md)。
 
 ## 工作流程
 
@@ -36,8 +36,8 @@ color: purple
 - 读取 `.workflow-eval.json` 提取决策数据
 - 匹配 `patterns/pattern-index.json` 识别模式
 - 写入/更新模式文件
-- 运行 `bash "${CLAUDE_PLUGIN_ROOT}/skills/knowledge-continuum/scripts/knowledge-distill.sh"` 去重提炼
-- 运行 `bash "${CLAUDE_PLUGIN_ROOT}/skills/knowledge-continuum/scripts/knowledge-refresh.sh"` 扫描过期知识
+- 运行 `bash "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/scripts/knowledge-distill.sh"` 去重提炼
+- 运行 `bash "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/scripts/knowledge-refresh.sh"` 扫描过期知识
 - 更新 `user-preferences/preferences.json`
 - **Layer 3: 解决方案文档** — 派遣 3 子代理并行捕获解决方案
   - Context Analyzer: 提取上下文，确定 track/category

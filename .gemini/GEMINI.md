@@ -29,8 +29,8 @@ Gemini CLI:   Task1 → Task2 → ... → TaskN (逐个实现)
 所有 Skill 通过 `activate_skill` 加载：
 
 ```
-activate_skill orch:workflow-control "需求描述"
-activate_skill orch:spec-creation "需求描述"
+activate_skill orch:workflow "需求描述"
+activate_skill orch:spec "需求描述"
 ```
 
 ## 工作流执行

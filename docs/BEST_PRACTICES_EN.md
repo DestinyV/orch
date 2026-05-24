@@ -2,8 +2,8 @@
 
 ## Core Principles
 
-1. **Spec-First** — Everything starts from `/spec-creation`, spec is the single source of truth
-2. **Design-Driven** — `/code-design` design approval required before Task stage
+1. **Spec-First** — Everything starts from `/spec`, spec is the single source of truth
+2. **Design-Driven** — `/design` design approval required before Task stage
 3. **TDD Flow** — RED → GREEN → REFACTOR → REVIEW
 4. **Agent Isolation** — standard mode: each Task uses independent sub-agent + worktree
 5. **Two-Stage Review** — Spec review → Quality review (Lint/types/coverage)

@@ -5,7 +5,7 @@ argument-hint: "[csv]"
 
 # Cost Report Command (SDD+TDD 适配版)
 
-查询本地 cost-tracking 数据库并呈现花费报告，按天、项目、工具和会话维度。与 orch 的 `cost-tracking` skill 深度集成。
+查询本地 cost 数据库并呈现花费报告，按天、项目、工具和会话维度。与 orch 的 `cost` skill 深度集成。
 
 ## 先决条件
 
@@ -96,16 +96,16 @@ sqlite3 -csv -header ~/.claude-cost-tracker/usage.db "
 
 ## SDD+TDD 工作流成本追踪
 
-SDD+TDD 工作流通过 `cost-tracking` skill 在每个阶段完成后记录 Token 用量和花费到数据库：
+SDD+TDD 工作流通过 `cost` skill 在每个阶段完成后记录 Token 用量和花费到数据库：
 
 | 阶段 | 预期 Token 范围 | 累计比例 |
 |------|----------------|---------|
-| spec-creation | 10K-20K | ~10% |
-| test-design + code-design | 10K-20K | ~20% |
-| code-task | 5K-10K | ~25% |
-| code-execute | 50K-100K | ~65% |
-| code-test | 20K-40K | ~85% |
-| spec-archive + knowledge-continuum | 10K-20K | ~100% |
+| spec | 10K-20K | ~10% |
+| test-design + design | 10K-20K | ~20% |
+| task | 5K-10K | ~25% |
+| execute | 50K-100K | ~65% |
+| test | 20K-40K | ~85% |
+| archive + continuous-learning | 10K-20K | ~100% |
 
 各项目/工具成本可在数据库中通过 `project = 'orch'` 过滤。
 

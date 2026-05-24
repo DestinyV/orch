@@ -10,7 +10,7 @@ description: 将 instincts（项目级/全局）导出为可分享的 JSON/YAML 
 ## 实现
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/knowledge-continuum/scripts/instinct-cli.py" export [--scope project|global|all] [--domain <name>] [--min-confidence <n>] [--output <file>]
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/scripts/instinct-cli.py" export [--scope project|global|all] [--domain <name>] [--min-confidence <n>] [--output <file>]
 ```
 
 ## 用法
@@ -32,7 +32,7 @@ JSON 格式：
 {
   "meta": {
     "exported_at": "2026-05-24T10:00:00+08:00",
-    "source": "orch/knowledge-continuum",
+    "source": "orch/continuous-learning",
     "count": 12
   },
   "instincts": [

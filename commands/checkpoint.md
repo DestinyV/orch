@@ -81,15 +81,15 @@ Available checkpoints:
 ## 工作流集成
 
 ```
-[workflow-control] → /checkpoint create "workflow-start"
+[workflow] → /checkpoint create "workflow-start"
     ↓
-[spec-creation] → /checkpoint create "spec-done"
+[spec] → /checkpoint create "spec-done"
     ↓
-[code-design] → /checkpoint verify "spec-done"
+[design] → /checkpoint verify "spec-done"
     ↓
-[code-test] → /checkpoint create "test-done"
+[test] → /checkpoint create "test-done"
     ↓
-[spec-archive] → /checkpoint verify "workflow-start" --full
+[archive] → /checkpoint verify "workflow-start" --full
 ```
 
 ## 参数

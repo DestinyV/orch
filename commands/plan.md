@@ -26,10 +26,10 @@ spec-creation → test-design ⟷ code-design → api-contract(fullstack) → co
 ```
 
 `/plan` 适合在以下场景调用：
-- `/code-task` 已执行但需要更细粒度分步计划
+- `/task` 已执行但需要更细粒度分步计划
 - 需要跨多个 Task 的协调实施路线图
-- 用户想先确认计划再进入 `/code-execute`
-- 快速模式中跳过 `/code-task` 后直接手动规划
+- 用户想先确认计划再进入 `/execute`
+- 快速模式中跳过 `/task` 后直接手动规划
 
 ## 流程
 

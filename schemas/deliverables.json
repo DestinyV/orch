@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "stages": {
-    "spec-creation": {
+    "spec": {
       "requiredFiles": [
         "spec/requirement.md",
         "spec/data-models.md",
@@ -15,7 +15,7 @@
       },
       "requiredPatterns": ["WHEN-THEN", "TEST-VERIFY"]
     },
-    "code-design": {
+    "design": {
       "requiredFiles": [
         "design/design.md"
       ],
@@ -28,7 +28,7 @@
         "design/sql-ddl.md"
       ]
     },
-    "code-task": {
+    "task": {
       "requiredFiles": [
         "tasks/tasks.md"
       ],
@@ -38,7 +38,7 @@
       },
       "requiredPatterns": ["provides:", "consumes:"]
     },
-    "code-execute": {
+    "execute": {
       "requiredFiles": [
         "execution/execution-report.md"
       ],
@@ -48,7 +48,7 @@
         "Code reviewed"
       ]
     },
-    "code-test": {
+    "test": {
       "requiredFiles": [
         "testing/testing-report.md"
       ],
@@ -61,7 +61,7 @@
         "E2E test executed (frontend/fullstack)"
       ]
     },
-    "spec-archive": {
+    "archive": {
       "requiredFiles": [
         "spec/archive-log.md"
       ]

@@ -25,4 +25,4 @@ Mandatory sequence for every unit of work:
 ## HARD-GATE Enforcement
 
 - If coverage drops below the threshold, the workflow **HARD-GATE** blocks progression to the next phase
-- See `workflow-control` skill for gate override procedures
+- See `workflow` skill for gate override procedures

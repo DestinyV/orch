@@ -54,7 +54,7 @@ P3: package.json / pom.xml / go.mod / pyproject.toml
 
 P0未找到→标注"仅基于代码分析推断"。最多10个文档，避免token浪费。
 
-<HARD-GATE>禁止在 workflow-control 之前执行 | 探索结果仅用于 spec-creation 和 code-design</HARD-GATE>
+<HARD-GATE>禁止在 workflow 之前执行 | 探索结果仅用于 spec 和 design</HARD-GATE>
 
 ### 阶段1：需求实现梳理
 
@@ -104,7 +104,7 @@ P0未找到→标注"仅基于代码分析推断"。最多10个文档，避免to
 
 ## 工具优先策略
 
-文件扫描操作优先使用脚本，减少上下文加载。详见 `Skill("orch:script-writer")`。
+文件扫描操作优先使用脚本，减少上下文加载。详见 `Skill("orch:scripts")`。
 
 - 搜索文件/关键字 → Grep 工具 | 批量读取+条件过滤 → Python3 内联脚本
 - 项目文档发现（阶段0）→ 用 Glob 定位文档，Grep 提取关键章节

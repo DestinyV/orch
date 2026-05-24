@@ -102,9 +102,9 @@ Phase 3 — Tests:        [PASS/FAIL]
 ## 与工作流集成
 
 HARD-GATE 在工作流的以下时机自动触发：
-- `code-design` → 设计完成时
-- `code-execute` → 每 Task 规范审查 + 质量审查
-- `code-test` → 闭环验证时
-- `spec-archive` → 归档前终检
+- `design` → 设计完成时
+- `execute` → 每 Task 规范审查 + 质量审查
+- `test` → 闭环验证时
+- `archive` → 归档前终检
 
 `/quality-gate` 允许在任意时刻手动触发完整管道。

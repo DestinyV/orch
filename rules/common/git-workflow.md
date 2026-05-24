@@ -7,14 +7,14 @@
 ```
 
 Types: feat, fix, refactor, docs, test, chore, perf, ci
-Scope: the Task name or requirement shorthand (e.g., `auth`, `knowledge-continuum`)
+Scope: the Task name or requirement shorthand (e.g., `auth`, `continuous-learning`)
 
 ## Every Task in Its Own Worktree
 
 - Each Task from the task list (`tasks.md`) MUST be implemented in a **dedicated git worktree**
 - Worktree name format: `task-<task-number>-<short-description>`
 - This ensures complete isolation between parallel Tasks and enables safe partial rollback
-- See `code-execute` skill for worktree creation automation
+- See `execute` skill for worktree creation automation
 
 ## Branch Naming
 

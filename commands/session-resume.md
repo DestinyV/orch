@@ -61,7 +61,7 @@ SESSION LOADED: {file path}
 WORKFLOW STATE: {path to .workflow-state.json}
 
 PROJECT: {project name}
-CURRENT STAGE: {spec-creation | test-design | code-design | ...}
+CURRENT STAGE: {spec | test-design | design | ...}
 PROGRESS: {X/Y stages completed}
 
 WHAT WE'RE BUILDING:
@@ -116,7 +116,7 @@ Ready to continue. What would you like to do?
 
 ## 与 workflow-control 中断恢复的关系
 
-`workflow-control` 通过 `.workflow-state.json` 实现自动中断恢复：
+`workflow` 通过 `.workflow-state.json` 实现自动中断恢复：
 
 ```
 workflow-control 启动

@@ -22,8 +22,8 @@ All test data originates from spec-creation's TEST-VERIFY blocks and Mock Data. 
 ## Coverage Requirements
 
 - Unit tests: >= 85% coverage (enforced in code-execute)
-- Integration tests: cover all API endpoints (code-test)
-- E2E tests: cover critical user journeys (code-test)
+- Integration tests: cover all API endpoints (test)
+- E2E tests: cover critical user journeys (test)
 - Target split: Unit 65-75% | Integration 15-25% | E2E 5-10%
 
 ## Test Naming

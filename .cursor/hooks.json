@@ -27,7 +27,7 @@
 
   "skills": {
     "discoveryPath": "skills/",
-    "entrySkill": "workflow-control",
+    "entrySkill": "workflow",
     "pattern": "**/skills/*/SKILL.md"
   }
 }

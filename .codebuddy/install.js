@@ -18,12 +18,12 @@ const LINKS = {
   'AGENTS.md': '.codebuddy/AGENTS.md',
 
   // Core skills (read-only symlinks or copies)
-  'skills/workflow-control/SKILL.md': '.codebuddy/skills/workflow-control.md',
-  'skills/spec-creation/SKILL.md': '.codebuddy/skills/spec-creation.md',
-  'skills/code-design/SKILL.md': '.codebuddy/skills/code-design.md',
-  'skills/code-task/SKILL.md': '.codebuddy/skills/code-task.md',
-  'skills/code-execute/SKILL.md': '.codebuddy/skills/code-execute.md',
-  'skills/code-test/SKILL.md': '.codebuddy/skills/code-test.md',
+  'skills/workflow/SKILL.md': '.codebuddy/skills/workflow.md',
+  'skills/spec/SKILL.md': '.codebuddy/skills/spec.md',
+  'skills/design/SKILL.md': '.codebuddy/skills/design.md',
+  'skills/task/SKILL.md': '.codebuddy/skills/task.md',
+  'skills/execute/SKILL.md': '.codebuddy/skills/execute.md',
+  'skills/test/SKILL.md': '.codebuddy/skills/test.md',
 };
 
 function install(cbPath) {

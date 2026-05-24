@@ -1,4 +1,4 @@
-# test-spec.md 模板
+# test-spec-creation.md 模板
 
 ## 基础结构
 

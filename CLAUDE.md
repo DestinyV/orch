@@ -48,12 +48,12 @@
 
 **核心工作流**：
 ```
-/start → spec-creation → test-design ⟷ code-design → api-contract(fullstack)
-→ code-task → code-execute → exception-handler(后端/全栈) → code-test
-→ spec-archive → knowledge-continuum
+/start → spec → test-design ⟷ design → contract(fullstack)
+→ code-task → code-execute → exception-handler(后端/全栈) → test
+→ archive → continuous-learning
 ```
 
-**TDD 数据链路**：`spec-creation (TEST-VERIFY) → test-designer (test-spec + fixtures) → code-execute (RED-GREEN-REFACTOR-REVIEW)`
+**TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → code-execute (RED-GREEN-REFACTOR-REVIEW)`
 
 **版本**：v2.21.0 (2026-05-24)
 
@@ -61,11 +61,11 @@
 
 ```
 orch/
-├── skills/          # 18个 Skills（workflow-control/spec-creation/test-design/code-design/api-contract/
-│                    #   code-task/code-execute/exception-handler/code-test/spec-archive/
-│                    #   script-writer/knowledge-continuum/using-orch/
-│                    #   context-budget/token-budget-advisor/strategic-compact/
-│                    #   cost-tracking/continuous-agent-loop）
+├── skills/          # 18个 Skills（workflow/spec/test-design/design/contract/
+│                    #   task/execute/exception/test/archive/
+│                    #   scripts/continuous-learning/using-orch/
+│                    #   context-budget/depth/compact/
+│                    #   cost/ralph-loop）
 ├── agents/          # 23个 Agents（11工作流核心 + 12扩展）
 ├── commands/        # 12个斜杠命令
 ├── rules/           # 语言规则（common/typescript/python/zh）
@@ -89,23 +89,23 @@ orch/
 
 | Skill | 职责 | 阶段 |
 |-------|------|------|
-| script-writer | 工具优先策略 | Utility |
-| workflow-control | 统一入口+流程编排 | 入口 |
-| spec-creation | 需求分析和规范生成 | Spec |
+| scripts | 工具优先策略 | Utility |
+| workflow | 统一入口+流程编排 | 入口 |
+| spec | 需求分析和规范生成 | Spec |
 | test-design | 测试规范 + Fixture 生成 | Test-Design |
-| code-design | 代码设计规划 | Design |
-| api-contract | 接口契约定义与审查 (fullstack) | Api-Contract |
-| code-task | 任务分解 | Task |
-| code-execute | TDD 实现 + git-worktree + 两阶段审查 | Execute |
-| exception-handler | 异常模式扫描+代码生成 | Exception |
-| code-test | 集成/E2E/性能测试 + 闭环验证 | Test |
-| spec-archive | 规范归档合并 | Archive |
-| knowledge-continuum | 知识复利 + instinct 学习 | Knowledge |
+| design | 代码设计规划 | Design |
+| contract | 接口契约定义与审查 (fullstack) | Api-Contract |
+| task | 任务分解 | Task |
+| execute | TDD 实现 + git-worktree + 两阶段审查 | Execute |
+| exception | 异常模式扫描+代码生成 | Exception |
+| test | 集成/E2E/性能测试 + 闭环验证 | Test |
+| archive | 规范归档合并 | Archive |
+| continuous-learning | 知识复利 + instinct 学习 | Knowledge |
 | context-budget | 上下文窗口审计 | Utility |
-| token-budget-advisor | 响应深度控制 | Utility |
-| strategic-compact | 逻辑边界 compact 建议 | Utility |
-| cost-tracking | Token 成本追踪 | Utility |
-| continuous-agent-loop | 自主循环模式选择 | Utility |
+| depth | 响应深度控制 | Utility |
+| compact | 逻辑边界 compact 建议 | Utility |
+| cost | Token 成本追踪 | Utility |
+| ralph-loop | 自主循环模式选择 | Utility |
 
 ### 多平台支持
 
@@ -124,17 +124,17 @@ orch/
 
 | Agent | 职责 |
 |-------|------|
-| workflow-control | 统一入口 + 流程编排 |
-| spec-creation | 需求分析和规范生成 |
+| workflow | 统一入口 + 流程编排 |
+| spec | 需求分析和规范生成 |
 | test-designer | 测试设计 |
 | code-architect | 代码设计规划 |
-| code-tasker | 任务列表生成 |
+| tasker | 任务列表生成 |
 | code-executor | TDD 代码实现 |
 | code-reviewer | 规范 + 质量两阶段审查 |
-| code-tester | 高层测试运行 |
-| exception-handler | 异常模式扫描 |
+| tester | 高层测试运行 |
+| exception | 异常模式扫描 |
 | knowledge-curator | 知识复利执行 |
-| spec-archiver | 规范归档合并 |
+| archiver | 规范归档合并 |
 
 另含 12 个扩展 Agents（planner/tdd-guide/code-simplifier/silent-failure-hunter/comment-analyzer/conversation-analyzer/pr-test-analyzer/refactor-cleaner/loop-operator/harness-optimizer/doc-updater/e2e-runner），详情见 `AGENTS.md`。
 
@@ -152,40 +152,40 @@ orch/
 
 | 原则 | 说明 |
 |------|------|
-| **规范优先** | 一切从 spec-creation 开始，所有设计开发基于规范 |
-| **设计驱动** | code-design 生成架构方案，审批后进入 Task 阶段 |
-| **任务清晰** | code-task 将设计拆解为可执行任务清单，含依赖和验收标准 |
-| **执行严谨** | code-execute 两阶段审查（规范+质量）+ TDD（RED→GREEN→REFACTOR→REVIEW）+ 覆盖率≥85% |
-| **测试完整** | code-test 执行集成/E2E/性能测试 + 闭环验证（TV→Test→Code→Result 对应）|
+| **规范优先** | 一切从 spec 开始，所有设计开发基于规范 |
+| **设计驱动** | design 生成架构方案，审批后进入 Task 阶段 |
+| **任务清晰** | task 将设计拆解为可执行任务清单，含依赖和验收标准 |
+| **执行严谨** | execute 两阶段审查（规范+质量）+ TDD（RED→GREEN→REFACTOR→REVIEW）+ 覆盖率≥85% |
+| **测试完整** | test 执行集成/E2E/性能测试 + 闭环验证（TV→Test→Code→Result 对应）|
 
 ## Skills 关系
 
 ```
 用户需求
   ↓
-[spec-creation]  生成 spec-dev/{req_id}/spec/（含 TEST-VERIFY + Mock Data）
+[spec]  生成 spec-dev/{req_id}/spec/（含 TEST-VERIFY + Mock Data）
   ↓
-  ├── [test-design]  ← 并行 →  [code-design]
+  ├── [test-design]  ← 并行 →  [design]
   │   生成 test-spec + fixtures      生成 design.md
   ↓                              ↓
-  ├── [api-contract]（fullstack 强制）→ api-contract.md + review-report.md
+  ├── [contract]（fullstack 强制）→ contract.md + review-report.md
   ↓
-[code-task]  →  tasks.md
+[task]  →  tasks.md
   ↓
-[code-execute]  →  test-*.template + fixtures → RED→GREEN→REFACTOR→REVIEW
+[execute]  →  test-*.template + fixtures → RED→GREEN→REFACTOR→REVIEW
   ↓              →  exception-handler（后端/全栈自动）
-[code-test]   →  集成 / E2E / 性能测试 + 闭环验证
+[test]   →  集成 / E2E / 性能测试 + 闭环验证
   ↓
-[spec-archive]  →  合并到主规范库
+[archive]  →  合并到主规范库
   ↓
-[knowledge-continuum]  →  patterns/ + instincts/ + preferences/
+[continuous-learning]  →  patterns/ + instincts/ + preferences/
   ↓
 ✅ 完成
 ```
 
-- test-design 与 code-design 可并行执行，互不阻塞
+- test-design 与 design 可并行执行，互不阻塞
 - exception-handler 仅后端/全栈自动触发（code-execute 子过程）
-- knowledge-continuum v2 含 instinct 学习层（hook 级会话观察 + 原子 instincts + 置信度评分 + 项目级隔离）
+- continuous-learning v2 含 instinct 学习层（hook 级会话观察 + 原子 instincts + 置信度评分 + 项目级隔离）
 
 ## 架构参考
 
@@ -219,16 +219,16 @@ orch/
 
 | ✅ 必须 | ❌ 禁止 |
 |---------|--------|
-| 首次使用前运行 spec-creation 生成规范 | 跳过设计阶段直接编码 |
-| 设计审批通过后才能进入 code-task | code-execute 中跳过规范或质量审查 |
+| 首次使用前运行 spec 生成规范 | 跳过设计阶段直接编码 |
+| 设计审批通过后才能进入 task | execute 中跳过规范或质量审查 |
 | 遵循 Task 清单严格执行 | 发现问题不修复就继续下一个 Task |
-| code-test 闭环验证（≥80% 覆盖率） | 为了让测试通过修改源代码逻辑 |
+| test 闭环验证（≥80% 覆盖率） | 为了让测试通过修改源代码逻辑 |
 
 ## 关键要点
 
-1. **规范驱动** — 一切从 `/spec-creation` 开始
+1. **规范驱动** — 一切从 `/spec` 开始
 2. **测试先行** — `/test-design` 从 TEST-VERIFY 生成测试规范和 Fixture
-3. **设计优先** — `/code-design` 数据库先行 + 接口契约驱动
+3. **设计优先** — `/design` 数据库先行 + 接口契约驱动
 4. **多阶段审查** — git-worktree 隔离 + 规范+质量两道关卡
 5. **闭环验证** — Task-代码-测试完全对应
 6. **知识复利** — 每次工作流结束沉淀模式，持续增强下次需求

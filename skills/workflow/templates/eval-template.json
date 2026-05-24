@@ -1,0 +1,167 @@
+{
+  "_description": ".workflow-eval.json 模板 — 步骤0 初始化时写入，每阶段完成后追加 stage 数据",
+  "req_id": "",
+  "status": "initialized",
+  "project_mode": "",
+  "mode": "standard",
+  "started_at": "",
+  "completed_at": "",
+  "updated_at": "",
+  "token_usage": {
+    "total_input": 0,
+    "total_output": 0,
+    "by_stage": {}
+  },
+  "stages": [
+    {
+      "stage": "0_workflow_control",
+      "skill": "workflow",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "user_interactions": 0,
+      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "0.5_socratic_clarify",
+      "skill": "clarify",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "socratic-clarifier", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "1_spec_creation",
+      "skill": "spec",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "code-explorer", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "2_test_design",
+      "skill": "test-design",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "test-designer", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "3_code_design",
+      "skill": "design",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "code-architect", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "3.5_api_contract",
+      "skill": "contract",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "api-contract-creator", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "4_code_task",
+      "skill": "task",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "code-tasker", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "5_code_execute",
+      "skill": "execute",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agents": [
+        { "name": "code-executor", "dispatched": false, "count": 0, "status": "", "retries": 0 },
+        { "name": "code-reviewer", "dispatched": false, "count": 0, "status": "", "retries": 0 }
+      ]
+    },
+    {
+      "stage": "5.5_exception_handler",
+      "skill": "exception",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "agent": { "name": "exception", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "6_code_test",
+      "skill": "test",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "hard_gate_triggers": 0,
+      "agents": [
+        { "name": "code-tester", "dispatched": false, "status": "", "retries": 0 },
+        { "name": "test-verifier", "dispatched": false, "status": "", "retries": 0 }
+      ]
+    },
+    {
+      "stage": "7_spec_archive",
+      "skill": "archive",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "agent": { "name": "spec-archiver", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "8_evaluation",
+      "skill": "evaluation",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "9_knowledge_continuum",
+      "skill": "continuous-learning",
+      "status": "pending",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "duration_seconds": 0,
+      "agent": { "name": "knowledge-curator", "dispatched": false, "status": "", "retries": 0 }
+    }
+  ],
+  "summary": {
+    "stages_total": 14,
+    "stages_done": 0,
+    "stages_failed": 0,
+    "stages_skipped": 0,
+    "agents_dispatched": 0,
+    "agents_success": 0,
+    "agents_failed": 0,
+    "hard_gates_total": 0,
+    "user_interactions_total": 0
+  },
+  "events": [],
+  "diagnosis": {
+    "bottlenecks": [],
+    "warnings": [],
+    "suggestions": []
+  }
+}

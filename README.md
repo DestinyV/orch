@@ -11,8 +11,8 @@
 - 💻 [Skills Documentation](./skills/README_EN.md) - 9 Skills workflow documentation
 - 🔧 [Installation Guide](./docs/INSTALLATION_EN.md) - Installation and troubleshooting
 - 🏗️ [Technical Guide](./CLAUDE.md) - Claude architecture and design principles
-- 🔀 **[Git-Worktrees Guide](./skills/code-execute/git-worktrees-guide.md)** - code-execute isolated work environment guide
-- ⚡ **[Worktrees Quick Reference](./skills/code-execute/QUICK_REFERENCE.md)** - Daily use quick reference card
+- 🔀 **[Git-Worktrees Guide](./skills/execute/git-worktrees-guide.md)** - execute isolated work environment guide
+- ⚡ **[Worktrees Quick Reference](./skills/execute/QUICK_REFERENCE.md)** - Daily use quick reference card
 
 ## 📌 Overview
 
@@ -20,11 +20,11 @@
 
 **Workflow**:
 ```
-/start "需求" → /spec-creation (Spec) → /test-design (Test Spec) ⟷ /code-design (Design) → /api-contract (Contract) → /code-task (Task) → /code-execute (Coding) → /exception-handler (Exception) → /code-test (Testing) → /spec-archive (Archive) → Complete
+/start "需求" → /spec (Spec) → /test-design (Test Spec) ⟷ /design (Design) → /contract (Contract) → /task (Task) → /execute (Coding) → /exception (Exception) → /test (Testing) → /archive (Archive) → Complete
 ```
 
-> `/test-design` and `/code-design` can be executed in parallel (both depend on spec-creation output).
-> `/exception-handler` triggers automatically for backend/fullstack projects after code-execute (zero hardcoding, project convention scanning).
+> `/test-design` and `/design` can be executed in parallel (both depend on spec output).
+> `/exception` triggers automatically for backend/fullstack projects after code-execute (zero hardcoding, project convention scanning).
 
 ---
 
@@ -63,17 +63,17 @@
 
 | Skill | Stage | Function | Output |
 |-------|-------|----------|--------|
-| **script-writer** | Utility | 工具优先策略：Grep/Bash/Glob/Edit 优先完成文件搜索/提取/编辑/校验，仅脚本无法处理时兜底Read | 脚本化文件操作 |
-| **workflow-control** | Orchestrator | 统一入口+流程编排：自动检测模式、串联9个Skill、HARD-GATE卡点、中断恢复 | .workflow-state.json + 全流程自动执行 |
-| **spec-creation** | Spec | Requirements analysis and spec generation, outputs BDD format spec documents (WHEN-THEN format) | spec-dev/{requirement_desc_abstract}/spec/ |
+| **scripts** | Utility | 工具优先策略：Grep/Bash/Glob/Edit 优先完成文件搜索/提取/编辑/校验，仅脚本无法处理时兜底Read | 脚本化文件操作 |
+| **workflow** | Orchestrator | 统一入口+流程编排：自动检测模式、串联9个Skill、HARD-GATE卡点、中断恢复 | .workflow-state.json + 全流程自动执行 |
+| **spec** | Spec | Requirements analysis and spec generation, outputs BDD format spec documents (WHEN-THEN format) | spec-dev/{requirement_desc_abstract}/spec/ |
 | **test-design** | Test-Design | Generate test specs, fixtures, and test templates from TEST-VERIFY | test-spec.md + fixtures.json + test-*.template |
-| **code-design** | Design | Code design planning based on specs, generates architecture and technical solutions | spec-dev/{requirement_desc_abstract}/design/design.md |
-| **api-contract** | Api-Contract | Interface contract definition and review (fullstack mandatory) | api-contract.md + review-report.md |
-| **code-task** | Task | Converts designs to code-level task lists, supports frontend, backend, database, microservice tasks | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
-| **code-execute** | Execute | Task execution via sub-agents, supports multi-language multi-framework, two-stage review (spec + quality), TDD process with unit tests. **v2.3.1+**: Uses git-worktree to create isolated work environments for each Task, ensuring safety, traceability, and recoverability of fix cycles | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
-| **exception-handler** | Exception | Exception scene recognition + project convention scanning + exception code generation (backend/fullstack, zero hardcoding) | src/** (with exception handling) |
-| **code-test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
-| **spec-archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | spec-dev/spec/ (merged main spec) |
+| **design** | Design | Code design planning based on specs, generates architecture and technical solutions | spec-dev/{requirement_desc_abstract}/design/design.md |
+| **contract** | Api-Contract | Interface contract definition and review (fullstack mandatory) | contract.md + review-report.md |
+| **task** | Task | Converts designs to code-level task lists, supports frontend, backend, database, microservice tasks | spec-dev/{requirement_desc_abstract}/tasks/tasks.md |
+| **execute** | Execute | Task execution via sub-agents, supports multi-language multi-framework, two-stage review (spec + quality), TDD process with unit tests. **v2.3.1+**: Uses git-worktree to create isolated work environments for each Task, ensuring safety, debugability, and recoverability of fix cycles | src/ + spec-dev/{requirement_desc_abstract}/execution/execution-report.md |
+| **exception** | Exception | Exception scene recognition + project convention scanning + exception code generation (backend/fullstack, zero hardcoding) | src/** (with exception handling) |
+| **test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md |
+| **archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | spec-dev/spec/ (merged main spec) |
 
 Detailed documentation: [View skills documentation](./skills/README_EN.md)
 
@@ -83,15 +83,15 @@ orch includes 9 professional Agents that collaborate across various Skills:
 
 | Agent | Responsibility | Use Cases |
 |-------|---------------|-----------|
-| **code-architect** | Analyzes existing codebase patterns and conventions to design functional architecture and provide complete implementation blueprints | code-design stage: analyzes project structure, extracts design patterns, plans architecture |
-| **code-explorer** | Deep analysis of existing code implementations by tracing execution paths, mapping architecture layers, and identifying design patterns | spec-creation and code-design stages: extracts architecture conventions and identifies reusable code |
-| **code-executor** | Writes high-quality code based on detailed implementation tasks with TDD (RED-GREEN-REFACTOR-REVIEW) | code-execute stage: each Task dispatched as independent subagent in isolated git-worktree |
-| **code-reviewer** | Reviews for bugs, logic errors, security vulnerabilities, and code quality issues with confidence-based filtering (≥80) | code-execute stages 3.3/3.4 and code-test stage 2: spec review + quality review |
-| **spec-archiver** | Spec archiving expert: benchmark analysis, conflict detection, smart merging, consistency verification | spec-archive stage: dispatched for scenario comparison, merging, and consistency checks |
+| **code-architect** | Analyzes existing codebase patterns and conventions to design functional architecture and provide complete implementation blueprints | design stage: analyzes project structure, extracts design patterns, plans architecture |
+| **code-explorer** | Deep analysis of existing code implementations by tracing execution paths, mapping architecture layers, and identifying design patterns | spec and design stages: extracts architecture conventions and identifies reusable code |
+| **code-executor** | Writes high-quality code based on detailed implementation tasks with TDD (RED-GREEN-REFACTOR-REVIEW) | execute stage: each Task dispatched as independent subagent in isolated git-worktree |
+| **code-reviewer** | Reviews for bugs, logic errors, security vulnerabilities, and code quality issues with confidence-based filtering (≥80) | execute stages 3.3/3.4 and test stage 2: spec review + quality review |
+| **archiver** | Spec archiving expert: benchmark analysis, conflict detection, smart merging, consistency verification | archive stage: dispatched for scenario comparison, merging, and consistency checks |
 | **test-designer** | Converts TEST-VERIFY into test cases, defines Mock strategies, generates fixtures and test framework code | test-design stage: analyzes scenarios, designs test cases, generates test templates |
-| **exception-handler** | Project convention scanning + exception scenario identification + exception code generation with zero hardcoding | code-execute stage: auto-triggered for backend/fullstack Tasks to add exception handling |
-| **api-contract-creator** | Interface contract definition and six-dimension review (completeness/naming/types/errors/conventions/database) | api-contract stage: fullstack mandatory, generates contract docs and review reports |
-| **code-tasker** | Design→task decomposition + dependency analysis + parallel execution planning with Test Case mapping | code-task stage: decomposes design into executable tasks with dependency DAG |
+| **exception** | Project convention scanning + exception scenario identification + exception code generation with zero hardcoding | execute stage: auto-triggered for backend/fullstack Tasks to add exception handling |
+| **contract-creator** | Interface contract definition and six-dimension review (completeness/naming/types/errors/conventions/database) | contract stage: fullstack mandatory, generates contract docs and review reports |
+| **tasker** | Design→task decomposition + dependency analysis + parallel execution planning with Test Case mapping | task stage: decomposes design into executable tasks with dependency DAG |
 
 ---
 
@@ -165,7 +165,7 @@ Enter requirements as prompted
 #### Step 1: Requirements Specification (User Action)
 
 ```bash
-/spec-creation
+/spec
 ```
 
 Interactive dialogue with the plugin for requirements analysis and confirmation:
@@ -197,7 +197,7 @@ After spec confirmation, subsequent steps will **execute automatically**:
 
 **Step 3.5: Api-Contract** (Automatic, fullstack only)
 - Defines interface contract and conducts five-dimension review
-- Output: `spec-dev/{requirement_desc_abstract}/api-contract/`
+- Output: `spec-dev/{requirement_desc_abstract}/contract/`
 
 **Step 4: Task List** (Automatic)
 - Automatically decomposes tasks based on design solution
@@ -228,7 +228,7 @@ After spec confirmation, subsequent steps will **execute automatically**:
 
 **Step 7: Spec Archiving** (Automatic)
 - Automatically triggers spec archiving process after all tests pass
-- Assigns spec-archiver for benchmark analysis and smart merging
+- Assigns archiver for benchmark analysis and smart merging
 - Integrates requirement specs into main spec library through scenario splitting
 - Generates archive report: `spec-dev/spec/archive-log.md`
 - Updates main specs: `spec-dev/spec/` (data-models, business-rules, glossary, etc.)
@@ -268,23 +268,23 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 # Input requirements: Need to add order form to order management system, supporting search, sort, pagination, batch operations
 
 # 1. Analyze requirements and generate spec
-/spec-creation
+/spec
 # Output: spec-dev/order-form/spec/ (requirement.md, scenarios/*.md, data-models.md, etc.)
 
 # 2. Architecture design based on spec
-/code-design Need to add order form
+/design Need to add order form
 # Output: spec-dev/order-form/design/design.md
 
 # 3. Decompose design into specific tasks
-/code-task spec-dev/order-form/design/design.md
+/task spec-dev/order-form/design/design.md
 # Output: spec-dev/order-form/tasks/tasks.md
 
 # 4. Execute code implementation (with two-stage review)
-/code-execute spec-dev/order-form/tasks/tasks.md
+/execute spec-dev/order-form/tasks/tasks.md
 # Output: src/... + spec-dev/order-form/execution/execution-report.md
 
 # 5. Test verification and closed-loop check
-/code-test spec-dev/order-form/tasks/tasks.md
+/test spec-dev/order-form/tasks/tasks.md
 # Output: tests/... + spec-dev/order-form/testing/testing-report.md
 ```
 
@@ -296,23 +296,23 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 # Input requirements: Need to create data dashboard supporting real-time data, multi-chart display, custom panels
 
 # 1. Analyze requirements and generate spec
-/spec-creation
+/spec
 # Output: spec-dev/dashboard/spec/ (requirement.md, scenarios/*.md, etc.)
 
 # 2. Architecture design based on spec
-/code-design Need to create data dashboard
+/design Need to create data dashboard
 # Output: spec-dev/dashboard/design/design.md
 
 # 3. Decompose design into specific tasks
-/code-task spec-dev/dashboard/design/design.md
+/task spec-dev/dashboard/design/design.md
 # Output: spec-dev/dashboard/tasks/tasks.md
 
 # 4. Execute code implementation
-/code-execute spec-dev/dashboard/tasks/tasks.md
+/execute spec-dev/dashboard/tasks/tasks.md
 # Output: src/... + spec-dev/dashboard/execution/execution-report.md
 
 # 5. Test verification and closed-loop check
-/code-test spec-dev/dashboard/tasks/tasks.md
+/test spec-dev/dashboard/tasks/tasks.md
 # Output: tests/... + spec-dev/dashboard/testing/testing-report.md
 ```
 
@@ -328,7 +328,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 1: /spec-creation Requirements Analysis & Spec      │
+│  Step 1: /spec Requirements Analysis & Spec      │
 │  - Analyze requirements and initial decomposition        │
 │  - Scenario refinement and multi-round confirmation      │
 │  - Output: spec-dev/{name}/spec/                          │
@@ -337,7 +337,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 2: /code-design Architecture & Technical Design   │
+│  Step 2: /design Architecture & Technical Design   │
 │  - Assign code-architect to analyze project patterns     │
 │  - Conduct architecture design and technical planning    │
 │  - Output: spec-dev/{name}/design/design.md               │
@@ -345,7 +345,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 3: /code-task Task Decomposition & Definition       │
+│  Step 3: /task Task Decomposition & Definition       │
 │  - Decompose design into coding tasks                     │
 │  - Define goals, deliverables, acceptance criteria        │
 │  - Output: spec-dev/{name}/tasks/tasks.md                 │
@@ -360,7 +360,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 4: /code-execute Code Implementation & Review       │
+│  Step 4: /execute Code Implementation & Review       │
 │  - Assign code-executor sub-agents for each Task          │
 │  - **v2.3.1+**: Create git-worktree isolated environments │
 │    • Coding and fixes performed in worktree              │
@@ -374,7 +374,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 5: /code-test Testing & Closed-Loop Verification    │
+│  Step 5: /test Testing & Closed-Loop Verification    │
 │  - Code quality review (Lint, TypeScript strict check)    │
 │  - Design and execute unit, integration, E2E tests        │
 │  - Closed-loop verification (Task-Code-Test correspondence)│
@@ -385,8 +385,8 @@ Total time: Specification stage depends on user interaction, subsequent full wor
                  │
                  ↓
 ┌──────────────────────────────────────────────────────────┐
-│  Step 6: /spec-archive Spec Archiving & Optimization      │
-│  - Assign spec-archiver for spec benchmark analysis       │
+│  Step 6: /archive Spec Archiving & Optimization      │
+│  - Assign archiver for spec benchmark analysis       │
 │  - Integrate into main spec through scenario splitting    │
 │  - Conflict detection and decision handling               │
 │  - Output: spec-dev/spec/ + archive-report.md             │
@@ -407,12 +407,12 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 ### ✅ Must Do
 - Step 0: Use `/orch:sdd-dev` to enter plugin and input requirements
-- Step 1: Run spec-creation for requirements analysis and spec generation
-- Step 2: Assign code-architect for architecture design in code-design stage
+- Step 1: Run spec for requirements analysis and spec generation
+- Step 2: Assign code-architect for architecture design in design stage
 - Step 3: Conduct task decomposition and definition in code-task stage
 - Step 4: Strictly follow task checklist for code-execute, complete spec + quality two-stage review
 - Step 5: Conduct comprehensive test verification and closed-loop check
-- Step 6: Automatically execute spec-archive after tests pass, accumulate specs to enterprise spec library
+- Step 6: Automatically execute archive after tests pass, accumulate specs to enterprise spec library
 
 ### ❌ Must Not Do
 - Skip Step 0 and directly call individual Skills (should use plugin entry)
@@ -420,7 +420,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 - Skip spec or quality reviews in code-execute
 - Modify source code logic to make tests pass
 - Ignore consistency between Tasks and code
-- Skip closed-loop verification in code-test stage
+- Skip closed-loop verification in test stage
 - Skip spec archiving process, preventing spec library improvement
 
 ---
@@ -433,8 +433,8 @@ Skills may have context, background, or dependency bindings with projects, so th
 
 Modify the SKILL.md files in the following Skills to adapt to your project requirements:
 
-1. **spec-creation** - Define project design patterns and reference component collection methods
-2. **code-design** - Adjust design analysis dimensions and depth
+1. **spec** - Define project design patterns and reference component collection methods
+2. **design** - Adjust design analysis dimensions and depth
 3. **code-task** - Adjust task decomposition granularity and acceptance criteria
 
 ### Adjust Execution and Review
@@ -447,7 +447,7 @@ Modify prompt files in code-execute:
 
 ### Adjust Testing Strategy
 
-Modify code-test SKILL.md:
+Modify test SKILL.md:
 
 - Adjust test frameworks and tools
 - Adjust test coverage requirements
@@ -470,13 +470,13 @@ Modify code-test SKILL.md:
 ### v2.3.0 (2026-03-23) ✨ Complete TDD Implementation
 - ✅ **TDD Implementation System** - Complete Phase 2 TDD implementation (RED-GREEN-REFACTOR-REVIEW)
 - ✅ **High-Level Testing System** - Complete Phase 3 integration, E2E, performance testing optimization
-- ✅ **Clear Responsibilities** - code-execute handles unit tests, code-test handles high-level tests
+- ✅ **Clear Responsibilities** - code-execute handles unit tests, test handles high-level tests
 - ✅ **High-Level Test Prompts** - Integration, E2E, performance test specialized design guides
 - ✅ **Best Practices Update** - BEST_PRACTICES.md adds Phase 3 best practices
 - ✅ **Closed-Loop Verification** - Complete TEST-VERIFY→Test→Code→Result chain
 
 ### v2.2.0 (2026-03-20)
-- ✅ **Spec Archiving** - New spec-archive skill and spec-archiver Agent
+- ✅ **Spec Archiving** - New archive skill and archiver Agent
 - ✅ **Spec Accumulation** - Automatically archive verified requirement specs to enterprise main spec library
 - ✅ **Scenario Splitting** - Support integration of new specs through scenario splitting and smart merging
 - ✅ **Conflict Detection** - Automatic detection and handling of spec conflicts with decision suggestions
@@ -494,7 +494,7 @@ Modify code-test SKILL.md:
 
 ### v2.0.0 (2026-03-09)
 - ✅ Complete refactoring to Spec-Design-TestDesign-Task-Execute-Test-Archive workflow
-- ✅ 7 Core Skills: spec-creation, code-design, test-design, code-task, code-execute, code-test, spec-archive
+- ✅ 7 Core Skills: spec, design, test-design, code-task, code-execute, test, archive
 - ✅ Multi-stage review mechanism and closed-loop verification
 - ✅ Frontend-first support (React/Vue/Angular/Svelte)
 - ✅ Complete documentation and best practices guides
@@ -511,23 +511,23 @@ Modify code-test SKILL.md:
 2. View [Usage Guide](./docs/USAGE_EN.md)
 3. Execute `/orch:sdd-dev` to enter plugin
 4. Enter requirements as prompted
-5. Step through spec-creation → code-design → test-design → code-task → code-execute → code-test → spec-archive
+5. Step through spec → design → test-design → code-task → code-execute → test → archive
 6. Choose a small feature for complete workflow trial run
 
 ### 📚 Advanced Learning
 1. Understand the 9 steps and 9 Agents in [Quick Start](#-quick-start)
 2. Read [Best Practices](./docs/BEST_PRACTICES_EN.md) to learn best practices for each stage
 3. Read [Usage Guide](./docs/USAGE_EN.md) for detailed workflow
-4. Learn [Git-Worktrees Guide](./skills/code-execute/references/git-worktrees-guide.md) to master isolated work environments
+4. Learn [Git-Worktrees Guide](./skills/execute/references/git-worktrees-guide.md) to master isolated work environments
    - Learn worktree creation, coding, fixing, merging, cleanup lifecycle
    - View real application scenarios and parallel Task management
-   - Reference [Quick Reference](./skills/code-execute/references/quick-reference.md) for daily queries
+   - Reference [Quick Reference](./skills/execute/references/quick-reference.md) for daily queries
 
 ### Team Adoption
 1. Ensure team members understand SDD workflow core principles
-2. Write project-specific design specs (through spec-creation)
+2. Write project-specific design specs (through spec)
 3. Write team best practices and coding style guides
-4. Configure code-execute and code-test review rules
+4. Configure code-execute and test review rules
 5. Train team members to use the entire workflow according to specs
 6. Establish spec-design based code review process
 

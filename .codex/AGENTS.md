@@ -6,16 +6,16 @@
 
 | Agent | 文件 | spawn_agent 名称 | 描述 |
 |-------|------|-----------------|------|
-| workflow-control | agents/workflow-control.md | orch-wfc | 入口 + 编排 |
-| spec-creation | agents/spec-creation.md | orch-spec | BDD 规范生成 |
+| workflow | agents/workflow.md | orch-wfc | 入口 + 编排 |
+| spec | agents/spec-creation.md | orch-spec | BDD 规范生成 |
 | test-designer | agents/test-designer.md | orch-test-des | 测试用例设计 |
 | code-architect | agents/code-architect.md | orch-arch | 架构设计 |
-| code-tasker | agents/code-tasker.md | orch-tasker | 任务列表生成 |
+| tasker | agents/tasker.md | orch-tasker | 任务列表生成 |
 | code-executor | agents/code-executor.md | orch-exec | TDD 实现 |
 | code-reviewer | agents/code-reviewer.md | orch-review | 两阶段代码审查 |
-| code-tester | agents/code-tester.md | orch-tester | 高层测试 |
-| exception-handler | agents/exception-handler.md | orch-exc | 异常处理 |
-| spec-archiver | agents/spec-archiver.md | orch-archiver | 规范归档合并 |
+| tester | agents/tester.md | orch-tester | 高层测试 |
+| exception | agents/exception.md | orch-exc | 异常处理 |
+| archiver | agents/archiver.md | orch-archiver | 规范归档合并 |
 | knowledge-curator | agents/knowledge-curator.md | orch-kc | 知识复利 |
 
 ## Codex 适配说明

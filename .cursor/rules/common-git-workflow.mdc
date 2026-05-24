@@ -13,7 +13,7 @@ globs: *
 
 ## Worktree Isolation (Required)
 
-Every Task in /code-execute must use a dedicated git worktree:
+Every Task in /execute must use a dedicated git worktree:
 ```
 git worktree add .worktrees/task-<n> <base-branch>
 ```
@@ -24,7 +24,7 @@ This prevents cross-task interference during parallel implementation.
 - One commit per logical change (not per file)
 - Commit messages: `<type>(<scope>): <description>`
 - Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`
-- Scope: the skill name (e.g., `code-execute`, `spec-creation`)
+- Scope: the skill name (e.g., `execute`, `spec`)
 
 ## Workflow State
 

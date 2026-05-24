@@ -7,7 +7,7 @@ argument-hint: 可选：需求描述
 
 统一入口命令，编排 10 阶段 SDD+TDD 流程。
 
-> **流程执行参考（Source of Truth）**: 各阶段的输入/输出契约、校验规则、失败纠正、Agent 派遣详见 [`skills/workflow-control/references/flow-execution-reference.md`](skills/workflow-control/references/flow-execution-reference.md)。
+> **流程执行参考（Source of Truth）**: 各阶段的输入/输出契约、校验规则、失败纠正、Agent 派遣详见 [`skills/workflow/references/flow-execution-reference.md`](skills/workflow/references/flow-execution-reference.md)。
 
 ## 入口
 
@@ -17,7 +17,7 @@ argument-hint: 可选：需求描述
 
 逐步调用：
 ```
-/spec-creation → /test-design ⟷ /code-design → /api-contract → /code-task → /code-execute → /code-test → /spec-archive
+/spec → /test-design ⟷ /design → /contract → /task → /execute → /test → /archive
 ```
 
 ## 强制规则
@@ -29,19 +29,19 @@ argument-hint: 可选：需求描述
 
 | 步骤 | Skill | Agent 派遣 | 前置 | 调度 |
 |------|-------|-----------|------|------|
-| 0 | workflow-control | — | 无 | 入口编排 |
-| 0.5 | socratic-clarify | socratic-clarifier | 模糊度 > 0.2 | 条件触发 |
-| 1 | spec-creation | code-explorer | clarification done | 自动级联 |
+| 0 | workflow | — | 无 | 入口编排 |
+| 0.5 | clarify | socratic-clarifier | 模糊度 > 0.2 | 条件触发 |
+| 1 | spec | code-explorer | clarification done | 自动级联 |
 | 2 | test-design | test-designer | spec done | 与步骤3 并行 |
-| 3 | code-design | code-architect | spec done | 与步骤2 并行 |
-| 3.5 | api-contract | api-contract-creator | code-design done + fullstack | 条件触发 |
-| 4 | code-task | code-tasker | code-design [+ api-contract] | 串行 |
-| 5 | code-execute | code-executor, code-reviewer | code-task done | 串行 |
-| 5.5 | exception-handler | exception-handler | code-execute 内部 | 子过程自动 |
-| 6 | code-test | code-tester, test-verifier | code-execute done | 串行 |
-| 7 | spec-archive | spec-archiver | code-test done + 全通过 | 串行 |
-| 8 | evaluation | — | spec-archive done | 串行 |
-| 9 | knowledge-continuum | knowledge-curator | evaluation done | 串行 |
+| 3 | design | code-architect | spec done | 与步骤2 并行 |
+| 3.5 | contract | contract-creator | design done + fullstack | 条件触发 |
+| 4 | task | tasker | design [+ contract] | 串行 |
+| 5 | execute | code-executor, code-reviewer | task done | 串行 |
+| 5.5 | exception | exception | execute 内部 | 子过程自动 |
+| 6 | test | tester, test-verifier | execute done | 串行 |
+| 7 | archive | archiver | test done + 全通过 | 串行 |
+| 8 | evaluation | — | archive done | 串行 |
+| 9 | continuous-learning | knowledge-curator | evaluation done | 串行 |
 
 ## 工作模式
 
@@ -59,15 +59,15 @@ argument-hint: 可选：需求描述
 
 | 步骤 | 调用 | 说明 |
 |------|------|------|
-| 0 | `Skill("orch:workflow-control")` | 模式检测 + 编排 |
-| 0.5 | `Skill("orch:socratic-clarify")` | 苏格拉底澄清 |
-| 1 | `Skill("orch:spec-creation")` | BDD 规范生成 |
+| 0 | `Skill("orch:workflow")` | 模式检测 + 编排 |
+| 0.5 | `Skill("orch:clarify")` | 苏格拉底澄清 |
+| 1 | `Skill("orch:spec")` | BDD 规范生成 |
 | 2 | `Agent(subagent_type=orch:test-designer, run_in_background=true)` | 测试规范 + fixtures |
 | 3 | `Agent(subagent_type=orch:code-architect, run_in_background=true)` | 架构设计 |
-| 3.5 | `Skill("orch:api-contract")` | 接口契约 + 审查 |
-| 4 | `Skill("orch:code-task")` | 任务拆解 |
-| 5 | `Skill("orch:code-execute")` | TDD 编码 |
-| 6 | `Skill("orch:code-test")` | 集成/E2E/性能测试 |
-| 7 | `Skill("orch:spec-archive")` | 规范归档合并 |
+| 3.5 | `Skill("orch:contract")` | 接口契约 + 审查 |
+| 4 | `Skill("orch:task")` | 任务拆解 |
+| 5 | `Skill("orch:execute")` | TDD 编码 |
+| 6 | `Skill("orch:test")` | 集成/E2E/性能测试 |
+| 7 | `Skill("orch:archive")` | 规范归档合并 |
 | 8 | evaluation | 效果评估 + 辅助诊断 |
-| 9 | `Skill("orch:knowledge-continuum")` | 知识沉淀 |
+| 9 | `Skill("orch:continuous-learning")` | 知识沉淀 |

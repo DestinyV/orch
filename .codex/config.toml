@@ -5,7 +5,7 @@ description = "SDD+TDD Development Workflow Plugin"
 
 [skills]
 discovery_path = "skills/"
-entry_skill = "workflow-control"
+entry_skill = "workflow"
 auto_load_pattern = "**/skills/*/SKILL.md"
 
 [agents]

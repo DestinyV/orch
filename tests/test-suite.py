@@ -3,7 +3,7 @@
 
 import os, sys, json, re
 
-ROOT = r"E:\YYWorkSpace\projects\sdd-tdd-dev"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 errors = []
 warnings = []
 
@@ -64,12 +64,12 @@ for jf in [".claude-plugin/plugin.json",".claude-plugin/marketplace.json","schem
 
 print("\n=== 6. WORKFLOW ===")
 sd = open(os.path.join(ROOT,"commands/start-dev.md"), encoding="utf-8").read()
-wfc = open(os.path.join(ROOT,"skills/workflow-control/SKILL.md"), encoding="utf-8").read()
+wfc = open(os.path.join(ROOT,"skills/workflow/SKILL.md"), encoding="utf-8").read()
 steps = re.findall(r"^\| *(\d+(?:\.\d+)?) *\| *(\S[^|]+)", sd, re.MULTILINE)
 print(f"  OK  start-dev.md: {len(steps)} steps")
 hg = wfc.count("<HARD-GATE>")
 print(f"  OK  workflow-control: {hg} HARD-GATEs") if hg >= 3 else warnings.append(f"workflow-control: {hg} HARD-GATEs")
-old = wfc.count("../script-writer/") + wfc.count("bash ../")
+old = wfc.count("../scripts/") + wfc.count("bash ../")
 print(f"  OK  no old paths") if old == 0 else errors.append(f"workflow-control: {old} old paths")
 print(f"  OK  cross-ref") if "start-dev.md" in wfc else warnings.append("no cross-ref")
 

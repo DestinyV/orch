@@ -33,12 +33,12 @@ git clone https://github.com/DestinyV/orch.git
 Claude Code automatically loads local skills from `.claude/skills/` directory, no additional configuration needed. Just use directly:
 
 ```bash
-/spec-creation
-/code-design
-/code-task
-/code-execute
-/code-test
-/spec-archive
+/spec
+/design
+/task
+/execute
+/test
+/archive
 ```
 
 ---
@@ -48,7 +48,7 @@ Claude Code automatically loads local skills from `.claude/skills/` directory, n
 After successful installation, verify in Claude Code:
 
 ```bash
-/spec-creation
+/spec
 ```
 
 If you see the interactive analysis prompt from spec-creation, installation was successful!
@@ -81,7 +81,7 @@ The skill files (`SKILL.md`) are standard Markdown and can be loaded as context 
 ## Troubleshooting
 
 ### Issue 1: Skill Not Found
-**Symptoms**: Running `/spec-creation` throws "skill not found" error
+**Symptoms**: Running `/spec` throws "skill not found" error
 
 **Solution**:
 1. Confirm installation completed: `npx skills add https://github.com/DestinyV/orch.git`
@@ -96,10 +96,10 @@ The skill files (`SKILL.md`) are standard Markdown and can be loaded as context 
 - Mac/Linux: Use `sudo` or check directory permissions
 
 ### Issue 3: Spec Directory Not Found
-**Symptoms**: Running `/code-design` throws "spec directory not found" error
+**Symptoms**: Running `/design` throws "spec directory not found" error
 
 **Solution**:
-1. First run `/spec-creation` to generate spec specifications
+1. First run `/spec` to generate spec specifications
 2. Ensure spec files were generated to `spec-dev/{requirement_desc_abstract}/spec/` directory
 
 ---
@@ -121,32 +121,32 @@ After installation, follow these steps to start using:
 
 1. **Requirements Specification**
    ```bash
-   /spec-creation [Requirements Description]
+   /spec [Requirements Description]
    ```
 
 2. **Code Design Planning**
    ```bash
-   /code-design
+   /design
    ```
 
 3. **Task List Generation**
    ```bash
-   /code-task
+   /task
    ```
 
 4. **Code Execution**
    ```bash
-   /code-execute
+   /execute
    ```
 
 5. **Testing and Verification**
    ```bash
-   /code-test
+   /test
    ```
 
 6. **Spec Archiving** (automatic after tests pass)
    ```bash
-   /spec-archive
+   /archive
    ```
 
 For more details, see [Usage Guide](./USAGE_EN.md) and [Plugin README](../README_EN.md)
