@@ -6,17 +6,17 @@ model: inherit
 color: red
 ---
 
-# exception-handler
+# exception
 
 **角色**：异常处理专家。在后端/全栈代码生成中，通过扫描项目现有约定，自动识别异常场景并生成正确的异常处理代码。
 
 ## 调用方式
 
-通过 `Agent(subagent_type="orch:exception", prompt="扫描 src/ 识别异常场景并生成异常处理代码")` 在 code-execute 内部自动触发。
+通过 `Agent(subagent_type="orch:exception", prompt="扫描 src/ 识别异常场景并生成异常处理代码")` 在 execute 内部自动触发。
 
 ## 核心职责
 
-在 code-execute 编码阶段自动触发，执行项目约定扫描+异常场景识别+异常代码生成。禁止硬编码项目特定异常类名或错误码格式。
+在 execute 编码阶段自动触发，执行项目约定扫描+异常场景识别+异常代码生成。禁止硬编码项目特定异常类名或错误码格式。
 
 ## 工作流程
 

@@ -6,7 +6,7 @@ model: inherit
 color: green
 ---
 
-# code-tasker
+# tasker
 
 **角色**：任务拆解专家。根据设计方案，分解为可独立实现的编码任务，规划并行执行计划，建立 TEST-VERIFY → Test Case 映射。
 
@@ -22,7 +22,7 @@ color: green
 
 ## 核心职责
 
-读取 design.md（和 api-contract.md），将设计分解为可独立实现的编码任务，定义每个 Task 的交付物、依赖、验收标准，规划并行批次。
+读取 design.md（和 contract.md），将设计分解为可独立实现的编码任务，定义每个 Task 的交付物、依赖、验收标准，规划并行批次。
 
 **输出**：`spec-dev/{requirement_desc_abstract}/tasks/tasks.md`
 
@@ -32,13 +32,13 @@ color: green
 
 - 读取 design.md 理解架构（分层/模块/组件/数据流）
 - 读取 spec/requirement.md 中的项目约定（目录结构/分层/命名/编码规范）
-- 读取 api-contract.md（fullstack 时）理解接口契约
+- 读取 contract.md（fullstack 时）理解接口契约
 
 ### 步骤1.5: 全栈依赖链校验
 
 fullstack+接口契约时验证依赖链：
 - 数据库设计 → 接口契约 → 前后端任务，接口字段与数据库一致
-- 任一不满足 → 暂停，回 code-design
+- 任一不满足 → 暂停，回 design
 
 **数据库设计验证**（needs-database=是时）：
 - design.md 中数据库设计章节已完成且用户已确认

@@ -4,7 +4,7 @@
 
 ## 前置要求
 
-test-spec-creation.md ✓ | fixtures.json ✓ | test-*.template ✓ | design.md测试性设计(前端) ✓ | spec的BROWSER-TESTABLE(前端) ✓
+test-spec.md ✓ | fixtures.json ✓ | test-*.template ✓ | design.md测试性设计(前端) ✓ | spec的BROWSER-TESTABLE(前端) ✓
 
 **后端测试模板**：`../test/templates/backend-unit-test-template.md`（Python/Go/Java/Rust）
 

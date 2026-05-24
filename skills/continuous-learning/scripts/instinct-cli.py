@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Instinct CLI — Manage instincts for knowledge-continuum v2
+Instinct CLI — Manage instincts for continuous-learning v2
 
 Commands:
   status   - Show all instincts (project + global) with confidence
@@ -388,7 +388,7 @@ def cmd_prune(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="knowledge-continuum Instinct CLI")
+    parser = argparse.ArgumentParser(description="continuous-learning Instinct CLI")
     sub = parser.add_subparsers(dest="command")
 
     p_status = sub.add_parser("status", help="Show instincts")

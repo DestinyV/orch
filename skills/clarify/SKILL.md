@@ -1,14 +1,14 @@
 ---
 name: clarify
 description: |
-  苏格拉底式需求澄清。在 spec-creation 之前，通过数学化模糊度评分的逐轮深度访谈澄清需求。
-  在 spec-creation 之前，通过数学化模糊度评分的逐轮深度访谈澄清需求。
+  苏格拉底式需求澄清。在 spec 之前，通过数学化模糊度评分的逐轮深度访谈澄清需求。
+  在 spec 之前，通过数学化模糊度评分的逐轮深度访谈澄清需求。
   
   输入：需求描述（文本）
   输出：spec-dev/{req_id}/spec/clarification.md（澄清报告 + 模糊度分数）
 ---
 
-# socratic-clarify — 苏格拉底需求澄清
+# clarify — 苏格拉底需求澄清
 
 ## When to Use
 
@@ -22,7 +22,7 @@ description: |
 
 ## 职责
 
-在 spec-creation 之前，通过数学化模糊度评分的逐轮深度访谈，将模糊想法转化为清晰需求基线。每次只问一个问题，针对最薄弱的清晰度维度，直到模糊度降至阈值以下。
+在 spec 之前，通过数学化模糊度评分的逐轮深度访谈，将模糊想法转化为清晰需求基线。每次只问一个问题，针对最薄弱的清晰度维度，直到模糊度降至阈值以下。
 
 ## 工作流程
 
@@ -35,7 +35,7 @@ description: |
   Phase 2: 挑战者模式（第4/6/8轮激活）
   Phase 3: 本体追踪（实体稳定性）
   Phase 4: 规范结晶 → clarification.md
-  Phase 5: 桥接 spec-creation
+  Phase 5: 桥接 spec
   ↓
 [spec] 读取澄清结果，生成标准规范
 ```
@@ -218,15 +218,15 @@ else:
 
 输出到 `spec-dev/{req_id}/spec/clarification.md`。
 
-## Phase 5: 桥接 spec-creation
+## Phase 5: 桥接 spec
 
-澄清完成后，自动级联到 spec-creation：
+澄清完成后，自动级联到 spec：
 
 ```bash
 Skill("orch:spec", args="{requirement_desc} (clarification: spec-dev/{req_id}/spec/clarification.md)")
 ```
 
-spec-creation 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问卷。
+spec 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问卷。
 
 ## 快速模式
 

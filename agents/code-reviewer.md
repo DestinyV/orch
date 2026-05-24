@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: 针对 bug、逻辑错误、安全漏洞、代码质量问题和项目约定遵循情况进行代码审查。审查高层测试代码（集成、E2E、性能），但不审查单元测试（由test-design和code-execute的TDD流程保证）。使用置信度过滤报告仅有真正意义的高优先级问题
+description: 针对 bug、逻辑错误、安全漏洞、代码质量问题和项目约定遵循情况进行代码审查。审查高层测试代码（集成、E2E、性能），但不审查单元测试（由test-design和execute的TDD流程保证）。使用置信度过滤报告仅有真正意义的高优先级问题
 tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
 model: inherit
 color: yellow
@@ -107,7 +107,7 @@ deep 模式额外检查：
 
 ## ⚠️ 职责分工
 
-**不审查**：单元测试（由test-design和code-execute的TDD流程保证）。
+**不审查**：单元测试（由test-design和execute的TDD流程保证）。
 **审查**：集成测试 | E2E测试 | 性能测试 | 生产代码（功能/错误处理/安全/性能/质量/规范）。
 
 ## 置信度评分

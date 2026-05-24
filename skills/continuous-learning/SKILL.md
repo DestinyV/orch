@@ -7,11 +7,11 @@ description: |
   输出：更新的 instinct/{personal,inherited}/ + pattern-index.json + preferences.json + 知识提炼报告
 ---
 
-# knowledge-continuum v2 — 知识复利引擎
+# continuous-learning v2 — 知识复利引擎
 
 ## When to Use
 
-- 工作流归档完成后自动触发（post-spec-archive）
+- 工作流归档完成后自动触发（post-archive）
 - 需要从工作流中提取模式、沉淀知识
 - 需要查看或管理 instincts（原子学习单元）
 
@@ -26,7 +26,7 @@ description: |
 ```
                     ┌─────────────────────────────────────┐
                     │   Layer 1: Workflow Knowledge (v1)   │
-                    │   工作流结束后触发 (post-spec-archive)  │
+                    │   工作流结束后触发 (post-archive)  │
                     │   patterns/ + user-preferences/      │
                     └─────────────────────────────────────┘
                                         +
@@ -113,7 +113,7 @@ test -f "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/user-preferences/prefe
 
 ### 反馈闭合
 
-workflow-control 步骤0 加载 `preferences.json` → `always_check[]` 注入 spec-creation 追问清单。
+workflow 步骤0 加载 `preferences.json` → `always_check[]` 注入 spec 追问清单。
 
 ### 输出清单
 
@@ -370,8 +370,8 @@ ${KNC_HOMUNCULUS_DIR:-~/.local/share/knc-homunculus}/
 
 当前以 knowledge-curator Agent 提示词形式集成。未来可扩展为独立子代理流程。
 
-## 与 workflow-control 的集成
+## 与 workflow 的集成
 
-workflow-control 步骤0 初始化时，从两个来源加载增强：
-1. `preferences.json` → `always_check[]` → spec-creation 追问清单
+workflow 步骤0 初始化时，从两个来源加载增强：
+1. `preferences.json` → `always_check[]` → spec 追问清单
 2. `instincts/` → 高置信度工作流 instincts → 注入 HARD-GATE 策略建议

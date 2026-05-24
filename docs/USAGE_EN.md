@@ -11,21 +11,21 @@
 | Stage | Command | Input | Output |
 |-------|---------|-------|--------|
 | Spec | `/spec [req]` | Description | `spec-dev/{id}/spec/` |
-| Test Design | `/test-design` | spec | `tests/test-spec-creation.md + fixtures.json + test-*.template` |
+| Test Design | `/test-design` | spec | `tests/test-spec.md + fixtures.json + test-*.template` |
 | Design | `/design` | spec | `design/design.md` |
 | Task | `/task` | design.md | `tasks/tasks.md` |
 | Execute | `/execute` | tasks + tests | `src/ + execution-report.md` |
 | Test | `/test` | src + spec | `testing-report.md` |
 | Archive | `/archive` | Passed spec | Merged to main spec |
 
-Note: test-design and code-design can run in parallel.
+Note: test-design and design can run in parallel.
 
 ## Full-Stack Projects
 
 When `project-mode: fullstack`:
-- code-design adds database design and API contract
-- api-contract auto-triggers between code-design and code-task
-- code-execute auto-calls exception-handler
+- design adds database design and API contract
+- contract auto-triggers between design and task
+- execute auto-calls exception
 
 ## Work Modes
 

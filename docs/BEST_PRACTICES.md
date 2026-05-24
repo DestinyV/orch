@@ -42,26 +42,26 @@
 ### Api-Contract 阶段（fullstack）
 - [ ] 六维度审查全部通过
 - [ ] 接口契约版本号正确
-- [ ] api-contract-creator Agent 派遣记录
+- [ ] contract-creator Agent 派遣记录
 
 ### Task 阶段
 - [ ] 任务粒度适中（≤4h）
 - [ ] 依赖关系准确无环（DAG）
 - [ ] Test Case 映射完整
-- [ ] code-tasker Agent 派遣记录
+- [ ] tasker Agent 派遣记录
 
 ### Execute 阶段
 - [ ] TDD 四阶段完整执行（RED→GREEN→REFACTOR→REVIEW）
 - [ ] 覆盖率 ≥85%（standard）/ ≥60%（quick）
 - [ ] 无伪代码/空函数体
-- [ ] 后端/全栈已调用 exception-handler
+- [ ] 后端/全栈已调用 exception
 - [ ] code-executor + code-reviewer Agent 派遣记录
 
 ### Exception-Handler 阶段（后端/全栈）
 - [ ] 项目约定扫描完成（异常类名/错误码格式/RPC模式）
 - [ ] 异常场景识别全覆盖
 - [ ] 零硬编码（所有约定通过扫描发现）
-- [ ] exception-handler Agent 派遣记录
+- [ ] exception Agent 派遣记录
 
 ### Test 阶段
 - [ ] 前端已执行浏览器 E2E 测试
@@ -73,11 +73,11 @@
 - [ ] 冲突全部标记 DECISION_NEEDED
 - [ ] 归档报告已生成
 - [ ] 版本号正确递增
-- [ ] spec-archiver Agent 派遣记录
+- [ ] archiver Agent 派遣记录
 
 ## 常见反模式
 
-- ❌ 跳过 workflow-control 直接调用下游 Skill
+- ❌ 跳过 workflow 直接调用下游 Skill
 - ❌ 跳过设计直接编码
 - ❌ 让测试通过而修改源代码逻辑
 - ❌ 发现问题不修复就继续下一个 Task

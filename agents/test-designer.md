@@ -16,7 +16,7 @@ color: blue
 
 ## 输出
 
-- `tests/test-spec-creation.md` — 测试规范
+- `tests/test-spec.md` — 测试规范
 - `tests/fixtures.json` — 测试数据
 
 ## 约束
@@ -58,5 +58,5 @@ TEST-VERIFY覆盖率 = 100% | 命名清晰（TC-ID，描述期望行为） | Moc
 
 ## 成功标准
 
-✅ test-spec-creation.md 完整 | fixtures.json 准确 | test-*.template 可直接使用 | 无 broken links | 格式一致 | 注释清晰
+✅ test-spec.md 完整 | fixtures.json 准确 | test-*.template 可直接使用 | 无 broken links | 格式一致 | 注释清晰
 ✅ 边界值和特殊值全部覆盖 | 所有 Mock 能初始化 | 所有 test 能运行

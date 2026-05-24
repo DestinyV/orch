@@ -9,7 +9,7 @@ globs: *
 
 - `main`: production-ready, always green
 - `feature/<requirement-id>`: single feature branch per requirement
-- Each code-execute Task uses an isolated **git worktree** (not branch)
+- Each execute Task uses an isolated **git worktree** (not branch)
 
 ## Worktree Isolation (Required)
 

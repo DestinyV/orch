@@ -10,7 +10,7 @@ description: |
   核心原则：数据库先行 + 接口契约驱动。
 ---
 
-# code-design
+# design
 
 ## 职责
 
@@ -26,9 +26,9 @@ description: |
 
 ### 读取标签和策略
 
-读取 spec/requirement.md 的模式标签（standard/quick, fullstack/frontend-only/backend-only, needs-database, needs-api-contract）。
+读取 spec/requirement.md 的模式标签（standard/quick, fullstack/frontend-only/backend-only, needs-database, needs-contract）。
 
-<HARD-GATE>fullstack+api-contract 时必须执行接口契约流程；needs-database 时必须先完成数据库设计。</HARD-GATE>
+<HARD-GATE>fullstack+contract 时必须执行接口契约流程；needs-database 时必须先完成数据库设计。</HARD-GATE>
 
 设计顺序：
 | 模式 | 数据库 | 顺序 |
@@ -41,7 +41,7 @@ description: |
 
 ### 需求理解
 
-**优先读取**：`spec-dev/{req_id}/project-context.md`（spec-creation 阶段1的探索结果），直接复用，避免重复扫描。
+**优先读取**：`spec-dev/{req_id}/project-context.md`（spec 阶段1的探索结果），直接复用，避免重复扫描。
 
 **项目上下文提取**：若 project-context.md 不存在，使用 `Skill("orch:scripts")` 调用 `extract-project-context.py` 从项目根目录提取技术栈/分层/命名约定。
 
@@ -207,7 +207,7 @@ ls -la spec-dev/{req_id}/design/diagrams/
 
 详见 `references/design-tokens-guide.md`。
 
-### 接口契约对齐（fullstack 且 needs-api-contract=是时）
+### 接口契约对齐（fullstack 且 needs-contract=是时）
 
 **前置**：数据库设计已完成且用户确认。
 

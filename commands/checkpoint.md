@@ -74,8 +74,8 @@ SDD+TDD 工作流在每个阶段完成后写入 `.workflow-state.json`。`/check
 ```
 Available checkpoints:
   NAME           TIMESTAMP            SHA       STAGE
-  feature-start  2026-05-24-10:00    a1b2c3d   spec-creation
-  core-done      2026-05-24-14:30    e5f6g7h   code-execute
+  feature-start  2026-05-24-10:00    a1b2c3d   spec
+  core-done      2026-05-24-14:30    e5f6g7h   execute
 ```
 
 ## 工作流集成

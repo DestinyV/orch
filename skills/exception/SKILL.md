@@ -8,7 +8,7 @@ description: |
   触发条件：后端/全栈项目，代码中存在可能失败的操作
 ---
 
-# exception-handler
+# exception
 
 ## 职责
 
@@ -17,15 +17,15 @@ description: |
 ## 何时使用
 
 - 用户明确要求"处理异常"、"添加异常校验"时
-- code-execute 编码阶段，后端/全栈 Task 涉及以下操作时自动触发
+- execute 编码阶段，后端/全栈 Task 涉及以下操作时自动触发
 
 ## 工作流程
 
-### 步骤1-4: 派遣 exception-handler Agent
+### 步骤1-4: 派遣 exception Agent
 
 **工具优先**：使用 `Skill("orch:scripts")` 调用 `scan-exceptions.py` 扫描项目异常类名/错误码/RPC 模式，替代 AI 逐文件 Grep。
 
-<HARD-GATE>必须通过 Agent 派遣 exception-handler 执行异常处理，不允许主上下文直接扫描和生成。</HARD-GATE>
+<HARD-GATE>必须通过 Agent 派遣 exception 执行异常处理，不允许主上下文直接扫描和生成。</HARD-GATE>
 
 ```bash
 Agent(

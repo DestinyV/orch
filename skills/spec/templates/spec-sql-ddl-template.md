@@ -1,6 +1,6 @@
 # SQL DDL/DML 脚本
 
-> 由 spec-creation 阶段生成（needs-database=是 时）
+> 由 spec 阶段生成（needs-database=是 时）
 > SQL 方言：[mysql | postgresql | sqlite | sqlserver]
 > 关联数据模型：[data-models.md](./data-models.md)
 

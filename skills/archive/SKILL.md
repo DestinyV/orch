@@ -9,7 +9,7 @@ description: |
   功能：在测试通过后，将需求的规范文档合并集成到主规范中，建立企业级规范库。
 ---
 
-# spec-archive
+# archive
 
 ## 职责
 
@@ -35,7 +35,7 @@ description: |
 ```bash
 Agent(subagent_type="orch:code-explorer",
       prompt="扫描 spec-dev/{req}/src/ 提取实际实现的接口路由/数据模型/组件结构:
-              1) API 路由和响应格式 vs api-contract.md
+              1) API 路由和响应格式 vs contract.md
               2) 数据模型字段 vs data-models.md
               3) 组件目录结构 vs design.md 组件树
               输出差异报告到 spec-dev/{req}/testing/spec-code-diff.md")
@@ -48,9 +48,9 @@ Agent(subagent_type="orch:code-explorer",
 | spec 有但实现无 | 标记为 `FINAL_SPEC_DRIFT`，从 spec 移除或标注未实现 |
 | 字段/接口结构不一致 | 更新 spec 匹配实现 |
 
-### 步骤2-4: 派遣 spec-archiver Agent 执行合并
+### 步骤2-4: 派遣 archiver Agent 执行合并
 
-<HARD-GATE>必须通过 Agent 派遣 spec-archiver，不允许主上下文直接执行对标和合并。</HARD-GATE>
+<HARD-GATE>必须通过 Agent 派遣 archiver，不允许主上下文直接执行对标和合并。</HARD-GATE>
 
 ```bash
 Agent(
@@ -81,7 +81,7 @@ Agent(
 
 ### 生成归档报告
 
-基于 spec-archiver 返回结果，输出到 `spec-dev/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
+基于 archiver 返回结果，输出到 `spec-dev/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
 
 ### 可选清理
 

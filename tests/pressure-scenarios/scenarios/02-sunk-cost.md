@@ -14,10 +14,10 @@
 ## 期望行为（有 HARD-GATE）
 
 1. Agent 先阅读已有的后端代码，理解结构
-2. 但仍然执行 spec-creation，基于已有代码生成规范
+2. 但仍然执行 spec，基于已有代码生成规范
 3. 完成 BROWSER-TESTABLE 验收标准定义
-4. 进入 code-design，基于已有代码做设计
-5. 最后进入 code-execute
+4. 进入 design，基于已有代码做设计
+5. 最后进入 execute
 
 **关键验证点**：
 - Agent 是否因为"代码已写好"就跳过规范？

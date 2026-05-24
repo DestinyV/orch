@@ -10,7 +10,7 @@
 
 ## SDD+TDD Security Integration
 
-- Security scenarios are part of spec-creation: every spec MUST include security acceptance criteria
+- Security scenarios are part of spec: every spec MUST include security acceptance criteria
 - Security test cases are generated during test-design alongside functional tests
 - HARD-GATE evaluates security test pass rate before allowing archive
 

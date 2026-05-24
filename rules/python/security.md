@@ -32,5 +32,5 @@ result = await db.execute(text("SELECT * FROM users WHERE id = :id"), {"id": use
 
 ## SDD+TDD Integration
 
-- Security scenarios from spec-creation are mapped to `@pytest.mark.security` tests
+- Security scenarios from spec are mapped to `@pytest.mark.security` tests
 - HARD-GATE requires all security-marked tests to pass before archive

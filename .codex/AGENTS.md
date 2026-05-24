@@ -7,7 +7,7 @@
 | Agent | 文件 | spawn_agent 名称 | 描述 |
 |-------|------|-----------------|------|
 | workflow | agents/workflow.md | orch-wfc | 入口 + 编排 |
-| spec | agents/spec-creation.md | orch-spec | BDD 规范生成 |
+| spec | agents/spec.md | orch-spec | BDD 规范生成 |
 | test-designer | agents/test-designer.md | orch-test-des | 测试用例设计 |
 | code-architect | agents/code-architect.md | orch-arch | 架构设计 |
 | tasker | agents/tasker.md | orch-tasker | 任务列表生成 |

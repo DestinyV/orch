@@ -10,7 +10,7 @@ description: |
   支持全栈开发的各类任务拆解（前端、后端、数据库、微服务等）。
 ---
 
-# code-task
+# task
 
 ## 职责
 
@@ -20,8 +20,8 @@ description: |
 
 ## 何时使用
 
-前置条件：code-design 已完成，design.md 已确认。
-⚠️ 快速模式时跳过（code-execute 自主拆解）。
+前置条件：design 已完成，design.md 已确认。
+⚠️ 快速模式时跳过（execute 自主拆解）。
 
 ## 工作流程
 
@@ -31,7 +31,7 @@ description: |
 
 ### 全栈依赖链校验
 
-<HARD-GATE>fullstack+接口契约时验证依赖链：数据库设计→接口契约→前后端任务，接口字段与数据库一致。任一不满足则暂停，回 code-design。</HARD-GATE>
+<HARD-GATE>fullstack+接口契约时验证依赖链：数据库设计→接口契约→前后端任务，接口字段与数据库一致。任一不满足则暂停，回 design。</HARD-GATE>
 
 **数据库设计验证**（needs-database=是时）：
 - [ ] design.md 中数据库设计章节已完成且用户已确认
@@ -45,9 +45,9 @@ description: |
 
 多项目场景读取 collaboration-plan.md，按项目依赖图分组任务，建立执行顺序和跨项目门控。
 
-### 步骤2-5: 派遣 code-tasker Agent
+### 步骤2-5: 派遣 tasker Agent
 
-<HARD-GATE>standard 模式必须通过 Agent 派遣 code-tasker 执行任务拆解，不允许主上下文直接拆解。</HARD-GATE>
+<HARD-GATE>standard 模式必须通过 Agent 派遣 tasker 执行任务拆解，不允许主上下文直接拆解。</HARD-GATE>
 
 ```bash
 Agent(
@@ -57,7 +57,7 @@ Agent(
     - 设计文档: spec-dev/{requirement_desc_abstract}/design/design.md
     - 接口契约: spec-dev/{requirement_desc_abstract}/contract/contract.md（fullstack时）
     - 规范文档: spec-dev/{requirement_desc_abstract}/spec/（提取项目约定和TEST-VERIFY）
-    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec-creation.md（如存在）
+    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec.md（如存在）
     
     执行：
     1. 分析架构和项目约定
@@ -81,7 +81,7 @@ Task ≥6 个时生成任务依赖 DAG（拓扑排序批次图）；provides/con
 
 ### 生成文档
 
-基于 code-tasker 返回结果，输出 `tasks.md`，头部标注模式标签（继承自 requirement.md）。模板见 `templates/tasks-document-template.md`。
+基于 tasker 返回结果，输出 `tasks.md`，头部标注模式标签（继承自 requirement.md）。模板见 `templates/tasks-document-template.md`。
 
 ## 关键约束
 

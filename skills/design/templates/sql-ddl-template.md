@@ -1,6 +1,6 @@
 # SQL DDL 模板
 
-> code-design 阶段生成 SQL 文件的模板
+> design 阶段生成 SQL 文件的模板
 
 ## 输出目录
 

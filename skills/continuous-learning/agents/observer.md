@@ -95,7 +95,7 @@ scope: global
 Run validate-outputs.sh after each stage to catch missing files early.
 
 ## Evidence
-- Observed across workflow-control stages
+- Observed across workflow stages
 - Pattern: missing files cause cascading failures
 - Last observed: 2026-05-23
 ```
@@ -121,4 +121,4 @@ Adjustments:
 4. **Respect Privacy**: Never include actual code snippets, only patterns
 5. **Merge Similar**: If a new instinct is similar to existing, update instead of duplicate
 6. **Default to Project Scope**: Unless the pattern is clearly universal
-7. **Reference SDD-TDD Concepts**: Use workflow-stage terminology (HARD-GATE, spec-creation, code-execute, etc.)
+7. **Reference SDD-TDD Concepts**: Use workflow-stage terminology (HARD-GATE, spec, execute, etc.)

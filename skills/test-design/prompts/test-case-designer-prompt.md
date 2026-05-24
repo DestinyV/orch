@@ -7,7 +7,7 @@
 1. 读取 spec/ 中 TEST-VERIFY + Mock Data
 2. 设计测试用例（正常+边界+错误）
 3. 定义 Mock 策略和 Fixture 数据
-4. 输出：test-spec-creation.md + fixtures.json + test-*.template
+4. 输出：test-spec.md + fixtures.json + test-*.template
 
 ## 规则
 

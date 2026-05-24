@@ -6,15 +6,15 @@ description: |
   输入：src/ + spec-dev/{requirement_desc_abstract}/
   输出：tests/ + spec-dev/{requirement_desc_abstract}/testing/testing-report.md
 
-  功能：对code-execute生成的代码进行全面审查和高层测试（集成、E2E、性能），执行闭环验证。
-  单元测试由code-execute的TDD流程保证，此处不重复。
+  功能：对execute生成的代码进行全面审查和高层测试（集成、E2E、性能），执行闭环验证。
+  单元测试由execute的TDD流程保证，此处不重复。
 ---
 
-# code-test
+# test
 
 ## When to Use
 
-- code-execute 完成，需要执行高层测试（集成/E2E/性能）
+- execute 完成，需要执行高层测试（集成/E2E/性能）
 - 需要进行闭环验证（TEST-VERIFY -> Test -> Code -> Result）
 - 需要生成测试报告
 
@@ -45,7 +45,7 @@ description: |
 Agent(
   subagent_type="orch:code-reviewer",
   prompt="
-    对 code-execute 生成的代码进行全面审查：
+    对 execute 生成的代码进行全面审查：
     - 源代码: src/
     - 设计规范: spec-dev/{requirement_desc_abstract}/design/design.md
     
@@ -64,9 +64,9 @@ Agent(
 
 详见 `references/code-reviewer.md`（审查维度详细说明）。
 
-### 高层测试（派遣 code-tester Agent）
+### 高层测试（派遣 tester Agent）
 
-<HARD-GATE>必须通过 Agent 派遣 code-tester 执行高层测试运行，不允许主上下文直接运行测试。</HARD-GATE>
+<HARD-GATE>必须通过 Agent 派遣 tester 执行高层测试运行，不允许主上下文直接运行测试。</HARD-GATE>
 
 ```bash
 Agent(
@@ -74,7 +74,7 @@ Agent(
   prompt="
     对代码执行高层测试：
     - 源代码: src/
-    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec-creation.md
+    - 测试规范: spec-dev/{requirement_desc_abstract}/tests/test-spec.md
     - 接口契约: spec-dev/{requirement_desc_abstract}/contract/contract.md（fullstack时）
 
     执行：
@@ -149,7 +149,7 @@ Agent(
 **后端/全栈**：
 - 3.0 基础设施检测：测试框架 | HTTP工具 | DB测试配置
 - 3.1 集成测试：Repository/Service/API 协作、事务边界、缓存
-- 3.1.5 契约测试（fullstack强制）：<HARD-GATE>验证后端返回字段/类型/结构与 api-contract.md 一致</HARD-GATE>
+- 3.1.5 契约测试（fullstack强制）：<HARD-GATE>验证后端返回字段/类型/结构与 contract.md 一致</HARD-GATE>
 
 **前端/全栈**：
 - 3.2 浏览器 E2E：`npx playwright test --grep "@e2e"` | 详见 `references/frontend-browser-testing.md`

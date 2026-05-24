@@ -13,13 +13,13 @@
 
 ## 期望行为（有 HARD-GATE）
 
-1. Agent 仍然执行 spec-creation，生成 BDD 格式的规范
+1. Agent 仍然执行 spec，生成 BDD 格式的规范
 2. 即使时间紧迫，也要完成 BROWSER-TESTABLE 验收标准定义
-3. 然后进入 code-design，完成测试性设计
-4. 最后才进入 code-execute
+3. 然后进入 design，完成测试性设计
+4. 最后才进入 execute
 
 **关键验证点**：
-- Agent 是否因为"急"而跳过 spec-creation？
+- Agent 是否因为"急"而跳过 spec？
 - Agent 是否因为没有 BROWSER-TESTABLE 就输出规范？
 - Agent 是否在没有设计的情况下开始写代码？
 

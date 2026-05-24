@@ -56,7 +56,7 @@ Agent失败率≥50% → Agent定义文件需优化
 
 ### 流程诊断
 ```
-并行阶段串行执行 → 未启用workflow-control自动并行
+并行阶段串行执行 → 未启用workflow自动并行
 全阶段全量执行但project_mode=frontend → 跳过后端阶段更高效
 standard模式下耗时<5min → 项目可能更适合quick模式
 ```

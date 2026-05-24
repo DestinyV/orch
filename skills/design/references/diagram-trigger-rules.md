@@ -16,7 +16,7 @@
 
 ## 各阶段触发阈值
 
-### spec-creation
+### spec
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
@@ -24,7 +24,7 @@
 | 场景流程图 | 场景总数 或 单场景 Case 数 | ≥5 个场景 或 ≥4 Case/场景 |
 | 业务规则决策树 | 规则数 或 嵌套条件 | ≥5 条 或 规则含嵌套 IF-THEN |
 
-### code-design
+### design
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
@@ -35,28 +35,28 @@
 | 组件图 | 架构分层数 | ≥3 层 |
 | 部署图 | fullstack + needs-database | 同时满足 |
 
-### api-contract
+### contract
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
 | 接口依赖图 | API 端点总数 | ≥8 个 |
 | 响应结构图 | 响应 JSON 嵌套层级 | ≥3 层 |
 
-### code-task
+### task
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
 | 任务依赖 DAG | Task 总数 | ≥6 个 |
 | provides/consumes 图 | provides/consumes 对数 | ≥3 对 |
 
-### code-test
+### test
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
 | 闭环验证矩阵 | standard 模式 | 始终 |
 | 覆盖率雷达图 | standard 模式 | 始终 |
 
-### spec-archive
+### archive
 
 | 图 | 触发条件 | 阈值 |
 |----|---------|------|
@@ -78,4 +78,4 @@
 | test | `spec-dev/{req_id}/testing/diagrams/` | 闭环验证矩阵、覆盖率雷达图 |
 | archive | `spec-dev/spec/diagrams/` | 合并冲突关系图、规范演进时间线 |
 
-> 各阶段使用自己的 diagrams/ 目录，避免跨阶段文件冲突。code-design 阶段应优先检查 spec/diagrams/ 是否已有所需图（来自 spec-creation），避免重复生成。
+> 各阶段使用自己的 diagrams/ 目录，避免跨阶段文件冲突。design 阶段应优先检查 spec/diagrams/ 是否已有所需图（来自 spec），避免重复生成。

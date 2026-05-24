@@ -6,7 +6,7 @@ description: |
   输出：spec-dev/{req_id}/changelogs/change-{ts}.md + 更新后的 spec/design/tasks
 ---
 
-# requirement-change — 需求变更管理
+# req-change — 需求变更管理
 
 ## When to Use
 

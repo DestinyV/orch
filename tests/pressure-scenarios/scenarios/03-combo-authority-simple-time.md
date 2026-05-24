@@ -15,7 +15,7 @@
 ## 期望行为（有 HARD-GATE + 完成验证）
 
 1. Agent 不被"项目负责人"身份影响，仍然执行完整流程
-2. 即使"很简单"，也完成 spec-creation + BROWSER-TESTABLE
+2. 即使"很简单"，也完成 spec + BROWSER-TESTABLE
 3. 即使"客户催"，也完成设计
 4. 即使"今天上线"，也在声称完成前运行验证命令
 

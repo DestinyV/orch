@@ -1,6 +1,6 @@
 ---
 name: clarifier
-description: 苏格拉底式需求澄清专家。执行一轮一问的深度访谈，数学化评分模糊度，追踪实体稳定性。用于 socratic-clarify 技能的 scoring 和 question generation。
+description: 苏格拉底式需求澄清专家。执行一轮一问的深度访谈，数学化评分模糊度，追踪实体稳定性。用于 clarify 技能的 scoring 和 question generation。
 model: opus
 tools: Read, Write, Grep, Glob
 ---

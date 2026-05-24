@@ -366,15 +366,15 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 - 第0步：使用 `/orch:sdd-dev` 进入插件输入需求
 - 第1步：运行spec进行需求分析和规范生成
 - 第2步：在design阶段分配code-architect进行架构设计
-- 第3步：在code-task阶段进行任务分解和定义
-- 第4步：遵循任务清单严格执行code-execute，完成规范+质量两阶段审查
+- 第3步：在task阶段进行任务分解和定义
+- 第4步：遵循任务清单严格执行execute，完成规范+质量两阶段审查
 - 第5步：进行完整的测试验证和闭环检查
 - 第6步：测试通过后自动执行archive，将规范沉淀到企业级规范库
 
 ### ❌ 不能做
 - 跳过第0步直接调用各个Skill（应该通过插件入口）
 - 跳过设计和任务定义阶段直接进行编码
-- 在code-execute中跳过规范或质量审查
+- 在execute中跳过规范或质量审查
 - 修改生成的源代码逻辑来让测试通过
 - 忽视Task和代码之间的一致性
 - 跳过test阶段的闭环验证
@@ -392,11 +392,11 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 
 1. **spec** - 定义项目的设计模式和参考组件收集方式
 2. **design** - 调整设计分析的维度和深度
-3. **code-task** - 调整任务分解的粒度和验收标准
+3. **task** - 调整任务分解的粒度和验收标准
 
 ### 调整执行和审查
 
-修改code-execute中的提示词文件：
+修改execute中的提示词文件：
 
 - `implementer-prompt.md` - 调整代码实现的风格和要求
 - `spec-reviewer-prompt.md` - 调整规范审查的维度
@@ -415,7 +415,7 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 ## 📝 更新日志
 
 ### v2.3.1 (2026-03-23) Git-Worktrees隔离工作环境
-- ✅ **Worktree隔离机制** - 为code-execute每个Task创建独立git-worktree
+- ✅ **Worktree隔离机制** - 为execute每个Task创建独立git-worktree
 - ✅ **安全修复循环** - 修复失败可删除worktree重新开始，不污染main分支
 - ✅ **完整修复历史** - worktree commit清晰记录"问题→修复→验证"链条
 - ✅ **并行Task支持** - 多Task同时执行无git冲突风险
@@ -426,7 +426,7 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 ### v2.3.0 (2026-03-23) ✨ TDD完整实现
 - ✅ **TDD实现体系** - 完成Phase 2 TDD实现阶段（RED-GREEN-REFACTOR-REVIEW）
 - ✅ **高层测试体系** - 完成Phase 3 集成、E2E、性能测试优化
-- ✅ **职责清晰化** - code-execute处理单元测试，test处理高层测试
+- ✅ **职责清晰化** - execute处理单元测试，test处理高层测试
 - ✅ **高层测试prompt** - 集成、E2E、性能测试专项设计指南
 - ✅ **最佳实践更新** - BEST_PRACTICES.md新增Phase 3最佳实践
 - ✅ **闭环验证完善** - TEST-VERIFY→Test→Code→Result完整链条
@@ -451,7 +451,7 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 
 ### v2.0.0 (2026-03-09)
 - ✅ 完全重构为 Spec-Design-TestDesign-Task-Execute-Test-Archive 工作流
-- ✅ 7个核心Skills：spec、design、test-design、code-task、code-execute、test、archive
+- ✅ 7个核心Skills：spec、design、test-design、task、execute、test、archive
 - ✅ 多阶段审查机制和闭环验证
 - ✅ 前端优先支持（React/Vue/Angular/Svelte）
 - ✅ 完整的文档和最佳实践指南
@@ -468,7 +468,7 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 2. 查看 [使用指南](./docs/USAGE.md)
 3. 执行 `/orch:sdd-dev` 进入插件
 4. 根据提示输入需求内容
-5. 逐步执行 spec → design → test-design → code-task → code-execute → test → archive
+5. 逐步执行 spec → design → test-design → task → execute → test → archive
 6. 选择一个小功能进行完整流程试运行
 
 ### 📚 深入学习
@@ -483,7 +483,7 @@ Skill可能和项目存在上下文、背景、依赖的绑定，所以，这套
 1. 确保团队成员理解SDD工作流的核心原则
 2. 为项目编写定制化的设计规范（通过spec）
 3. 编写团队的最佳实践和编码风格指南
-4. 配置code-execute和test的审查规则
+4. 配置execute和test的审查规则
 5. 培训团队成员按照规范使用整个工作流
 6. 建立基于spec-design的代码审查流程
 

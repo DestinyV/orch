@@ -9,8 +9,8 @@
 ## 工作模式
 
 <!--
-  🚧 此模式标识会被后续阶段（code-design、code-task、code-execute）读取并强制执行
-  请不要手动修改，由 spec-creation 技能自动生成
+  🚧 此模式标识会被后续阶段（design、task、execute）读取并强制执行
+  请不要手动修改，由 spec 技能自动生成
 -->
 - 模式：[standard | quick]
 - TDD要求：[必须执行 | 可简化]
@@ -23,19 +23,19 @@
 ## 项目模式
 
 <!--
-  🚧 由 code-architect agent 在 code-design 阶段自动识别和设置
+  🚧 由 code-architect agent 在 design 阶段自动识别和设置
 -->
 - **project-mode**: [frontend | backend | fullstack]
 - **needs-database**: [true | false]
 - **sql-dialect**: [mysql | postgresql | sqlite | sqlserver | 未确定]（needs-database=true 时必填）
 
-> 注：project-mode 和 needs-database 由 code-architect agent 在 code-design 阶段自动识别和设置。
-> sql-dialect 由 spec-creation 通过 AskUserQuestion 确认（needs-database=true 时），或由 code-design 自动检测。
+> 注：project-mode 和 needs-database 由 code-architect agent 在 design 阶段自动识别和设置。
+> sql-dialect 由 spec 通过 AskUserQuestion 确认（needs-database=true 时），或由 design 自动检测。
 
 ## 项目文档约束 ⭐🆕
 
 <!--
-  🚧 由 spec-creation 阶段的项目探索流程自动提取
+  🚧 由 spec 阶段的项目探索流程自动提取
   此章节记录项目自身声明的架构约定，后续阶段必须遵循
 -->
 
@@ -136,11 +136,11 @@
 ## 多项目协作 ⭐🆕
 
 <!--
-  当需求涉及多个项目/仓库时由 spec-creation 填充
+  当需求涉及多个项目/仓库时由 spec 填充
   单项目场景下标注"不涉及"
 -->
 - 协作模式：[single | monorepo | multi-repo | same-repo]（默认 single）
 - 涉及项目：[不涉及 / project-a, project-b, project-c]
 - 协作链路类型：[不涉及 / 上下游服务 | 前后端分离仓库 | 微服务集群 | Monorepo多Package]
 
-> 注：协作模式=single 时，以下字段留空。非 single 时由 code-design 阶段生成详细协作计划。
+> 注：协作模式=single 时，以下字段留空。非 single 时由 design 阶段生成详细协作计划。

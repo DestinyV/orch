@@ -49,11 +49,11 @@
 **核心工作流**：
 ```
 /start → spec → test-design ⟷ design → contract(fullstack)
-→ code-task → code-execute → exception-handler(后端/全栈) → test
+→ task → execute → exception(后端/全栈) → test
 → archive → continuous-learning
 ```
 
-**TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → code-execute (RED-GREEN-REFACTOR-REVIEW)`
+**TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
 **版本**：v2.21.0 (2026-05-24)
 
@@ -173,7 +173,7 @@ orch/
 [task]  →  tasks.md
   ↓
 [execute]  →  test-*.template + fixtures → RED→GREEN→REFACTOR→REVIEW
-  ↓              →  exception-handler（后端/全栈自动）
+  ↓              →  exception（后端/全栈自动）
 [test]   →  集成 / E2E / 性能测试 + 闭环验证
   ↓
 [archive]  →  合并到主规范库
@@ -184,7 +184,7 @@ orch/
 ```
 
 - test-design 与 design 可并行执行，互不阻塞
-- exception-handler 仅后端/全栈自动触发（code-execute 子过程）
+- exception 仅后端/全栈自动触发（execute 子过程）
 - continuous-learning v2 含 instinct 学习层（hook 级会话观察 + 原子 instincts + 置信度评分 + 项目级隔离）
 
 ## 架构参考

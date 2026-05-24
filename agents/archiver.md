@@ -6,7 +6,7 @@ model: inherit
 color: green
 ---
 
-# spec-archiver
+# archiver
 
 **角色**：规范归档专家。测试通过后，将需求规范合并集成到主规范中，建立企业级规范库。
 

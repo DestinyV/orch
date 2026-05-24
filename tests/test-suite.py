@@ -68,9 +68,9 @@ wfc = open(os.path.join(ROOT,"skills/workflow/SKILL.md"), encoding="utf-8").read
 steps = re.findall(r"^\| *(\d+(?:\.\d+)?) *\| *(\S[^|]+)", sd, re.MULTILINE)
 print(f"  OK  start-dev.md: {len(steps)} steps")
 hg = wfc.count("<HARD-GATE>")
-print(f"  OK  workflow-control: {hg} HARD-GATEs") if hg >= 3 else warnings.append(f"workflow-control: {hg} HARD-GATEs")
+print(f"  OK  workflow: {hg} HARD-GATEs") if hg >= 3 else warnings.append(f"workflow: {hg} HARD-GATEs")
 old = wfc.count("../scripts/") + wfc.count("bash ../")
-print(f"  OK  no old paths") if old == 0 else errors.append(f"workflow-control: {old} old paths")
+print(f"  OK  no old paths") if old == 0 else errors.append(f"workflow: {old} old paths")
 print(f"  OK  cross-ref") if "start-dev.md" in wfc else warnings.append("no cross-ref")
 
 print("\n=== 7. PLATFORMS ===")

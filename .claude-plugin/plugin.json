@@ -1,7 +1,7 @@
 {
   "name": "orch",
   "version": "0.1.0",
-  "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件。18个专业Skills覆盖从需求到归档的全生命周期：spec-creation → test-design → code-design → api-contract → code-task → code-execute → exception-handler → code-test → spec-archive → knowledge-continuum。附加上下文预算、Token深度控制、成本追踪、自主循环等扩展能力。支持前端、后端、数据库、微服务等全类型项目。",
+  "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件。18个专业Skills覆盖从需求到归档的全生命周期：spec → test-design → design → contract → task → execute → exception → test → archive → continuous-learning。附加上下文预算、Token深度控制、成本追踪、自主循环等扩展能力。支持前端、后端、数据库、微服务等全类型项目。",
 "author": {
     "name": "DestinyV",
     "url": "https://github.com/DestinyV"

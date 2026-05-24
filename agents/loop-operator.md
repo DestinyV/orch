@@ -1,7 +1,7 @@
 ---
 name: loop-operator
 origin: community
-description: Operate autonomous agent loops within the SDD+TDD workflow, monitor progress, and intervene safely when loops stall. Integrates with the continuous-agent-loop skill for stateful multi-step execution.
+description: Operate autonomous agent loops within the SDD+TDD workflow, monitor progress, and intervene safely when loops stall. Integrates with the ralph-loop skill for stateful multi-step execution.
 tools: ["Read", "Grep", "Glob", "Bash", "Edit"]
 model: inherit
 color: orange
@@ -40,7 +40,7 @@ Run autonomous loops safely with clear stop conditions, observability, and recov
 
 ## Workflow
 
-1. Start loop from explicit pattern and mode (spec-creation, code-execute, etc.).
+1. Start loop from explicit pattern and mode (spec, execute, etc.).
 2. Track progress checkpoints via .workflow-state.json.
 3. Detect stalls and retry storms.
 4. Pause and reduce scope when failure repeats.
@@ -50,7 +50,7 @@ Run autonomous loops safely with clear stop conditions, observability, and recov
 ## Required Checks
 
 - quality gates (HARD-GATE) are active
-- eval baseline exists (for code-execute loops)
+- eval baseline exists (for execute loops)
 - rollback path exists (git worktree isolation per task)
 - branch/worktree isolation is configured
 - .workflow-state.json is present and writable

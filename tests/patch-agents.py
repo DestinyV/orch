@@ -6,7 +6,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # (filename, anchor, content_to_insert)
 patches = [
-    ("api-contract-creator.md", "## 职责",
+    ("contract-creator.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:contract-creator\", prompt=\"...\")` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:contract-creator\",\n  prompt=\"将 design.md 中的接口定义转化为接口契约文档，执行六维度审查\"\n)\n```\n\n## 输出\n\n- `contract.md` — 接口契约文档\n- `review-report.md` — 六维度审查报告\n\n"),
     ("code-architect.md", "## 核心流程",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:code-architect\", prompt=\"...\")` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:code-architect\",\n  prompt=\"对需求进行架构蓝图分析，输出 design.md\"\n)\n```\n\n## 约束\n\n<HARD-GATE>禁止跳过 project-context.md 直接设计 | 设计必须覆盖所有 spec 场景</HARD-GATE>\n\n"),
@@ -16,25 +16,25 @@ patches = [
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:code-explorer\", prompt=\"扫描 src/ 提取架构模式\", run_in_background=true)` 派遣。\n\n## 工作流程\n\n1. 接收扫描目标（目录/模式/关键词）\n2. 使用工具优先策略搜索（Grep > Python3 > Read）\n3. 汇总结果返回\n\n"),
     ("code-reviewer.md", "## 多视角审查方法",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:code-reviewer\", prompt=\"...\")` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:code-reviewer\",\n  prompt=\"对 src/ 执行两阶段审查（规范+质量）\"\n)\n```\n\n## 约束\n\n<HARD-GATE>standard 模式必须通过 Agent 派遣 | confidence < 80 的问题不报告</HARD-GATE>\n\n"),
-    ("code-tasker.md", "## 职责",
+    ("tasker.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:tasker\", prompt=\"...\")` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:tasker\",\n  prompt=\"将 design.md 拆解为可执行 Task 清单\"\n)\n```\n\n## 约束\n\n<HARD-GATE>每个 Task 必须有 provides/consumes 声明 | 依赖关系必须无环（DAG）</HARD-GATE>\n\n"),
-    ("code-tester.md", "## 职责",
+    ("tester.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:tester\", prompt=\"...\", run_in_background=false)` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:tester\",\n  prompt=\"执行高层测试（集成/E2E/性能）并返回测试报告\"\n)\n```\n\n"),
-    ("exception-handler.md", "## 职责",
-     "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:exception\", prompt=\"...\")` 在 code-execute 内部自动触发。\n\n```\nAgent(\n  subagent_type=\"orch:exception\",\n  prompt=\"扫描 src/ 识别异常场景并生成异常处理代码\"\n)\n```\n\n"),
+    ("exception.md", "## 职责",
+     "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:exception\", prompt=\"...\")` 在 execute 内部自动触发。\n\n```\nAgent(\n  subagent_type=\"orch:exception\",\n  prompt=\"扫描 src/ 识别异常场景并生成异常处理代码\"\n)\n```\n\n"),
     ("knowledge-curator.md", "## 核心原则",
      "## 角色\n\n知识复利引擎执行专家。执行知识识别到沉淀到提炼到刷新到自适应全流程。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:knowledge-curator\", prompt=\"执行知识复利流程\", run_in_background=false)` 派遣。\n\n## 输出\n\n- `patterns/pattern-index.json` — 更新频次和最后使用时间\n- `patterns/*.md` — 更新历史教训\n- `user-preferences/preferences.json` — 更新 always_check\n\n"),
-    ("spec-archiver.md", "## 职责",
+    ("archiver.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:archiver\", prompt=\"...\")` 派遣。\n\n```\nAgent(\n  subagent_type=\"orch:archiver\",\n  prompt=\"将测试通过的规范归档到主规范库\"\n)\n```\n\n## 输出\n\n- `spec-dev/spec/archive-log.md` — 归档日志\n\n## 约束\n\n<HARD-GATE>全部测试通过后才允许归档 | 冲突时需用户确认合并策略</HARD-GATE>\n\n"),
     ("socratic-clarifier.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:clarifier\", prompt=\"...\")` 在 scoring 时调用。\n\n## 工作流程\n\n1. 读取访谈记录\n2. 评分各维度清晰度\n3. 提取本体实体\n4. 返回 JSON 评分结果\n\n## 约束\n\n<HARD-GATE>必须使用 Opus 模型 | temperature 必须为 0.1 | 必须输出 JSON 格式</HARD-GATE>\n\n"),
     ("test-designer.md", "## 工作流程",
-     "## 角色\n\n测试设计专家。从 TEST-VERIFY 生成测试用例、fixtures 和测试框架代码。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:test-designer\", prompt=\"...\", run_in_background=true)` 派遣。\n\n## 输出\n\n- `tests/test-spec-creation.md` — 测试规范\n- `tests/fixtures.json` — 测试数据\n- `tests/test-*.template` — 测试框架代码\n\n## 约束\n\n<HARD-GATE>每条 TEST-VERIFY 必须映射到至少一个测试用例 | fixtures.json 必须可解析</HARD-GATE>\n\n"),
+     "## 角色\n\n测试设计专家。从 TEST-VERIFY 生成测试用例、fixtures 和测试框架代码。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:test-designer\", prompt=\"...\", run_in_background=true)` 派遣。\n\n## 输出\n\n- `tests/test-spec.md` — 测试规范\n- `tests/fixtures.json` — 测试数据\n- `tests/test-*.template` — 测试框架代码\n\n## 约束\n\n<HARD-GATE>每条 TEST-VERIFY 必须映射到至少一个测试用例 | fixtures.json 必须可解析</HARD-GATE>\n\n"),
     ("test-verifier.md", "## 职责",
      "## 调用方式\n\n通过 `Agent(subagent_type=\"orch:test-verifier\", prompt=\"...\")` 派遣。\n\n## 工作流程\n\n1. 读取验收标准清单\n2. 确定每条标准的证据级别\n3. 独立运行验证命令\n4. 输出结构化验证报告\n\n"),
     ("tracer.md", "## 核心方法",
      "## 角色\n\n因果追踪专家。通过多假设竞争式分析定位根因。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:debug\", prompt=\"分析 Bug 根因\")` 派遣。\n\n## 约束\n\n<HARD-GATE>至少生成 2 个竞争假设 | 每个假设必须有正反证据 | 必须有收敛或分离判断</HARD-GATE>\n\n"),
-    ("workflow-control.md", "## 职责",
+    ("workflow.md", "## 职责",
      "## 调用方式\n\n通过 `Skill(\"orch:workflow\", args=\"{requirement_desc}\")` 调用（不是 Agent 派遣）。\n\n## 输出\n\n- `.workflow-state.json` — 状态追踪\n- `.workflow-eval.json` — 效果评估 + Token 用量\n\n## 约束\n\n<HARD-GATE>禁止跳过阶段 | 禁止在正式流程前执行代码探索</HARD-GATE>\n\n"),
 ]
 
@@ -51,7 +51,7 @@ ecc_agents = {
     "pr-test-analyzer.md": "## 角色\n\nPR 测试分析专家。评估 PR 的测试覆盖充分性。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:pr-test-analyzer\", prompt=\"分析 PR 的测试覆盖\")` 派遣。\n\n## 输出\n\n测试覆盖分析报告。\n\n## 约束\n\n<HARD-GATE>只分析不修改 | 覆盖率不达标必须标记</HARD-GATE>\n\n",
     "refactor-cleaner.md": "## 角色\n\n代码清理专家。识别并移除死代码和冗余逻辑。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:refactor-cleaner\", prompt=\"清理死代码\")` 派遣。\n\n## 输出\n\n清理后的代码（通过 Edit/Write 输出）。\n\n## 约束\n\n<HARD-GATE>不能删除有引用的代码 | 必须编译通过</HARD-GATE>\n\n",
     "silent-failure-hunter.md": "## 角色\n\n静默失败检测专家。识别被静默吞噬的错误和异常。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:silent-failure-hunter\", prompt=\"检测代码中的静默失败\")` 派遣。\n\n## 输出\n\n静默失败报告（位置/类型/修复建议）。\n\n## 约束\n\n<HARD-GATE>只报告不修改 | 必须标注置信度</HARD-GATE>\n\n",
-    "spec-creation.md": "## 角色\n\n规范生成专家。通过交互式问卷生成 BDD 规范文档。\n\n## 调用方式\n\n通过 `Skill(\"orch:spec\", args=\"{requirement}\")` 调用（不是 Agent 派遣）。\n\n## 输出\n\n`spec-dev/{req_id}/spec/` — 完整规范目录。\n\n## 约束\n\n<HARD-GATE>每个场景至少 1 个异常 Case | standard 模式必须有 TEST-VERIFY</HARD-GATE>\n\n",
+    "spec.md": "## 角色\n\n规范生成专家。通过交互式问卷生成 BDD 规范文档。\n\n## 调用方式\n\n通过 `Skill(\"orch:spec\", args=\"{requirement}\")` 调用（不是 Agent 派遣）。\n\n## 输出\n\n`spec-dev/{req_id}/spec/` — 完整规范目录。\n\n## 约束\n\n<HARD-GATE>每个场景至少 1 个异常 Case | standard 模式必须有 TEST-VERIFY</HARD-GATE>\n\n",
     "tdd-guide.md": "## 角色\n\nTDD 流程引导专家。确保遵循 RED-GREEN-REFACTOR-REVIEW 循环。\n\n## 调用方式\n\n通过 `Agent(subagent_type=\"orch:tdd-guide\", prompt=\"引导 TDD 流程\")` 派遣。\n\n## 输出\n\nTDD 流程状态报告（各阶段日志）。\n\n## 约束\n\n<HARD-GATE>不能跳过 RED 阶段 | 覆盖率不能低于 85%</HARD-GATE>\n\n",
 }
 

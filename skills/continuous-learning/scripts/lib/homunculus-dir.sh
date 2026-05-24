@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# knowledge-continuum — Homunculus directory resolution
+# continuous-learning — Homunculus directory resolution
 # Sourced by observe.sh, start-observer.sh, and instinct-cli.py wrappers.
 
 _ecc_resolve_homunculus_dir() {

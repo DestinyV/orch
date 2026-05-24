@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# knowledge-continuum — Project detection helper
+# continuous-learning — Project detection helper
 #
 # Detects current project context for project-scoped instincts.
 # Sets: PROJECT_ID, PROJECT_NAME, PROJECT_ROOT, PROJECT_DIR

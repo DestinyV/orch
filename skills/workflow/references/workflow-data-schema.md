@@ -31,7 +31,7 @@
 }
 ```
 
-### 心跳扩展（code-execute 进行中）
+### 心跳扩展（execute 进行中）
 
 ```json
 {

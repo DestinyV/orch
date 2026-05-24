@@ -83,7 +83,7 @@ mkdir -p ~/.claude/session-data
 ---
 
 ## Workflow Stage
-**Current**: {spec-creation / test-design / code-design / ...}
+**Current**: {spec / test-design / design / ...}
 **Next**: {next skill to invoke}
 **Blockers**: {any HARD-GATE blocks}
 
@@ -114,7 +114,7 @@ Does this look accurate? Anything to correct or add before we close?
 ## 与 SDD+TDD 工作流集成
 
 ```bash
-# 在 workflow-control 中自动触发
+# 在 workflow 中自动触发
 # 每阶段完成时：
 # 1. 更新 .workflow-state.json（强制）
 # 2. 更新 .workflow-eval.json（Token/效果）

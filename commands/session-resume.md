@@ -114,12 +114,12 @@ Ready to continue. What would you like to do?
 
 **session 文件为空或格式错误**: `Session file found but appears empty or unreadable.`
 
-## 与 workflow-control 中断恢复的关系
+## 与 workflow 中断恢复的关系
 
 `workflow` 通过 `.workflow-state.json` 实现自动中断恢复：
 
 ```
-workflow-control 启动
+workflow 启动
     → 检测 .workflow-state.json 是否存在
     → 如存在，读取 last_completed_stage
     → 自动从下一 stage 继续（无需用户干预）

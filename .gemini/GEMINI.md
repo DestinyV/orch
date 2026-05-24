@@ -17,10 +17,10 @@ SDD+TDD 工作流适配 Gemini CLI。核心差异：Gemini 无子代理工具，
 因无子代理，并行步骤改为串行：
 
 ```
-Claude Code:  test-design (并行) code-design
-Gemini CLI:   test-design → code-design  (顺序执行)
+Claude Code:  test-design (并行) design
+Gemini CLI:   test-design → design  (顺序执行)
 
-Claude Code:  code-execute (多 Task 并行子代理)
+Claude Code:  execute (多 Task 并行子代理)
 Gemini CLI:   Task1 → Task2 → ... → TaskN (逐个实现)
 ```
 
@@ -37,5 +37,5 @@ activate_skill orch:spec "需求描述"
 
 1. 使用 `activate_skill` 替代 Skill 工具激活每个阶段
 2. 串行执行所有步骤（等待前一步完成后再激活下一步）
-3. 无 Agent 子代理意味着 code-task 中的并行 Task 也需串行实现
+3. 无 Agent 子代理意味着 task 中的并行 Task 也需串行实现
 4. 流程状态记录仍在 `.workflow-state.json` 中

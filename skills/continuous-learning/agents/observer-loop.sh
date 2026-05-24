@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# knowledge-continuum — Observer background loop
+# continuous-learning — Observer background loop
 # Analyzes observations and creates instincts.
 
 set +e

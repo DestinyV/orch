@@ -72,7 +72,7 @@
       "tokens_output": 0,
       "duration_seconds": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "api-contract-creator", "dispatched": false, "status": "", "retries": 0 }
+      "agent": { "name": "contract-creator", "dispatched": false, "status": "", "retries": 0 }
     },
     {
       "stage": "4_code_task",
@@ -82,7 +82,7 @@
       "tokens_output": 0,
       "duration_seconds": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "code-tasker", "dispatched": false, "status": "", "retries": 0 }
+      "agent": { "name": "tasker", "dispatched": false, "status": "", "retries": 0 }
     },
     {
       "stage": "5_code_execute",
@@ -115,7 +115,7 @@
       "duration_seconds": 0,
       "hard_gate_triggers": 0,
       "agents": [
-        { "name": "code-tester", "dispatched": false, "status": "", "retries": 0 },
+        { "name": "tester", "dispatched": false, "status": "", "retries": 0 },
         { "name": "test-verifier", "dispatched": false, "status": "", "retries": 0 }
       ]
     },
@@ -126,7 +126,7 @@
       "tokens_input": 0,
       "tokens_output": 0,
       "duration_seconds": 0,
-      "agent": { "name": "spec-archiver", "dispatched": false, "status": "", "retries": 0 }
+      "agent": { "name": "archiver", "dispatched": false, "status": "", "retries": 0 }
     },
     {
       "stage": "8_evaluation",

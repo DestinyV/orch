@@ -66,8 +66,8 @@
 | **静默注入** | 写入检查清单，不主动 AskUserQuestion | 追加到 spec 内部 checklist |
 
 **注入时机**：
-- spec-creation 阶段1：加载历史相关风险摘要
-- code-execute 阶段：追加历史遗漏项到质量检查清单
+- spec 阶段1：加载历史相关风险摘要
+- execute 阶段：追加历史遗漏项到质量检查清单
 - 仅当当前需求确实遗漏时才提示用户
 
 ## 知识库结构
@@ -78,7 +78,7 @@ continuous-learning/
 │   ├── pattern-index.json       # 模式索引（关键词 + 频次）
 │   ├── architecture-patterns.md # 架构设计模式
 │   ├── data-governance.md       # 数据治理模式
-│   ├── api-contracts.md         # 接口契约模式
+│   ├── contracts.md         # 接口契约模式
 │   ├── security-patterns.md     # 安全防护模式
 │   ├── integration-patterns.md  # 系统集成模式
 │   ├── performance-patterns.md  # 性能优化模式
@@ -89,7 +89,7 @@ continuous-learning/
 ├── user-preferences/            # 用户偏好
 │   └── preferences.json         # 偏好配置 + 历史记录
 ├── references/                  # 参考文档
-│   └── knowledge-continuum.md   # 本文件
+│   └── continuous-learning.md   # 本文件
 └── scripts/                     # 工具脚本
     ├── knowledge-refresh.sh     # 知识刷新
     └── knowledge-distill.sh     # 知识提炼
@@ -101,20 +101,20 @@ continuous-learning/
 
 **历史**：用户常遗漏 `updated_at` 字段和字符集定义
 **本次增强**：
-- spec-creation 阶段1.7 数据库设计确认时，自动检查是否包含 `updated_at`
+- spec 阶段1.7 数据库设计确认时，自动检查是否包含 `updated_at`
 - 如果不包含，追加追问："是否需要添加 updated_at 审计字段？"
 
 ### 场景2：表单开发
 
 **历史**：用户常遗漏防重复提交和 Loading 状态
 **本次增强**：
-- code-design 阶段测试性设计时，提示："历史表单需求常遗漏防重复提交，请确认是否已设计"
+- design 阶段测试性设计时，提示："历史表单需求常遗漏防重复提交，请确认是否已设计"
 
 ### 场景3：API 设计
 
 **历史**：列表接口常遗漏排序和分页参数
 **本次增强**：
-- api-contract 阶段审查时，自动检查：`size`、`page`、`sort` 参数是否定义
+- contract 阶段审查时，自动检查：`size`、`page`、`sort` 参数是否定义
 
 ## 知识刷新流程
 

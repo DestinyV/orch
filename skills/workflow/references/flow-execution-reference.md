@@ -9,7 +9,7 @@
 | 0 | workflow | — | 需求描述 | .workflow-state.json + .workflow-eval.json | 无 | 入口 |
 | 0.5 | clarify | socratic-clarifier | 需求描述 | spec/clarification.md | 模糊度 > 0.2 | 条件 |
 | 1 | spec | code-explorer | 需求/澄清报告 | spec/{requirement,scenarios,...}.md | 步骤0 done | 自动 |
-| 2 | test-design | test-designer | spec/ | tests/test-spec-creation.md + fixtures.json + test-*.template | 步骤1 done | 并行 |
+| 2 | test-design | test-designer | spec/ | tests/test-spec.md + fixtures.json + test-*.template | 步骤1 done | 并行 |
 | 3 | design | code-architect | spec/ | design/design.md | 步骤1 done | 并行 |
 | 3.5 | contract | contract-creator | design.md | contract.md + review-report.md | 步骤3 done + fullstack | 条件 |
 | 4 | task | tasker | design.md | tasks/tasks.md | 步骤3 done [+ 3.5] | 串行 |
@@ -35,7 +35,7 @@
 
 ## 各阶段详细契约
 
-### 步骤0: workflow-control
+### 步骤0: workflow
 
 **输入契约**（必须）：
 - 需求描述（字符串）
@@ -53,7 +53,7 @@
 
 ---
 
-### 步骤0.5: socratic-clarify
+### 步骤0.5: clarify
 
 **输入契约**（必须）：
 - 需求描述
@@ -72,12 +72,12 @@
 3. 包含目标/约束/验收标准章节
 
 **失败纠正**：
-- 文件缺失 → 重跑 socratic-clarify
+- 文件缺失 → 重跑 clarify
 - 模糊度未降低 → 继续追问（最多 5 轮额外）
 
 ---
 
-### 步骤1: spec-creation
+### 步骤1: spec
 
 **输入契约**（必须）：
 - 需求描述或 `spec/clarification.md`
@@ -108,7 +108,7 @@
 5. 全部文件非空
 
 **失败纠正**：
-- 核心文件缺失 → 回溯 spec-creation 重新生成
+- 核心文件缺失 → 回溯 spec 重新生成
 - 模式标签缺失 → AskUserQuestion 确认后补入
 - 场景无异常 Case → 追加后再校验
 - project-context.md 缺失 → 自动派遣 code-explorer 补偿
@@ -121,24 +121,24 @@
 - `spec/scenarios/*.md` — 含 TEST-VERIFY + Mock Data
 
 **输出契约**（必须）：
-- `tests/test-spec-creation.md`
+- `tests/test-spec.md`
 - `tests/fixtures.json`
 
 **输出契约**（可选）：
 - `tests/test-*.template`（Java/Python/TypeScript）
 
 **校验规则**：
-1. test-spec-creation.md 非空
+1. test-spec.md 非空
 2. fixtures.json 可解析为有效 JSON
 3. 每条 TEST-VERIFY 映射到至少 1 个测试用例
 
 **失败纠正**：
-- test-spec-creation.md 缺失 → 重新派遣 test-designer
+- test-spec.md 缺失 → 重新派遣 test-designer
 - 并行安全：此步骤失败不阻塞步骤3
 
 ---
 
-### 步骤3: code-design（与步骤2 并行）
+### 步骤3: design（与步骤2 并行）
 
 **输入契约**（必须）：
 - `spec/` — 全部 spec 文档
@@ -166,7 +166,7 @@
 
 ---
 
-### 步骤3.5: api-contract（fullstack 条件触发）
+### 步骤3.5: contract（fullstack 条件触发）
 
 **输入契约**（必须）：
 - `design/design.md`
@@ -176,7 +176,7 @@
 - `contract/review-report.md`
 
 **校验规则**：
-1. api-contract.md 中每个接口有请求/响应结构定义
+1. contract.md 中每个接口有请求/响应结构定义
 2. review-report.md 中无 blocking 级别问题
 3. 接口命名与项目现有风格一致
 
@@ -186,7 +186,7 @@
 
 ---
 
-### 步骤4: code-task
+### 步骤4: task
 
 **输入契约**（必须）：
 - `design/design.md`
@@ -207,7 +207,7 @@
 
 ---
 
-### 步骤5: code-execute
+### 步骤5: execute
 
 **输入契约**（必须）：
 - `tasks/tasks.md` — 含 tasks、依赖关系、验收标准
@@ -227,17 +227,17 @@
 5. 编译/类型检查 0 错误
 
 **失败纠正**：
-- src/ 为空 → 回溯 code-execute
+- src/ 为空 → 回溯 execute
 - 覆盖率不足 → 补充测试后重新验证
 - 编译错误 → 修复后重新构建
 - 超时 → 拆分未完成 Task 到新批次
 
 ---
 
-### 步骤5.5: exception-handler（后端/全栈自动触发）
+### 步骤5.5: exception（后端/全栈自动触发）
 
 **输入契约**（必须）：
-- `src/` — code-execute 输出的源代码
+- `src/` — execute 输出的源代码
 
 **输出契约**：
 - `src/` — 添加异常处理后的代码
@@ -252,7 +252,7 @@
 
 ---
 
-### 步骤6: code-test
+### 步骤6: test
 
 **输入契约**（必须）：
 - `src/` — 源代码
@@ -270,13 +270,13 @@
 5. standard 模式：覆盖率 ≥ 85%
 
 **失败纠正**：
-- 测试失败 → 返回 code-execute 修复
+- 测试失败 → 返回 execute 修复
 - E2E 未执行 → 先执行 E2E
 - 覆盖不足 → 补充测试用例
 
 ---
 
-### 步骤7: spec-archive
+### 步骤7: archive
 
 **输入契约**（必须）：
 - `spec-dev/{req_id}/spec/` — 需求规范
@@ -301,7 +301,7 @@
 3. archive-log.md 存在
 
 **失败纠正**：
-- 测试未全部通过 → 回溯 code-test，不允许进入
+- 测试未全部通过 → 回溯 test，不允许进入
 - 冲突 → AskUserQuestion 确认合并策略
 
 ---
@@ -329,7 +329,7 @@
 
 ---
 
-### 步骤9: knowledge-continuum
+### 步骤9: continuous-learning
 
 **输入契约**（必须）：
 - `.workflow-eval.json` — 含 diagnosis

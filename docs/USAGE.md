@@ -22,7 +22,7 @@
 |------|-------|------|------|-------|
 | 编排 | `/workflow` | 需求描述 | .workflow-state.json | 无（主控Skill） |
 | 规范 | `/spec` | 需求描述 | `spec-dev/{id}/spec/` | code-explorer |
-| 测试设计 | `/test-design` | spec | `tests/test-spec-creation.md + fixtures.json + test-*.template` | test-designer |
+| 测试设计 | `/test-design` | spec | `tests/test-spec.md + fixtures.json + test-*.template` | test-designer |
 | 设计 | `/design` | spec | `design/design.md` | code-architect |
 | 接口契约 | `/contract` | design.md | `contract.md + review-report.md` | contract-creator |
 | 任务 | `/task` | design.md + tests | `tasks/tasks.md` | tasker |
@@ -33,14 +33,14 @@
 
 ## 并行执行
 
-- `/test-design`(2) 和 `/design`(3) 可并行（均依赖 spec-creation）
-- workflow-control 自动处理并行调度
+- `/test-design`(2) 和 `/design`(3) 可并行（均依赖 spec）
+- workflow 自动处理并行调度
 
 ## 全栈项目
 
 `project-mode: fullstack` 时自动触发：
-- `/contract` 在 code-design 和 code-task 之间自动执行接口契约
-- `/exception` 在 code-execute 之后自动执行异常处理
+- `/contract` 在 design 和 task 之间自动执行接口契约
+- `/exception` 在 execute 之后自动执行异常处理
 
 ## 工作模式
 

@@ -1,6 +1,6 @@
 # 组件提取指南
 
-code-design 组件拆分决策和 code-execute 实现参考。
+design 组件拆分决策和 execute 实现参考。
 
 ## 理论基础
 

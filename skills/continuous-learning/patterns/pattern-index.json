@@ -23,7 +23,7 @@
     {
       "id": "api-001",
       "name": "接口契约模式",
-      "file": "api-contracts.md",
+      "file": "contracts.md",
       "keywords": ["API", "REST", "接口", "分页", "排序", "错误码", "幂等", "响应格式"],
       "frequency": 0,
       "last_used": "",

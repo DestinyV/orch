@@ -1,4 +1,4 @@
-# spec-archive 详细工作流
+# archive 详细工作流
 
 ## 步骤1: 分析需求Spec和主规范
 

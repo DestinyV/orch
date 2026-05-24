@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# knowledge-continuum — Observer Session Guard
+# continuous-learning — Observer Session Guard
 # Exit 0 = proceed, Exit 1 = skip this observer cycle.
 # Called by observer-loop.sh before spawning any Claude session.
 

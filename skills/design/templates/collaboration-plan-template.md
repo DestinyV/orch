@@ -1,6 +1,6 @@
 # 跨项目协作计划模板
 
-> code-design 阶段 2.6 使用此模板生成跨项目协作计划
+> design 阶段 2.6 使用此模板生成跨项目协作计划
 
 ## 文件路径
 
@@ -58,9 +58,9 @@ project-c (下游 — 前端应用)
 | [GET /api/v1/xxx] | [project-a] | [project-b] | [待确认/已确认] | [v1] |
 
 **端点详情：[Method] [Path]**
-- 请求参数：[简要描述或链接到 api-contract.md]
+- 请求参数：[简要描述或链接到 contract.md]
 - 响应格式：[简要描述]
-- 错误码：[引用 api-contract.md]
+- 错误码：[引用 contract.md]
 
 ### [project-b] → [project-c] 契约
 

@@ -23,12 +23,12 @@ description: |
   - frontend-monitoring.md (前端/全栈：前端监控)
   - sql-ddl.md (needs-database=是：DDL+DML可执行脚本)
   - diagrams/ (按需：ER图/场景流程图/决策树)
-  - project-context.md (标准模式，位于上级目录 {requirement_desc_abstract}/，供 code-design 复用)
+  - project-context.md (标准模式，位于上级目录 {requirement_desc_abstract}/，供 design 复用)
 
-  输出供 test-design 和 code-design 并行消费。
+  输出供 test-design 和 design 并行消费。
 ---
 
-# spec-creation
+# spec
 
 ## 职责
 
@@ -48,7 +48,7 @@ description: |
 
 ## Phase 0: 苏格拉底澄清检测（前置）
 
-<HARD-GATE>检测到 clarification.md 存在时必须读取；不存在时必须检测需求模糊度决定是否派遣 socratic-clarify。</HARD-GATE>
+<HARD-GATE>检测到 clarification.md 存在时必须读取；不存在时必须检测需求模糊度决定是否派遣 clarify。</HARD-GATE>
 
 在进入标准流程前，先检测是否已有苏格拉底澄清结果：
 
@@ -56,7 +56,7 @@ description: |
 2. **存在** → 读取澄清报告，直接进入 Phase 1（跳过需求理解问卷，从澄清报告提取目标/约束/验收标准）
 3. **不存在** → 评估需求描述模糊度：
    - 需求描述包含具体文件路径、函数名、验收标准 → 模糊度低，直接进入 Phase 1
-   - 需求描述模糊/开放/不确定 → 模糊度高，建议用户先运行 socratic-clarify
+   - 需求描述模糊/开放/不确定 → 模糊度高，建议用户先运行 clarify
 4. 在 `requirement.md` 头部写入澄清状态：
 
 ```yaml
@@ -91,7 +91,7 @@ description: |
 ### 需求理解
 
 - 读取需求（描述或文档），识别核心功能点和场景
-- **模式自动检测**：根据需求文本推断 project-mode（该逻辑由 workflow-control 统一处理，若直接调用 spec-creation 则自主执行）：
+- **模式自动检测**：根据需求文本推断 project-mode（该逻辑由 workflow 统一处理，若直接调用 spec 则自主执行）：
 
 | 需求特征 | 推断模式 |
 |---------|---------|
@@ -107,9 +107,9 @@ description: |
   3. 代码模式探索 → `Agent(subagent_type="orch:code-explorer", prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索", run_in_background=true)`
   - 小型项目(<200文件)保持串行
   - 两路 code-explorer 可并行派遣（`run_in_background=true`）
-  - 探索过程使用 script-writer 工具优先策略：搜索→Grep，批量过滤→Python3，兜底→Read
+  - 探索过程使用 scripts 工具优先策略：搜索→Grep，批量过滤→Python3，兜底→Read
 
-**探索结果输出**：标准模式将三路探索结果写入 `spec-dev/{req_id}/project-context.md`，供下游 code-design 直接读取，避免重复扫描。
+**探索结果输出**：标准模式将三路探索结果写入 `spec-dev/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
 
 **数据库需求判定**（当需求涉及数据持久化时）：
 ```
@@ -180,7 +180,7 @@ description: |
 
 <HARD-GATE>设计图=全部 或 按需触发阈值达标时，生成对应图供用户确认。快速模式跳过。</HARD-GATE>
 
-读取 `requirement.md` 中的「设计图」标签，按 `references/diagram-trigger-rules.md`（引用自 code-design）判断触发条件：
+读取 `requirement.md` 中的「设计图」标签，按 `references/diagram-trigger-rules.md`（引用自 design）判断触发条件：
 
 | 图类型 | 触发条件 | 确认对象 |
 |--------|---------|---------|
@@ -243,7 +243,7 @@ spec-dev/[需求ID]/
 │   ├── frontend-monitoring.md      # [前端/全栈]前端监控
 │   ├── sql-ddl.md                  # [needs-database=是]SQL脚本
 │   └── diagrams/                   # [按需]ER图/流程图/决策树
-└── project-context.md              # [标准模式]架构探索结果，供 code-design 复用
+└── project-context.md              # [标准模式]架构探索结果，供 design 复用
 ```
 
 模板见 `templates/` 目录。

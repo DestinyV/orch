@@ -1,6 +1,6 @@
 # 数据模型定义
 
-> 💡 **交叉引用**：完整的可执行 SQL DDL/DML 脚本见 `sql-ddl.md`（由 code-design 阶段生成）。
+> 💡 **交叉引用**：完整的可执行 SQL DDL/DML 脚本见 `sql-ddl.md`（由 design 阶段生成）。
 > 本文件定义逻辑数据模型，sql-ddl.md 定义物理 SQL 实现。
 
 ---

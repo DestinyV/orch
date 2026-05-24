@@ -1,6 +1,6 @@
 # Git-Worktrees 指南
 
-在 code-execute 阶段为每个 Task 创建隔离工作环境，确保修复循环的安全性、可追踪性。
+在 execute 阶段为每个 Task 创建隔离工作环境，确保修复循环的安全性、可追踪性。
 
 ## 创建 Worktree
 

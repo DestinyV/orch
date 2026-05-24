@@ -15,7 +15,7 @@ description: |
 
 ## When to Use
 
-- fullstack 模式下 code-design 阶段完成
+- fullstack 模式下 design 阶段完成
 - 需要将 design.md 中的接口定义转化为正式契约文档
 - 需要审查接口命名/类型/错误处理的一致性
 
@@ -26,7 +26,7 @@ description: |
 
 ## 职责
 
-读取 design.md 中的接口清单，生成 api-contract.md（接口契约）和 review-report.md（审查报告）。
+读取 design.md 中的接口清单，生成 contract.md（接口契约）和 review-report.md（审查报告）。
 fullstack 项目强制环节。
 
 ## 工作流程
@@ -37,9 +37,9 @@ fullstack 项目强制环节。
 
 **工具优先**：使用 `Skill("orch:scripts")` 调用 `extract-api-list.py` 从 design.md 提取接口清单 JSON，替代 AI 逐文件 Read。
 
-### 步骤 2-4: 派遣 api-contract-creator Agent
+### 步骤 2-4: 派遣 contract-creator Agent
 
-<HARD-GATE>fullstack 模式下必须通过 Agent 派遣 api-contract-creator，不允许主上下文直接执行接口审查。</HARD-GATE>
+<HARD-GATE>fullstack 模式下必须通过 Agent 派遣 contract-creator，不允许主上下文直接执行接口审查。</HARD-GATE>
 
 ```bash
 Agent(
@@ -51,7 +51,7 @@ Agent(
     - 现有项目 API 约定（从 design.md 提取）
     
     执行：
-    1. 生成接口契约（api-contract.md）：路径+方法/功能描述/认证/请求参数/成功响应/错误响应/关联数据库表
+    1. 生成接口契约（contract.md）：路径+方法/功能描述/认证/请求参数/成功响应/错误响应/关联数据库表
     2. 六维度审查（review-report.md）：
        - 完整性：每个前端交互有对应后端接口
        - 命名规范：RESTful风格一致性
@@ -77,7 +77,7 @@ API 端点 ≥8 个时生成接口依赖图（前后端调用关系）；响应 
 
 ## 关键约束
 
-<HARD-GATE>fullstack 模式下必须执行接口审查，任一项不通过 → 拒绝进入 code-task</HARD-GATE>
+<HARD-GATE>fullstack 模式下必须执行接口审查，任一项不通过 → 拒绝进入 task</HARD-GATE>
 
 ✅ 必须：参数和响应明确定义 | 错误码完整 | 遵循现有约定
 ❌ 禁止：定义 spec 外的接口 | 跳过审查 | 不通过时进入下一阶段 | 不更新版本号改接口

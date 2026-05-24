@@ -3,7 +3,7 @@ name: workflow
 description: 统一入口 + 流程编排。接收需求后自动编排所有下游 Skill 的执行顺序，支持模式自动检测、HARD-GATE 卡点管控、中断恢复。
 ---
 
-# workflow-control
+# workflow
 
 **调用方式**：通过 `Skill("orch:workflow")` 调用，非 Agent 派遣。
 

@@ -5,19 +5,19 @@
 ## Flow Overview
 
 ```
-spec-creation → test-design + code-design → api-contract → code-task → code-execute → code-test → spec-archive → knowledge-continuum
+spec → test-design + design → contract → task → execute → test → archive → continuous-learning
 ```
 
-1. **spec-creation** — Analyze requirement, produce BDD scenarios, data models, business rules
+1. **spec** — Analyze requirement, produce BDD scenarios, data models, business rules
 2. **test-design** — Generate test specs, fixtures, and templates from spec scenarios (parallel with step 3)
-3. **code-design** — Architecture design, database schema, interface contracts (parallel with step 2)
-4. **api-contract** — Formalize API contracts, review for consistency (fullstack only)
-5. **code-task** — Decompose design into concrete implementation tasks
-6. **code-execute** — Implement each Task in isolated git worktree with subagent
-7. **code-test** — Integration, E2E, and performance verification
-8. **spec-archive** — Merge validated spec into master spec repository
+3. **design** — Architecture design, database schema, interface contracts (parallel with step 2)
+4. **contract** — Formalize API contracts, review for consistency (fullstack only)
+5. **task** — Decompose design into concrete implementation tasks
+6. **execute** — Implement each Task in isolated git worktree with subagent
+7. **test** — Integration, E2E, and performance verification
+8. **archive** — Merge validated spec into master spec repository
 9. **evaluate** — Measure effectiveness, token usage, gate check
-10. **knowledge-continuum** — Extract decisions and patterns into knowledge base
+10. **continuous-learning** — Extract decisions and patterns into knowledge base
 
 ## HARD-GATE Card
 

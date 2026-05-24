@@ -2,7 +2,7 @@
 
 ## 概述
 
-MCP (Model Context Protocol) Browser Server 让 Claude 能通过 MCP 协议直接操控浏览器，在 code-test 阶段进行探索性测试、截图验证和交互式 UI 验证。
+MCP (Model Context Protocol) Browser Server 让 Claude 能通过 MCP 协议直接操控浏览器，在 test 阶段进行探索性测试、截图验证和交互式 UI 验证。
 
 ## 安装
 
@@ -56,11 +56,11 @@ npm install -g @anthropic/mcp-server-browser
 | `browser_press_key` | 按键操作 | `{ key: string }` |
 | `browser_wait` | 等待指定时间 | `{ time?: number }` |
 
-## 在 code-test 阶段的使用流程
+## 在 test 阶段的使用流程
 
 ### 步骤1: 启动 MCP Server
 
-在 code-test 开始前，确保 MCP Browser Server 已配置并可连接。
+在 test 开始前，确保 MCP Browser Server 已配置并可连接。
 
 ### 步骤2: 导航到待测应用
 

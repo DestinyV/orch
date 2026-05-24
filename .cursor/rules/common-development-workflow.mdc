@@ -31,10 +31,10 @@ Use `/workflow "requirement"` as the single entry. It auto-detects mode (fronten
 
 - `frontend`: UI only, no database, no API contracts
 - `backend`: Logic + data, skip frontend steps
-- `fullstack`: All steps including api-contract
+- `fullstack`: All steps including contract
 
 ## HARD-GATE Checkpoints
 
 - Step 5 (execute): test environment must be available before starting
 - Step 5.5 (exception): project convention scan must complete
-- Step 6 (test): all unit tests from code-execute must pass
+- Step 6 (test): all unit tests from execute must pass

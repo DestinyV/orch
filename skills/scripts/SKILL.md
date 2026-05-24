@@ -8,7 +8,7 @@ description: |
   触发条件：任何Skill需要进行文件搜索、批量处理、内容提取、格式校验时
 ---
 
-# script-writer
+# scripts
 
 ## When to Use
 

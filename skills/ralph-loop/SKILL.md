@@ -108,9 +108,9 @@ Agent C (方案3) ─┘
 
 ```
 /start "批量处理 10 个需求"
-  → workflow-control 检测到循环需求
+  → workflow 检测到循环需求
   → 选择 sequential loop (有依赖) 或 infinite (无依赖)
-  → 每需求：spec-creation → code-design → ... → spec-archive
+  → 每需求：spec → design → ... → archive
   → 每轮验证 + 下一轮自动触发
   → 全部完成 → 输出摘要
 ```

@@ -20,7 +20,7 @@ argument-hint: "[feature description | path/to/spec-dir | path/to/design.md]"
 ## 与 SDD+TDD 工作流的集成
 
 ```
-spec-creation → test-design ⟷ code-design → api-contract(fullstack) → code-task
+spec → test-design ⟷ design → contract(fullstack) → task
                                                                              ↓
                                                         /plan 在此创建实施计划
 ```
@@ -48,7 +48,7 @@ spec-creation → test-design ⟷ code-design → api-contract(fullstack) → co
 ### 2. 模式采集
 
 检查 spec 中的 project-mode (frontend/backend/fullstack)，确定：
-- 是否需要 api-contract（fullstack 强制）
+- 是否需要 contract（fullstack 强制）
 - 是否涉及数据库变更（SQL DDL）
 - 是否需要异常处理（backend/fullstack）
 - 测试策略（单元 ≥85% + 集成/E2E）

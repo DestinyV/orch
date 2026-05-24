@@ -14,14 +14,14 @@ globs: *.test.ts, *.spec.ts, *.test.py, *.test.js, *.test.tsx
 
 ## Test Data Source
 
-All test data originates from spec-creation's TEST-VERIFY blocks and Mock Data. test-design converts these into:
+All test data originates from spec's TEST-VERIFY blocks and Mock Data. test-design converts these into:
 - `test-spec.md` — complete test case definitions
 - `fixtures.json` — reusable test fixtures
 - `test-*.template` — framework-specific test skeletons
 
 ## Coverage Requirements
 
-- Unit tests: >= 85% coverage (enforced in code-execute)
+- Unit tests: >= 85% coverage (enforced in execute)
 - Integration tests: cover all API endpoints (test)
 - E2E tests: cover critical user journeys (test)
 - Target split: Unit 65-75% | Integration 15-25% | E2E 5-10%
@@ -35,7 +35,7 @@ All test data originates from spec-creation's TEST-VERIFY blocks and Mock Data. 
 
 ## Verification
 
-Every test in code-test must trace back to:
+Every test in test must trace back to:
 ```
 TEST-VERIFY (spec) → Test Case (test-spec.md) → Code → Test Result
 ```

@@ -5,7 +5,7 @@ description: 将 instincts（项目级/全局）导出为可分享的 JSON/YAML 
 
 # Instinct Export Command (SDD+TDD 适配版)
 
-从 knowledge-continuum v2 导出 instincts 到可分享格式。适用于团队共享约定、迁移到新机器、贡献项目规范。
+从 continuous-learning v2 导出 instincts 到可分享格式。适用于团队共享约定、迁移到新机器、贡献项目规范。
 
 ## 实现
 

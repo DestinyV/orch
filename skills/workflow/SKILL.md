@@ -8,7 +8,7 @@ description: |
   支持模式自动检测、并行分支调度、HARD-GATE卡点管控、自动补偿、中断恢复、效果评估与Token追踪。
 ---
 
-# workflow-control — 流程编排引擎
+# workflow — 流程编排引擎
 
 
 ## When to Use
@@ -31,7 +31,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 | Token 记录 | 每阶段完成后调用 `context-budget` 记录上下文消耗，记录到 `.workflow-eval.json` |
 | 上下文监控 | 阶段切换时检测上下文余量，不足时建议 compact 或精简后续步骤 |
 
-<HARD-GATE>禁止在正式流程前执行代码探索，由 spec-creation 内部负责。</HARD-GATE>
+<HARD-GATE>禁止在正式流程前执行代码探索，由 spec 内部负责。</HARD-GATE>
 <HARD-GATE>禁止跳过阶段。即使已有 spec 目录，也必须从步骤0开始，由状态检测决定中断恢复。</HARD-GATE>
 
 ---
@@ -48,7 +48,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 | UI + 后端同时涉及 | fullstack |
 
 3. AskUserQuestion 确认：模式/数据库/快速或标准/设计图偏好
-4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec-creation
+4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec
 5. 初始化 `.workflow-state.json` + `.workflow-eval.json`
 6. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`
 
@@ -133,26 +133,26 @@ done
 ### 派遣代码块
 
 ```bash
-# ═══ 步骤1: spec-creation — 项目探索补偿 ═══
+# ═══ 步骤1: spec — 项目探索补偿 ═══
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
       prompt="扫描项目 CLAUDE.md/README.md/docs/ 提取：1)技术栈/框架版本 2)目录结构/分层 3)命名规范 4)API模式。输出 project-context.md")
 
-# ═══ 步骤2-3: test-design + code-design（并行） ═══
+# ═══ 步骤2-3: test-design + design（并行） ═══
 Agent(subagent_type="orch:test-designer", run_in_background=true,
-      prompt="读取 spec-dev/{req}/spec/scenarios/ 中 TEST-VERIFY，生成：1)test-spec-creation.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
+      prompt="读取 spec-dev/{req}/spec/scenarios/ 中 TEST-VERIFY，生成：1)test-spec.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
 
 Agent(subagent_type="orch:code-architect", run_in_background=true,
       prompt="基于 spec-dev/{req}/spec/ 架构设计：1)技术栈/模块边界 2)架构模式(Layered/Clean/Hexagonal) 3)组件(文件路径/职责/接口/依赖) 4)数据流/构建序列。后端额外：数据库/服务依赖/可观测性。前端额外：构建/CDN/性能监控。输出 design.md")
 
-# ═══ 步骤3.5: api-contract（fullstack） ═══
+# ═══ 步骤3.5: contract（fullstack） ═══
 Agent(subagent_type="orch:contract-creator",
-      prompt="读取 design.md 接口定义，生成 api-contract.md + review-report.md。审查：命名一致性/类型匹配/错误完整/约定遵循/字段一致。接口命名/路由/格式与现有风格一致")
+      prompt="读取 design.md 接口定义，生成 contract.md + review-report.md。审查：命名一致性/类型匹配/错误完整/约定遵循/字段一致。接口命名/路由/格式与现有风格一致")
 
-# ═══ 步骤4: code-task ═══
+# ═══ 步骤4: task ═══
 Agent(subagent_type="orch:tasker",
       prompt="读取 design.md 拆解 Task 清单。每Task标注：id/名称/描述/provides/consumes/depends_on/验收标准/预估文件。依赖DAG无环。输出 tasks.md")
 
-# ═══ 步骤5: code-execute（每Task独立子代理并行） ═══
+# ═══ 步骤5: execute（每Task独立子代理并行） ═══
 for task in $(python3 -c "import json;tasks=json.load(open('spec-dev/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
   Agent(subagent_type="orch:executor", run_in_background=true,
         prompt="TDD: RED(写测试确认FAIL)->GREEN(最少代码PASS)->REFACTOR(优化保PASS)->REVIEW(lint/type/覆盖>=85%/无伪代码)。出口验证: 任一不满足阻塞。Git+Trailers(Constraint/Rejected/Spec)")
@@ -163,22 +163,22 @@ Agent(subagent_type="orch:tdd-guide",
       prompt="审查每Task TDD四阶段日志: RED有失败证据/GREEN有通过证据/REFACTOR测试未回归/REVIEW全达标。任一不满足驳回")
       prompt="对已完成批次两阶段审查。规范审查(对照design.md检查架构/命名/结构)。质量审查(对照rules/检查type/lint/DRY/SOLID)。仅报告confidence≥80。输出: CRITICAL|WARNING|INFO + file:line")
 
-# ═══ 步骤5.5: exception-handler（后端/全栈） ═══
+# ═══ 步骤5.5: exception（后端/全栈） ═══
 Agent(subagent_type="orch:exception",
       prompt="扫描 src/ 异常场景。1)项目约定扫描(异常类名/错误码/RPC模式) 2)识别场景(数据库/RPC/JSON/参数) 3)按约定生成异常代码。RPC→远程异常|业务→业务异常|参数→参数异常|系统→系统异常。禁止硬编码")
 
-# ═══ 步骤6: code-test ═══
+# ═══ 步骤6: test ═══
 Agent(subagent_type="orch:tester",
       prompt="对 src/ 高层测试: 1)环境检查 2)集成测试(Repository/Service/API协作) 3)E2E(npx playwright test --grep @e2e) 4)契约(fullstack验证字段/类型) 5)性能(P95<500ms) 6)闭环(TV→Test→Code→Result)。返回 testing-report.md")
 
 Agent(subagent_type="orch:test-verifier",
       prompt="对 testing-report.md 每条验收标准：独立运行验证命令(不接受历史输出)。标记 VERIFIED/PARTIAL/MISSING。拒绝'应该能工作'类声明")
 
-# ═══ 步骤7: spec-archive ═══
+# ═══ 步骤7: archive ═══
 Agent(subagent_type="orch:archiver",
       prompt="归档到 spec-dev/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
 
-# ═══ 步骤9: knowledge-continuum ═══
+# ═══ 步骤9: continuous-learning ═══
 Agent(subagent_type="orch:knowledge-curator",
       prompt="知识复利：收集→识别→沉淀(运行distill.sh去重)→提炼(运行refresh.sh扫描过期)→自适应(更新preferences.json)。Layer 3: 3子代理并行捕获解决方案")
 ```
@@ -191,7 +191,7 @@ Agent(subagent_type="orch:knowledge-curator",
 2. JSON 校验失败 → 默认从上一 done 阶段续接
 3. 最后 done → 验证产出文件存在，缺失标记 failed + AskUserQuestion
 4. 最后 failed → AskUserQuestion（重试/跳过/查看错误）
-5. 步骤5 中断：检测 `code-execute.status=in_progress` → 列出已完成 Task，从未完成恢复
+5. 步骤5 中断：检测 `execute.status=in_progress` → 列出已完成 Task，从未完成恢复
 6. 上下文过大时，中断恢复前先调用 `Skill("orch:context-budget")` 审计 → `Skill("orch:compact")` 建议 compaction 后再继续
 
 ## 快速模式

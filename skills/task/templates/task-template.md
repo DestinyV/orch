@@ -21,7 +21,7 @@
 - provides: [接口列表]（后端 Task，如 `[GET /api/users, POST /api/users]`）
 - consumes: [接口列表]（前端 Task，如 `[GET /api/users]`）
 
-> 注：provides/consumes 必须与 api-contract.md 中定义的接口完全一致
+> 注：provides/consumes 必须与 contract.md 中定义的接口完全一致
 
 **跨项目依赖** ⭐🆕（多项目场景必填）：
 - 依赖项目：[project-x]

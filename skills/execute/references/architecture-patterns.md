@@ -1,6 +1,6 @@
 # 常用架构模式参考
 
-> code-design 架构决策和 code-execute 实现参考
+> design 架构决策和 execute 实现参考
 
 ## Clean Architecture
 

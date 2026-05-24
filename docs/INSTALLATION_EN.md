@@ -13,12 +13,12 @@ npx skills add https://github.com/DestinyV/orch.git
 Or install individual skills:
 
 ```bash
-npx skills add https://github.com/DestinyV/orch.git --skill spec-creation
-npx skills add https://github.com/DestinyV/orch.git --skill code-design
-npx skills add https://github.com/DestinyV/orch.git --skill code-task
-npx skills add https://github.com/DestinyV/orch.git --skill code-execute
-npx skills add https://github.com/DestinyV/orch.git --skill code-test
-npx skills add https://github.com/DestinyV/orch.git --skill spec-archive
+npx skills add https://github.com/DestinyV/orch.git --skill spec
+npx skills add https://github.com/DestinyV/orch.git --skill design
+npx skills add https://github.com/DestinyV/orch.git --skill task
+npx skills add https://github.com/DestinyV/orch.git --skill execute
+npx skills add https://github.com/DestinyV/orch.git --skill test
+npx skills add https://github.com/DestinyV/orch.git --skill archive
 ```
 
 ### Method 2: Local Installation (Development/Testing)
@@ -51,7 +51,7 @@ After successful installation, verify in Claude Code:
 /spec
 ```
 
-If you see the interactive analysis prompt from spec-creation, installation was successful!
+If you see the interactive analysis prompt from spec, installation was successful!
 
 ---
 

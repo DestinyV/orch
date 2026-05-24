@@ -97,7 +97,7 @@ Top Optimizations:
 - **MCP 是最大杠杆**: 每个 tool schema ~500 tokens; 30-tool server 比所有 skills 总和还贵
 - **Agent descriptions 始终加载**: 即使从未调用，description 也存在于每次 Task 工具调用
 - **变更后审计**: 每次添加 agent/skill/MCP server 后运行检查
-- **与 strategic-compact 配合**: 先审计再 compaction 最大化收益
+- **与 compact 配合**: 先审计再 compaction 最大化收益
 
 ## 关键约束
 

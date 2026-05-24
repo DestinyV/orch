@@ -20,7 +20,7 @@ tools: Bash, Grep, Read, Glob
 
 ## 职责
 
-对 code-execute 或 code-test 的输出进行独立证据验证。每条验收标准必须有新鲜证据支持。
+对 execute 或 test 的输出进行独立证据验证。每条验收标准必须有新鲜证据支持。
 
 ## 验证流程
 

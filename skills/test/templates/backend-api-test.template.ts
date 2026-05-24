@@ -1,6 +1,6 @@
 # 后端 API 测试模板
 
-> code-test 阶段 3.1.5 API 契约测试使用此模板生成后端 API 测试
+> test 阶段 3.1.5 API 契约测试使用此模板生成后端 API 测试
 
 ## 测试策略
 
@@ -30,10 +30,10 @@ describe('API: [端点名称]', () => {
       const response = await request(app)
         .[method]('[path]')
         .set('Authorization', `Bearer ${validToken}`)
-        .send({ /* 来自 api-contract.md 的请求参数 */ })
+        .send({ /* 来自 contract.md 的请求参数 */ })
         .expect(200);
 
-      // 验证响应结构（按 api-contract.md 定义）
+      // 验证响应结构（按 contract.md 定义）
       expect(response.body).toMatchObject({
         code: 0,
         data: { /* 必填字段 */ },

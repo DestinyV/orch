@@ -1,5 +1,5 @@
 ---
-description: 生成 Claude Code 成本报告。从本地 cost-tracking SQLite 数据库查询用量、花费和趋势。
+description: 生成 Claude Code 成本报告。从本地 cost SQLite 数据库查询用量、花费和趋势。
 argument-hint: "[csv]"
 ---
 

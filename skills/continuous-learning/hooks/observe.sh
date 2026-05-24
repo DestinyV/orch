@@ -1,5 +1,5 @@
 #!/bin/bash
-# knowledge-continuum — Observation Hook
+# continuous-learning — Observation Hook
 #
 # Captures PreToolUse/PostToolUse events for instinct-based pattern analysis.
 # Integration layer between orch workflow and instinct learning.
@@ -7,7 +7,7 @@
 # Registered via plugin hooks/hooks.json (auto-loaded).
 # Can also be registered manually in ~/.claude/settings.json.
 #
-# Observation hook for knowledge-continuum instinct learning.
+# Observation hook for continuous-learning instinct learning.
 # scoped to capture orch workflow decisions (HARD-GATE triggers,
 # pattern matches, user corrections) as instinct observations.
 

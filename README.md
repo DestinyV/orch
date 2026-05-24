@@ -1,4 +1,4 @@
-# orch Full-Stack SDD-TDD Development Workflow
+# Orch Full-Stack SDD-TDD Development Workflow
 
 [中文](./README_ZH.md) | English
 
@@ -24,7 +24,7 @@
 ```
 
 > `/test-design` and `/design` can be executed in parallel (both depend on spec output).
-> `/exception` triggers automatically for backend/fullstack projects after code-execute (zero hardcoding, project convention scanning).
+> `/exception` triggers automatically for backend/fullstack projects after execute (zero hardcoding, project convention scanning).
 
 ---
 
@@ -409,15 +409,15 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 - Step 0: Use `/orch:sdd-dev` to enter plugin and input requirements
 - Step 1: Run spec for requirements analysis and spec generation
 - Step 2: Assign code-architect for architecture design in design stage
-- Step 3: Conduct task decomposition and definition in code-task stage
-- Step 4: Strictly follow task checklist for code-execute, complete spec + quality two-stage review
+- Step 3: Conduct task decomposition and definition in task stage
+- Step 4: Strictly follow task checklist for execute, complete spec + quality two-stage review
 - Step 5: Conduct comprehensive test verification and closed-loop check
 - Step 6: Automatically execute archive after tests pass, accumulate specs to enterprise spec library
 
 ### ❌ Must Not Do
 - Skip Step 0 and directly call individual Skills (should use plugin entry)
 - Skip design and task definition stages and directly code
-- Skip spec or quality reviews in code-execute
+- Skip spec or quality reviews in execute
 - Modify source code logic to make tests pass
 - Ignore consistency between Tasks and code
 - Skip closed-loop verification in test stage
@@ -435,11 +435,11 @@ Modify the SKILL.md files in the following Skills to adapt to your project requi
 
 1. **spec** - Define project design patterns and reference component collection methods
 2. **design** - Adjust design analysis dimensions and depth
-3. **code-task** - Adjust task decomposition granularity and acceptance criteria
+3. **task** - Adjust task decomposition granularity and acceptance criteria
 
 ### Adjust Execution and Review
 
-Modify prompt files in code-execute:
+Modify prompt files in execute:
 
 - `implementer-prompt.md` - Adjust code implementation style and requirements
 - `spec-reviewer-prompt.md` - Adjust spec review dimensions
@@ -458,7 +458,7 @@ Modify test SKILL.md:
 ## 📝 Changelog
 
 ### v2.3.1 (2026-03-23) ✨ Git-Worktrees Isolated Work Environments
-- ✅ **Worktree Isolation Mechanism** - Creates independent git worktree for each Task in code-execute
+- ✅ **Worktree Isolation Mechanism** - Creates independent git worktree for each Task in execute
 - ✅ **Safe Fix Cycle** - Failed fixes can delete worktree and restart without polluting main branch
 - ✅ **Complete Fix History** - Worktree commits clearly record "problem→fix→verification" chain
 - ✅ **Parallel Task Support** - Multiple Tasks execute simultaneously without git conflict risk
@@ -470,7 +470,7 @@ Modify test SKILL.md:
 ### v2.3.0 (2026-03-23) ✨ Complete TDD Implementation
 - ✅ **TDD Implementation System** - Complete Phase 2 TDD implementation (RED-GREEN-REFACTOR-REVIEW)
 - ✅ **High-Level Testing System** - Complete Phase 3 integration, E2E, performance testing optimization
-- ✅ **Clear Responsibilities** - code-execute handles unit tests, test handles high-level tests
+- ✅ **Clear Responsibilities** - execute handles unit tests, test handles high-level tests
 - ✅ **High-Level Test Prompts** - Integration, E2E, performance test specialized design guides
 - ✅ **Best Practices Update** - BEST_PRACTICES.md adds Phase 3 best practices
 - ✅ **Closed-Loop Verification** - Complete TEST-VERIFY→Test→Code→Result chain
@@ -494,7 +494,7 @@ Modify test SKILL.md:
 
 ### v2.0.0 (2026-03-09)
 - ✅ Complete refactoring to Spec-Design-TestDesign-Task-Execute-Test-Archive workflow
-- ✅ 7 Core Skills: spec, design, test-design, code-task, code-execute, test, archive
+- ✅ 7 Core Skills: spec, design, test-design, task, execute, test, archive
 - ✅ Multi-stage review mechanism and closed-loop verification
 - ✅ Frontend-first support (React/Vue/Angular/Svelte)
 - ✅ Complete documentation and best practices guides
@@ -511,7 +511,7 @@ Modify test SKILL.md:
 2. View [Usage Guide](./docs/USAGE_EN.md)
 3. Execute `/orch:sdd-dev` to enter plugin
 4. Enter requirements as prompted
-5. Step through spec → design → test-design → code-task → code-execute → test → archive
+5. Step through spec → design → test-design → task → execute → test → archive
 6. Choose a small feature for complete workflow trial run
 
 ### 📚 Advanced Learning
@@ -527,7 +527,7 @@ Modify test SKILL.md:
 1. Ensure team members understand SDD workflow core principles
 2. Write project-specific design specs (through spec)
 3. Write team best practices and coding style guides
-4. Configure code-execute and test review rules
+4. Configure execute and test review rules
 5. Train team members to use the entire workflow according to specs
 6. Establish spec-design based code review process
 

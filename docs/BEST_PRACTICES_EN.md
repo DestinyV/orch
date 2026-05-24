@@ -35,7 +35,7 @@
 - [ ] TDD four stages fully executed
 - [ ] Coverage ≥85% (standard) / ≥60% (quick)
 - [ ] No pseudo-code / empty function bodies
-- [ ] Backend/fullstack called exception-handler
+- [ ] Backend/fullstack called exception
 
 ### Test
 - [ ] Frontend executed browser E2E tests
@@ -53,4 +53,4 @@
 - ❌ Modify source logic to make tests pass
 - ❌ Continue to next Task without fixing issues
 - ❌ Use console/print to fake implementations
-- ❌ Ignore closed-loop verification (Task-code-test correspondence)
+- ❌ Ignore closed-loop verification (Task-test correspondence)

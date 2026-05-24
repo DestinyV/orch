@@ -1,7 +1,7 @@
 ---
 name: debug
 description: |
-  Bug 修复辅助技能。通过证据驱动的因果追踪定位根因，适用于 code-execute 或 code-test 阶段的失败诊断。
+  Bug 修复辅助技能。通过证据驱动的因果追踪定位根因，适用于 execute 或 test 阶段的失败诊断。
   
   输入：bug 描述 + 相关文件路径
   输出：根因分析 + 修复建议
@@ -15,7 +15,7 @@ description: |
 
 ## When to Use
 
-- code-test 阶段测试失败，需要定位根因
+- test 阶段测试失败，需要定位根因
 - Bug 报告需要多假设竞争式因果追踪
 - 需要区分症状和根因
 

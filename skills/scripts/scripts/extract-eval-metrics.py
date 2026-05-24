@@ -97,7 +97,7 @@ def diagnose(stages, events, summary):
     # 补偿事件诊断
     compensations = [e for e in events if e.get('event') == 'compensation']
     if compensations:
-        d['suggestions'].append(f'自动补偿 {len(compensations)} 次，检查上游 spec-creation 流程完整性')
+        d['suggestions'].append(f'自动补偿 {len(compensations)} 次，检查上游 spec 流程完整性')
 
     # 阶段跳过率
     skipped = [s for s in stages if s.get('status') == 'skipped']

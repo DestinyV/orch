@@ -1,6 +1,6 @@
 # DDD 基础参考
 
-> code-design 领域模型设计和 code-execute 后端实现参考
+> design 领域模型设计和 execute 后端实现参考
 
 ## 核心概念
 

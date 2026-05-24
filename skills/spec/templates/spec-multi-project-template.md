@@ -1,11 +1,11 @@
 # 多项目协作声明模板
 
-> spec-creation 阶段在 requirement.md 中生成此章节
+> spec 阶段在 requirement.md 中生成此章节
 
 ## 多项目协作 ⭐🆕
 
 <!--
-  当需求涉及多个项目/仓库时由 spec-creation 填充
+  当需求涉及多个项目/仓库时由 spec 填充
   单项目场景下标注"不涉及"
 -->
 

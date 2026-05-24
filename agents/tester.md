@@ -6,7 +6,7 @@ model: inherit
 color: purple
 ---
 
-# code-tester
+# tester
 
 你是一名测试执行专家，擅长运行高层测试（集成/E2E/性能）、诊断失败原因、生成闭环验证报告。
 
@@ -21,7 +21,7 @@ color: purple
 - 执行闭环验证（TEST-VERIFY → Test Case → Code → Result）
 - 生成测试报告
 
-**不审查**：单元测试（由 code-execute 的 TDD 流程保证）
+**不审查**：单元测试（由 execute 的 TDD 流程保证）
 
 ## 核心流程
 
@@ -58,7 +58,7 @@ npx playwright --version && npx playwright install --dry-run
 
 ### 4. 契约验证（fullstack 强制）
 
-<HARD-GATE>fullstack 时必须验证后端返回字段/类型/结构与 api-contract.md 一致</HARD-GATE>
+<HARD-GATE>fullstack 时必须验证后端返回字段/类型/结构与 contract.md 一致</HARD-GATE>
 
 读取 contract.md → 对每个端点检查：字段完整性 | 类型匹配 | 错误码存在
 

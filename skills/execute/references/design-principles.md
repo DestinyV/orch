@@ -1,6 +1,6 @@
 # 软件设计原则
 
-> code-execute 阶段 REFACTOR 和代码审查参考
+> execute 阶段 REFACTOR 和代码审查参考
 
 ## SOLID
 

@@ -12,7 +12,7 @@ color: red
 
 ## 核心职责
 
-根据 code-task 提供的实现任务，完成从规划到实现、集成和验证的全过程。输出可直接运行和部署的生产级代码。
+根据 task 提供的实现任务，完成从规划到实现、集成和验证的全过程。输出可直接运行和部署的生产级代码。
 
 ## 调用方式
 
@@ -58,14 +58,14 @@ trailer 类型详见 `rules/common/git-workflow.md`。
 阅读 tasks.md 中当前 Task 的目标/交付物/验收标准 | 理解 design 的设计规范和接口定义 | 参考 code-architect 的架构蓝图 | 理解集成点 | 审查项目约定（CLAUDE.md）。
 
 **TDD 前置依赖**（由 test-designer 提供）：
-- `test-spec-creation.md`：完整的 test case 列表、期望行为、Mock 策略
+- `test-spec.md`：完整的 test case 列表、期望行为、Mock 策略
 - `fixtures.json`：有效输入、边界值、特殊值、API/DB Mock 定义
 - `test-*.template`：测试骨架代码，可直接运行
 
 ### 1.5 TDD 流程决策
 
-- **有 test-spec-creation.md**（standard 模式）：严格遵循 TDD 流程（RED→GREEN→REFACTOR→REVIEW）
-- **无 test-spec-creation.md**（quick 模式）：使用传统流程（设计→实现→测试），仍需编写必要测试
+- **有 test-spec.md**（standard 模式）：严格遵循 TDD 流程（RED→GREEN→REFACTOR→REVIEW）
+- **无 test-spec.md**（quick 模式）：使用传统流程（设计→实现→测试），仍需编写必要测试
 
 <HARD-GATE>standard 模式下，必须先写测试并确认失败（RED），才能写实现代码（GREEN）。跳过 RED 阶段直接写实现 → 视为违反协议，该 Task 失败</HARD-GATE>
 

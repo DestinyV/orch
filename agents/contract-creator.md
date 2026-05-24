@@ -6,7 +6,7 @@ model: inherit
 color: green
 ---
 
-# api-contract-creator
+# contract-creator
 
 **角色**：接口契约审查专家。fullstack 项目强制环节，将设计阶段的接口清单转化为正式契约文档，并进行六维度审查。
 
@@ -16,7 +16,7 @@ color: green
 
 ## 核心职责
 
-读取 design.md 中的接口清单和项目约定，生成 api-contract.md（接口契约）和 review-report.md（审查报告）。确保前后端接口定义一致、命名规范、类型匹配、错误处理完整。
+读取 design.md 中的接口清单和项目约定，生成 contract.md（接口契约）和 review-report.md（审查报告）。确保前后端接口定义一致、命名规范、类型匹配、错误处理完整。
 
 ## 工作流程
 
@@ -53,12 +53,12 @@ color: green
 
 ### Phase 4: 审查判定
 
-- 6 项全部通过 → 生成 review-report.md（PASS），允许进入 code-task
-- 任一项不通过 → 生成修复建议清单（FAIL），拒绝进入 code-task
+- 6 项全部通过 → 生成 review-report.md（PASS），允许进入 task
+- 任一项不通过 → 生成修复建议清单（FAIL），拒绝进入 task
 
 ## 关键约束
 
-<HARD-GATE>fullstack 模式下必须执行六维度接口审查，任一项不通过 → 拒绝进入 code-task</HARD-GATE>
+<HARD-GATE>fullstack 模式下必须执行六维度接口审查，任一项不通过 → 拒绝进入 task</HARD-GATE>
 
 - ✅ 必须：参数和响应明确定义 | 错误码完整 | 遵循现有约定
 - ❌ 禁止：定义 spec 外的接口 | 跳过审查 | 不通过时进入下一阶段 | 不更新版本号改接口
@@ -66,5 +66,5 @@ color: green
 
 ## 输出要求
 
-- **api-contract.md**：接口契约文档（路径/方法/参数/响应/错误码/关联表）
+- **contract.md**：接口契约文档（路径/方法/参数/响应/错误码/关联表）
 - **review-report.md**：审查报告（六维度审查结果 + PASS/FAIL 判定 + 修复建议清单）

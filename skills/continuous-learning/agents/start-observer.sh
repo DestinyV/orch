@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# knowledge-continuum — Observer Agent Launcher
+# continuous-learning — Observer Agent Launcher
 #
 # Starts/stops the background observer agent that analyzes observations
 # and creates instincts.
