@@ -9,21 +9,23 @@ argument-hint: 可选：需求描述
 
 > **流程执行参考（Source of Truth）**: 各阶段的输入/输出契约、校验规则、失败纠正、Agent 派遣详见 [`skills/workflow/references/flow-execution-reference.md`](skills/workflow/references/flow-execution-reference.md)。
 
+<HARD-GATE>收到指令后立即调用 Skill("orch:workflow")，禁止在调用前执行任何代码探索、文件读取、目录扫描或项目分析</HARD-GATE>
+
 ## 入口
 
 ```
-/start-dev "需求描述"   →   自动执行完整流程
+/start-dev "需求描述"   →   立即 → Skill("orch:workflow") → 自动执行完整流程
 ```
 
 逐步调用：
 ```
-/spec → /test-design ⟷ /design → /contract → /task → /execute → /test → /archive
+/spec → /test-design ⟷ /design → /contract → /task → /execute → /test → /archive → evaluation → continuous-learning
 ```
 
 ## 强制规则
 
-1. **禁止在 workflow 之前执行代码探索**。探索由 spec 内部负责。
-2. **禁止跳过阶段**。必须从阶段0 开始，由状态检测决定中断恢复。
+1. <HARD-GATE>禁止在 workflow 之前执行代码探索。收到指令后唯一允许的动作是调用 Skill("orch:workflow")，由 spec 阶段(code-explorer)内部负责探索。</HARD-GATE>
+2. <HARD-GATE>禁止跳过阶段。必须从阶段0 开始，由状态检测决定中断恢复。</HARD-GATE>
 
 ## 流程步骤
 
