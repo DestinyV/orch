@@ -49,7 +49,7 @@
 2. .workflow-state.json 已写入且可解析
 
 **失败纠正**：
-- 模式推断不准确 → AskUserQuestion 手动选择
+- project-mode 由用户在步骤0 主动选择，不推断
 
 ---
 

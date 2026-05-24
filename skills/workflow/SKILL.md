@@ -39,15 +39,8 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 ## 步骤0: 初始化
 
 1. 接收需求 → 检查 `orch-spec/` 下 `.workflow-state.json`（存在则中断恢复）
-2. 自动推断 project-mode：
-
-| 需求特征 | 推断 |
-|---------|------|
-| UI/页面/组件/交互 | frontend / fullstack |
-| API/数据库/服务/存储 | backend / fullstack |
-| UI + 后端同时涉及 | fullstack |
-
-3. AskUserQuestion 确认：模式/数据库/快速或标准/设计图偏好
+2. project-mode：直接 AskUserQuestion 让用户从 [frontend / backend / fullstack / mobile] 中选择，**禁止通过分析项目或需求特征推断**
+3. AskUserQuestion 确认：数据库类型/快速或标准/设计图偏好
 4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec
 5. 初始化 `.workflow-state.json` + `.workflow-eval.json`
 6. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`

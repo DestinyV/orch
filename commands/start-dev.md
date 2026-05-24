@@ -24,7 +24,7 @@ argument-hint: 可选：需求描述
 
 ## 强制规则
 
-1. <HARD-GATE>禁止在 workflow 之前执行代码探索。收到指令后唯一允许的动作是调用 Skill("orch:workflow")，由 spec 阶段(code-explorer)内部负责探索。</HARD-GATE>
+1. <HARD-GATE>禁止在调用 Skill("orch:workflow") 之前执行任何代码探索/文件读取/目录扫描。收到指令后唯一允许的动作就是调用 Skill("orch:workflow")。project-mode 由 workflow 内部让用户自主选择，不通过读项目推断。</HARD-GATE>
 2. <HARD-GATE>禁止跳过阶段。必须从阶段0 开始，由状态检测决定中断恢复。</HARD-GATE>
 
 ## 流程步骤
