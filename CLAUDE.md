@@ -44,7 +44,7 @@
 
 ## 项目概述
 
-**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。18 Skills + 23 Agents + 12 Commands，覆盖从需求到归档的全生命周期。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。
+**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。22 Skills + 28 Agents + 14 Commands，覆盖从需求到归档的全生命周期。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。
 
 **核心工作流**：
 ```
@@ -55,19 +55,20 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.5.0 (2026-05-24)
+**版本**：v0.5.1 (2026-05-24)
 
 ## 架构与文件结构
 
 ```
 orch/
-├── skills/          # 18个 Skills（workflow/spec/test-design/design/contract/
+├── skills/          # 22个 Skills（workflow/spec/test-design/design/contract/
 │                    #   task/execute/exception/test/archive/
 │                    #   scripts/continuous-learning/using-orch/
 │                    #   context-budget/depth/compact/
-│                    #   cost/ralph-loop）
-├── agents/          # 23个 Agents（11工作流核心 + 12扩展）
-├── commands/        # 12个斜杠命令
+│                    #   cost/ralph-loop/clarify/debug/req-change/
+│                    #   spec-import）
+├── agents/          # 28个 Agents（11工作流核心 + 17扩展）
+├── commands/        # 14个斜杠命令
 ├── rules/           # 语言规则（common/typescript/python/zh）
 ├── scripts/lib/     # 运行时脚本（resolve-root/project-detect/state-store/utils）
 ├── hooks/hooks.json # Hook 注册表

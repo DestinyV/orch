@@ -1,6 +1,6 @@
 # orch — Agent Registry
 
-SDD+TDD 工作流专用 Agent 注册表。共 25 个 Agents（11 工作流核心 + 14 扩展能力）。
+SDD+TDD 工作流专用 Agent 注册表。共 28 个 Agents（11 工作流核心 + 17 扩展能力）。
 
 ## 工作流核心 Agents
 
