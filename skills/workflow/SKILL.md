@@ -103,19 +103,18 @@ done
 
 ### 派遣索引
 
-| 步骤 | Agent | 调度 |
-|------|-------|------|
-| 1 | `code-explorer` | `run_in_background=true` |
-| 2 | `test-designer` | `run_in_background=true` |
-| 3 | `code-architect` | `run_in_background=true` |
-| 3.5 | `contract-creator` | `run_in_background=false` |
-| 4 | `tasker` | `run_in_background=false` |
-| 5 | `executor` ×N + `code-reviewer` | `run_in_background=true` ×N |
-| 5.5 | `exception` | 子过程自动 |
-| 6 | `tester` + `test-verifier` | `run_in_background=false` |
-| 7 | `archiver` | `run_in_background=false` |
-| 8 | evaluation | `context-budget` 估算 → `cost` 实记 → `diagnosis` 对比 |
-| 9 | `knowledge-curator` | `run_in_background=false` |
+| 批次 | 步骤 | Agent | 调度策略 |
+|------|------|-------|---------|
+| 批次1 | 1 | `code-explorer` | 后台单 Agent，产出 project-context.md |
+| **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞** |
+| — | 3.5 | `contract-creator` | 批次2 全部完成后串行，仅 fullstack |
+| — | 4 | `tasker` | 批次2+3.5 完成后串行 |
+| 批次3 | 5 | `executor` ×N + `code-reviewer` | 批次4 完成后，同批次内无依赖 Task 并行启动 (for 循环 `run_in_background=true`) |
+| — | 5.5 | `exception` | 步骤5 子过程自动 |
+| — | 6 | `tester` + `test-verifier` | 步骤5+5.5 完成后串行 |
+| — | 7 | `archiver` | 步骤6 完成后串行 |
+| — | 8 | evaluation | 步骤7 完成后自动：`context-budget` 估算 → `cost` 实记 → `diagnosis` 对比 |
+| — | 9 | `knowledge-curator` | 步骤8 完成后串行 |
 
 | 辅助 Agent | 触发条件 | 集成点 |
 |-----------|---------|--------|
