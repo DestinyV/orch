@@ -97,8 +97,10 @@ done
 | 5.5 exception | 后端/全栈自动 | 异常代码生成 | — | — |
 | 6 test | src/存在 + report存在 | testing-report.md存在 + E2E执行 | stage/stats/agent×2 写入 eval.json | 失败回execute |
 | 7 archive | 全部测试通过 | 主规范已合并 + archive-log.md | stage/stats 写入 eval.json | 失败回溯 |
-| 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
-| 9 knowledge | evaluation done | pattern-index.json 更新 | — | — |
+| **8 evaluation** | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
+| **9 continuous-learning** | evaluation done | pattern-index.json 更新 + instincts | — | — |
+
+<HARD-GATE>步骤8(evaluation)和步骤9(continuous-learning)不可跳过。archive完成后必须自动执行。</HARD-GATE>
 
 ---
 
@@ -115,10 +117,11 @@ done
 | 3 | `code-architect` | `run_in_background=true` |
 | 3.5 | `contract-creator` | `run_in_background=false` |
 | 4 | `tasker` | `run_in_background=false` |
-| 5 | `code-executor` ×N + `code-reviewer` | `run_in_background=true` ×N |
+| 5 | `executor` ×N + `code-reviewer` | `run_in_background=true` ×N |
 | 5.5 | `exception` | 子过程自动 |
 | 6 | `tester` + `test-verifier` | `run_in_background=false` |
 | 7 | `archiver` | `run_in_background=false` |
+| 8 | evaluation | `context-budget` 估算 → `cost` 实记 → `diagnosis` 对比 |
 | 9 | `knowledge-curator` | `run_in_background=false` |
 
 | 辅助 Agent | 触发条件 | 集成点 |
@@ -178,9 +181,40 @@ Agent(subagent_type="orch:test-verifier",
 Agent(subagent_type="orch:archiver",
       prompt="归档到 orch-spec/spec/: 1)场景合并(ID冲突追加不覆盖) 2)数据模型合并 3)业务规则合并(冲突标注DECISION_NEEDED) 4)术语合并(重复跳过) 5)标记archived:true 6)生成archive-log.md")
 
-# ═══ 步骤9: continuous-learning ═══
+# ═══ 步骤8: evaluation（archive 后自动执行）═══
+<HARD-GATE>archive 完成后不允许跳过 evaluation。必须执行三段式：估算 → 实记 → 对比。</HARD-GATE>
+
+1. **估算**：`Skill("orch:context-budget", args="write-to-eval")` 读取各组件大小，写入 `.workflow-eval.json` 的 `stages[].estimated_tokens`
+2. **实记**：查询 `~/.claude/orch-costs/usage.db` 获取本需求所有实际 token 消耗，写入 `.workflow-eval.json` 的 `stages[].actual_tokens` 和 `token_usage`
+3. **对比**：逐阶段比较 `estimated_tokens` vs `actual_tokens`，偏差率写入 `diagnosis.偏差`，输出汇总诊断
+4. 更新 `.workflow-state.json` 中 `current_stage: evaluation, status: done`
+5. 上下文过大时，先调用 `context-budget` 审计 → `compact` 建议 compaction
+
+```bash
+# 估算
+context-budget --write-eval
+
+# 实记（DB 存在时）
+sqlite3 ~/.claude/orch-costs/usage.db "
+  SELECT stage, SUM(input_tokens) AS in_tok, SUM(output_tokens) AS out_tok,
+         ROUND(SUM(cost_usd), 4) AS cost
+  FROM usage WHERE project = '{project_name}'
+  GROUP BY stage ORDER BY stage;
+"
+```
+
+# ═══ 步骤9: continuous-learning（evaluation 后自动执行）═══
+<HARD-GATE>evaluation 完成后不允许跳过 continuous-learning。必须执行知识沉淀。</HARD-GATE>
+
+1. 读取 `.workflow-eval.json` 中的 diagnosis
+2. 派遣 `knowledge-curator` 提取模式、更新 instincts
+3. 更新 `.workflow-state.json` 中 `current_stage: knowledge, status: done`
+4. 全部完成后更新 `.workflow-state.json` 中 `status: completed`
+
+```bash
 Agent(subagent_type="orch:knowledge-curator",
-      prompt="知识复利：收集→识别→沉淀(运行distill.sh去重)→提炼(运行refresh.sh扫描过期)→自适应(更新preferences.json)。Layer 3: 3子代理并行捕获解决方案")
+      prompt="知识复利：读取 .workflow-eval.json 和 .workflow-state.json，从 evaluation 诊断中提取可复用模式。1)沉淀到 patterns/ 2)更新 instincts 3)刷新 preferences.json")
+```
 ```
 
 ## 中断恢复

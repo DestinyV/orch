@@ -103,21 +103,91 @@ Top Optimizations:
 - **变更后审计**: 每次添加 agent/skill/MCP server 后运行检查
 - **与 compact 配合**: 先审计再 compaction 最大化收益
 
+## Write-to-Eval 模式（workflow 步骤8 使用）
+
+当传入 `write-to-eval` 参数时，context-budget 会将估算结果写入 `.workflow-eval.json`：
+
+```bash
+Skill("orch:context-budget", args="write-to-eval")
+```
+
+**写入内容**（追加到 `stages[]` 或更新 evaluation stage）：
+
+```json
+{
+  "stage": "evaluation",
+  "status": "done",
+  "estimated_tokens": {
+    "agents": { "count": 25, "tokens": 8500 },
+    "skills": { "count": 21, "tokens": 32000 },
+    "rules":  { "count": 12, "tokens": 4800 },
+    "mcp":    { "count": 0,  "tokens": 0 },
+    "claude_md": { "count": 1, "tokens": 2400 },
+    "total": 47700
+  },
+  "actual_tokens": null,
+  "agent": "context-budget"
+}
+```
+
+**扫描估算逻辑**：
+
+```bash
+# Agents 估算
+echo "agents: $(cat agents/*.md 2>/dev/null | wc -l) lines × 1.3"
+for f in agents/*.md; do
+  lines=$(wc -l < "$f")
+  tokens=$((lines * 13 / 10))
+  echo "  $(basename $f): ~${tokens}tok"
+done
+
+# Skills 估算
+echo "skills: $(wc -l skills/*/SKILL.md 2>/dev/null | tail -1)"
+for d in skills/*/; do
+  [ -f "${d}SKILL.md" ] || continue
+  lines=$(wc -l < "${d}SKILL.md")
+  tokens=$((lines * 13 / 10))
+  echo "  $(basename $d): ~${tokens}tok"
+done
+```
+
+**写入命令**：
+
+```bash
+python3 -c "
+import json, os, pathlib
+
+root = '${CLAUDE_PLUGIN_ROOT:-.}'
+eval_path = pathlib.Path('orch-spec') / '.workflow-eval.json'
+if not eval_path.exists():
+    eval_path = pathlib.Path('.workflow-eval.json')
+
+estimates = {}
+for cat, pattern in [('agents', 'agents/*.md'), ('skills', 'skills/*/SKILL.md'), ('rules', 'rules/**/*.md')]:
+    files = list(pathlib.Path(root).glob(pattern))
+    total_lines = sum(len(f.read_text().splitlines()) for f in files if f.is_file())
+    estimates[cat] = {'count': len(files), 'tokens': int(total_lines * 1.3)}
+
+estimates['total'] = sum(v['tokens'] for v in estimates.values() if isinstance(v, dict))
+
+data = json.loads(eval_path.read_text()) if eval_path.exists() else {'stages': [], 'token_usage': {}}
+stage = {'stage': 'evaluation', 'status': 'done', 'estimated_tokens': estimates, 'actual_tokens': None}
+data['stages'] = [s for s in data.get('stages', []) if s['stage'] != 'evaluation'] + [stage]
+data['token_usage']['estimated'] = estimates
+eval_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+print('Written estimates to ' + str(eval_path))
+"
+```
+
 ## 关键约束
 
 - ❌ 不读取实际文件内容（仅统计大小）
-- ❌ 不修改任何配置（仅报告）
+- ✅ `write-to-eval` 模式下写入 `.workflow-eval.json`（仅追加估计值，不修改实际消耗）
 - ✅ 标记问题但不下结论（保留用户判断权）
-
 
 ## Output
 
-Context Budget Report — 包含组件开销分解、问题清单、Top 优化建议。
+- 默认模式：Context Budget Report — 组件开销分解、问题清单、Top 优化建议
+- `write-to-eval` 模式：估算数据写入 `.workflow-eval.json` 的 `stages[].estimated_tokens`
 
-## Constraints
-
-- 不读取实际文件内容（仅统计大小）
-- 不修改任何配置（仅报告）
-- 标记问题但不下结论（保留用户判断权）
-
-<HARD-GATE>禁止读取文件内容（仅统计大小） | 禁止修改配置（仅报告）</HARD-GATE>
+<HARD-GATE>禁止读取文件内容（仅统计大小） | 禁止修改工作流配置 | write-to-eval 仅允许写入 estimated_tokens 字段</HARD-GATE>

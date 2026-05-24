@@ -41,6 +41,18 @@
           }
         ],
         "id": "stop:evaluate"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/cost-tracker.js\"",
+            "description": "Track token and cost metrics per session (JSONL + SQLite)",
+            "timeout": 10
+          }
+        ],
+        "id": "stop:cost-tracker"
       }
     ]
   }

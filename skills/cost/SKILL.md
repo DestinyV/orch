@@ -3,139 +3,124 @@ name: cost
 description: |
   从本地 SQLite 数据库查询 Claude Code Token 用量、花费和预算。
   TRIGGER when: 用户询问花费/用量/token/budget/昨日对比/按项目成本分析。
-  预期用户在 `~/.claude-cost-tracker/usage.db` 已有成本追踪 hook 或插件写入行。
-origin: community
+  数据来自 Stop hook 自动采集（JSONL + SQLite 双写），零外部依赖。
 ---
 
 # Cost Tracking
 
-分析 Claude Code 成本和用量历史。
+查询 Claude Code 成本和用量历史。数据由 Stop hook（`cost-tracker.js`）在每次响应后自动从 transcript 采集并写入本地数据库。
 
-## When to Use
+## 数据源（按优先级）
 
-- 用户询问"花费了多少"、"这个会话花了多少钱"、"Token用量"
-- 需要按项目/工具/日期查看成本分析
+| 来源 | 路径 | 说明 |
+|------|------|------|
+| **orch 本地 DB** | `~/.claude/orch-costs/usage.db` | Stop hook 自动采集，写入即用 |
+| **orch 原始流水** | `~/.claude/orch-costs/costs.jsonl` | JSONL 格式，零依赖兜底 |
+| **社区 cost-tracker** | `~/.claude-cost-tracker/usage.db` | 兼容社区插件，若存在则自动回退 |
 
-## How It Works
-
-查询本地 SQLite 数据库 `~/.claude-cost-tracker/usage.db`，通过 sqlite3 执行聚合查询。
-优先使用 `cost_usd` 列（source of truth），不手动计算价格。
-
-## 先决条件
+## 工作原理
 
 ```bash
-command -v sqlite3 >/dev/null && echo "sqlite3 available" || echo "sqlite3 missing"
-test -f ~/.claude-cost-tracker/usage.db && echo "Database found" || echo "Database not found"
+# 步骤1: 确认 DB 存在
+test -f ~/.claude/orch-costs/usage.db && echo "orch DB found"
+test -f ~/.claude-cost-tracker/usage.db && echo "community DB found"
+
+# 步骤2: orch DB 优先，社区 DB 回退
 ```
-
-数据库缺失时不要编造数据。告知用户成本追踪未配置，建议安装可信的成本追踪 hook/plugin。
-
-## 预期表结构
-
-| Column | Meaning |
-| ------ | ------- |
-| `timestamp` | ISO 时间戳 |
-| `project` | 项目名称 |
-| `tool_name` | 工具或事件名 |
-| `input_tokens` | 输入 token 数 |
-| `output_tokens` | 输出 token 数 |
-| `cost_usd` | USD 预计算成本 |
-| `session_id` | 会话 ID |
-| `model` | 模型 |
-
-优先使用 `cost_usd`，而非手动计算价格（价格和缓存定价经常变化）。
 
 ## 查询示例
 
-### 快捷摘要
+### 今日汇总
 
 ```bash
-sqlite3 ~/.claude-cost-tracker/usage.db "
+# orch 本地 DB
+sqlite3 ~/.claude/orch-costs/usage.db "
   SELECT
-    'Today: $' || ROUND(COALESCE(SUM(CASE WHEN date(timestamp) = date('now') THEN cost_usd END), 0), 4) ||
-    ' | Total: $' || ROUND(COALESCE(SUM(cost_usd), 0), 4) ||
-    ' | Calls: ' || COUNT(*) ||
-    ' | Sessions: ' || COUNT(DISTINCT session_id)
+    '今日: $' || ROUND(COALESCE(SUM(CASE WHEN date(timestamp) = date('now') THEN cost_usd END), 0), 4) ||
+    ' | 总计: $' || ROUND(COALESCE(SUM(cost_usd), 0), 4) ||
+    ' | 调用: ' || COUNT(*) ||
+    ' | 会话: ' || COUNT(DISTINCT session_id)
   FROM usage;
 "
 ```
 
-### 按项目
+### 按项目成本
 
 ```bash
-sqlite3 -header -column ~/.claude-cost-tracker/usage.db "
-  SELECT project, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
-  FROM usage GROUP BY project ORDER BY cost DESC;
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  SELECT project, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls,
+         SUM(input_tokens) AS input_tok, SUM(output_tokens) AS output_tok
+  FROM usage
+  GROUP BY project
+  ORDER BY cost DESC;
 "
 ```
 
-### 按工具
+### 按工作流阶段
 
 ```bash
-sqlite3 -header -column ~/.claude-cost-tracker/usage.db "
-  SELECT tool_name, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
-  FROM usage GROUP BY tool_name ORDER BY cost DESC;
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  SELECT stage, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
+  FROM usage
+  WHERE stage != ''
+  GROUP BY stage
+  ORDER BY cost DESC;
 "
 ```
 
-### 最近 7 天
+### 按模型
 
 ```bash
-sqlite3 -header -column ~/.claude-cost-tracker/usage.db "
-  SELECT date(timestamp) AS date, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
-  FROM usage GROUP BY date(timestamp) ORDER BY date DESC LIMIT 7;
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  SELECT model, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls,
+         SUM(input_tokens) AS input, SUM(output_tokens) AS output
+  FROM usage
+  GROUP BY model
+  ORDER BY cost DESC;
 "
 ```
 
-### 会话钻取
+### 最近 7 天趋势
 
 ```bash
-sqlite3 -header -column ~/.claude-cost-tracker/usage.db "
-  SELECT session_id, MIN(timestamp) AS started, MAX(timestamp) AS ended,
-    ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
-  FROM usage GROUP BY session_id ORDER BY started DESC LIMIT 10;
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  SELECT date(timestamp) AS date, ROUND(SUM(cost_usd), 4) AS cost,
+         COUNT(*) AS calls, COUNT(DISTINCT session_id) AS sessions
+  FROM usage
+  GROUP BY date(timestamp)
+  ORDER BY date DESC
+  LIMIT 7;
 "
 ```
 
-## 报告指南
+### 会话明细
 
-包含：
-1. 今日花费 vs 昨日
-2. 总计花费
-3. 按项目排名的 Top 项目
-4. 按工具排名的 Top 工具
-5. 会话数和平均成本/会话
+```bash
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  SELECT session_id,
+    MIN(timestamp) AS started,
+    MAX(timestamp) AS ended,
+    ROUND(SUM(cost_usd), 4) AS cost,
+    COUNT(*) AS calls,
+    SUM(input_tokens) AS input_tok,
+    SUM(output_tokens) AS output_tok
+  FROM usage
+  GROUP BY session_id
+  ORDER BY started DESC
+  LIMIT 10;
+"
+```
 
-金额格式化：小金额 4 位小数，大金额 2 位。
+## 无 DB 时的回退策略
 
-## 反模式
+两种 DB 都不存在时：
 
-- 有 `cost_usd` 时不要从原始 tokens 估算
-- 不要假设数据库存在而不检查
-- 不要在大数据库上运行无限制的 `SELECT *`
-- 不要在面向用户的回答中硬编码当前模型定价
-- 不要推荐安装未审查的 hook/plugin
+1. 告知用户 cost-tracker 未运行（Stop hook 未触发过）
+2. 建议运行任意 workflow 阶段产生一条记录
+3. 不编造数据，不硬编码定价
 
-## 集成
+## 约束
 
-与 `depth` 配合：成本上下文 + 深度控制 → 更精确的预算管理。
-与 `context-budget` 配合：审计出膨胀组件后，追踪其实际花费。
-
-## 关键约束
-
-- ✅ 优先使用 `cost_usd` 列（source of truth）
-- ❌ 数据库不存在时不编造数据
-- ❌ 不硬编码模型定价
-
-
-## Output
-
-成本查询结果（今日/总计/按项目/按工具/按日期的 SQL 查询输出）。
-
-## Constraints
-
-- 优先使用 `cost_usd` 列（source of truth）
+- 优先使用 `cost_usd` 列（source of truth），不手动计算价格
 - 数据库不存在时不编造数据
-- 不硬编码模型定价
-
-<HARD-GATE>数据库不存在时不编造数据 | 优先使用 cost_usd 列 | 不硬编码定价</HARD-GATE>
+- 不硬编码模型定价（定价表仅在 hook 中用于估算，DB 中的 `cost_usd` 是已计算值）

@@ -19,7 +19,30 @@
           "tokens_output": { "type": "integer", "description": "本阶段输出 token 数" },
           "duration_seconds": { "type": "integer", "description": "本阶段耗时（秒）" },
           "agent": { "type": "string", "description": "派遣的 Agent" },
-          "hard_gates": { "type": "array", "items": { "type": "string" }, "description": "触发的 HARD-GATE" }
+          "hard_gates": { "type": "array", "items": { "type": "string" }, "description": "触发的 HARD-GATE" },
+          "estimated_tokens": {
+            "type": "object",
+            "description": "context-budget 预估算（三段式第一步）",
+            "properties": {
+              "agents": { "type": "object", "properties": { "count": { "type": "integer" }, "tokens": { "type": "integer" } } },
+              "skills": { "type": "object", "properties": { "count": { "type": "integer" }, "tokens": { "type": "integer" } } },
+              "rules": { "type": "object", "properties": { "count": { "type": "integer" }, "tokens": { "type": "integer" } } },
+              "mcp": { "type": "object", "properties": { "count": { "type": "integer" }, "tokens": { "type": "integer" } } },
+              "claude_md": { "type": "object", "properties": { "count": { "type": "integer" }, "tokens": { "type": "integer" } } },
+              "total": { "type": "integer" }
+            }
+          },
+          "actual_tokens": {
+            "type": "object",
+            "description": "cost-tracker DB 实际消耗（三段式第二步）",
+            "properties": {
+              "input_tokens": { "type": "integer" },
+              "output_tokens": { "type": "integer" },
+              "cache_write": { "type": "integer" },
+              "cache_read": { "type": "integer" },
+              "cost_usd": { "type": "number" }
+            }
+          }
         }
       }
     },
@@ -29,7 +52,8 @@
       "properties": {
         "total_input": { "type": "integer" },
         "total_output": { "type": "integer" },
-        "by_stage": { "type": "object" }
+        "by_stage": { "type": "object" },
+        "estimated": { "type": "object", "description": "context-budget 预估算汇总" }
       }
     },
     "events": {
@@ -49,7 +73,17 @@
       "properties": {
         "bottlenecks": { "type": "array", "items": { "type": "string" } },
         "recommendations": { "type": "array", "items": { "type": "string" } },
-        "score": { "type": "integer", "minimum": 0, "maximum": 100 }
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "偏差": {
+          "type": "object",
+          "description": "估算 vs 实际对比（三段式第三步）",
+          "properties": {
+            "estimated_total": { "type": "integer" },
+            "actual_input": { "type": "integer" },
+            "actual_output": { "type": "integer" },
+            "偏差率": { "type": "number", "description": "百分比，负数=低估，正数=高估" }
+          }
+        }
       }
     }
   }
