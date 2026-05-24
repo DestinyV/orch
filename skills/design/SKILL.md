@@ -145,10 +145,11 @@ Agent(
 **前置**：SQL 方言确认（若 spec/requirement.md 中未确定，用 AskUserQuestion 确认）。
 
 **执行流程**：
-1. SQL 方言对照 → `references/sql-dialect-guide.md`（MySQL/PostgreSQL/SQLite 差异速查）
-2. 表结构设计 → `references/database-design-guide.md`（命名约定 | 数据类型 | 约束规则 | 索引规则）
-3. 用户确认
-4. DDL 生成 → `templates/sql-ddl-template.md`
+1. 表设计规范 → **`references/table-design-spec.md`（必读）** — 命名/字段/索引/约束/扩展/反模式
+2. SQL 方言对照 → `references/sql-dialect-guide.md`（MySQL/PostgreSQL/SQLite 差异速查）
+3. 表结构设计 → `references/database-design-guide.md`（命名约定 | 数据类型 | 约束规则 | 索引规则）
+4. 用户确认
+5. DDL 生成 → `templates/sql-ddl-template.md`
 
 <HARD-GATE>未完成数据库设计并得到用户确认前，不得进入接口契约和组件设计。</HARD-GATE>
 
@@ -260,8 +261,9 @@ ls -la orch-spec/{req_id}/design/diagrams/
 | `references/architecture-patterns-guide.md` | 架构风格选择 + 依赖注入 | 阶段2.3 |
 | `references/design-patterns-guide.md` | 设计模式决策和应用 | 阶段2.3 |
 | `references/component-extraction-guide.md` | 前端组件拆分和边界划定 | 阶段2.4 |
+| `references/table-design-spec.md` | **表设计规范（Source of Truth）** — 命名/字段/索引/约束/扩展/反模式 | 阶段2.5 |
 | `references/sql-dialect-guide.md` | SQL 方言差异速查 | 阶段2.5 |
-| `references/database-design-guide.md` | 表结构设计和命名约定 | 阶段2.5 |
+| `references/database-design-guide.md` | 表结构设计理论 | 阶段2.5 |
 | `templates/design-template.md` | design.md 输出结构 | 阶段6 |
 | `templates/sql-ddl-template.md` | DDL 脚本生成 | 阶段2.5 |
 | `templates/collaboration-plan-template.md` | 多项目协作计划 | 阶段2.7 |
