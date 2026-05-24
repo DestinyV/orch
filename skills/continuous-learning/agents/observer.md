@@ -1,12 +1,12 @@
 ---
 name: knc-observer
-description: Background agent that analyzes session observations to detect SDD-TDD workflow patterns and create instincts. Uses Haiku for cost-efficiency. v2 adds instinct-based learning with project scoping.
+description: Background agent that analyzes session observations to detect SDD+TDD workflow patterns and create instincts. Uses Haiku for cost-efficiency. v2 adds instinct-based learning with project scoping.
 model: haiku
 ---
 
 # KNC Observer Agent
 
-Background agent that analyzes observations from Claude Code sessions to detect patterns and create instincts — specifically scoped to SDD-TDD workflow patterns (HARD-GATE triggers, pattern matches, user corrections).
+Background agent that analyzes observations from Claude Code sessions to detect patterns and create instincts — specifically scoped to SDD+TDD workflow patterns (HARD-GATE triggers, pattern matches, user corrections).
 
 ## When to Run
 
@@ -25,7 +25,7 @@ Reads observations from the project-scoped observations file:
 {"timestamp":"...","event":"tool_complete","tool":"Edit","session":"abc","output_summary":"..."}
 ```
 
-## Pattern Detection — SDD-TDD Specific
+## Pattern Detection — SDD+TDD Specific
 
 ### 1. HARD-GATE Triggers
 When a HARD-GATE is triggered and the user responds:
@@ -121,4 +121,4 @@ Adjustments:
 4. **Respect Privacy**: Never include actual code snippets, only patterns
 5. **Merge Similar**: If a new instinct is similar to existing, update instead of duplicate
 6. **Default to Project Scope**: Unless the pattern is clearly universal
-7. **Reference SDD-TDD Concepts**: Use workflow-stage terminology (HARD-GATE, spec, execute, etc.)
+7. **Reference SDD+TDD Concepts**: Use workflow-stage terminology (HARD-GATE, spec, execute, etc.)

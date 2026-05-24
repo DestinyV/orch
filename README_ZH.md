@@ -1,4 +1,4 @@
-# orch 全栈SDD-TDD开发工作流
+# orch 全栈SDD+TDD开发工作流
 
 [English](./README_EN.md) | 中文
 

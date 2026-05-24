@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "SDD-TDD Workflow Evaluation",
+  "title": "SDD+TDD Workflow Evaluation",
   "type": "object",
   "required": ["req_id", "status", "stages", "token_usage", "events", "diagnosis"],
   "properties": {

@@ -1,4 +1,4 @@
-# Orch Full-Stack SDD-TDD Development Workflow
+# Orch Full-Stack SDD+TDD Development Workflow
 
 [中文](./README_ZH.md) | English
 

@@ -63,7 +63,7 @@ analyze_observations() {
   cd "$PROJECT_DIR" || return
 
   prompt=$(cat <<PROMPT
-Read ${analysis_relpath} and identify SDD-TDD workflow patterns.
+Read ${analysis_relpath} and identify SDD+TDD workflow patterns.
 Look for:
 1. HARD-GATE triggers and their resolutions
 2. User corrections to workflow choices
