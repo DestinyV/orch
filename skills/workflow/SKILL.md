@@ -148,18 +148,18 @@ Agent(subagent_type="orch:code-explorer", run_in_background=true,
 
 # ═══ 步骤2-3: test-design + design（并行） ═══
 Agent(subagent_type="orch:test-designer", run_in_background=true,
-      prompt="读取 orch-spec/{req}/spec/scenarios/ 中 TEST-VERIFY，生成：1)test-spec.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
+      prompt="读取 orch-spec/{req}/spec/scenarios/ 中 TEST-VERIFY，生成到 orch-spec/{req}/tests/：1)test-spec.md(AAA模式) 2)fixtures.json(有效/边界/特殊值+Mock) 3)test-*.template(Jest/Vitest/pytest)。Mock策略：只Mock外部依赖，不Mock业务逻辑")
 
 Agent(subagent_type="orch:code-architect", run_in_background=true,
-      prompt="基于 orch-spec/{req}/spec/ 架构设计：1)技术栈/模块边界 2)架构模式(Layered/Clean/Hexagonal) 3)组件(文件路径/职责/接口/依赖) 4)数据流/构建序列。后端额外：数据库/服务依赖/可观测性。前端额外：构建/CDN/性能监控。输出 design.md")
+      prompt="基于 orch-spec/{req}/spec/ 架构设计：1)技术栈/模块边界 2)架构模式(Layered/Clean/Hexagonal) 3)组件(文件路径/职责/接口/依赖) 4)数据流/构建序列。后端额外：数据库/服务依赖/可观测性。前端额外：构建/CDN/性能监控。输出到 orch-spec/{req}/design/design.md")
 
 # ═══ 步骤3.5: contract（fullstack） ═══
 Agent(subagent_type="orch:contract-creator",
-      prompt="读取 design.md 接口定义，生成 contract.md + review-report.md。审查：命名一致性/类型匹配/错误完整/约定遵循/字段一致。接口命名/路由/格式与现有风格一致")
+      prompt="读取 orch-spec/{req}/design/design.md 接口定义，生成到 orch-spec/{req}/contract/：contract.md + review-report.md。审查：命名一致性/类型匹配/错误完整/约定遵循/字段一致。接口命名/路由/格式与现有风格一致")
 
 # ═══ 步骤4: task ═══
 Agent(subagent_type="orch:tasker",
-      prompt="读取 design.md 拆解 Task 清单。每Task标注：id/名称/描述/provides/consumes/depends_on/验收标准/预估文件。依赖DAG无环。输出 tasks.md")
+      prompt="读取 orch-spec/{req}/design/design.md 拆解 Task 清单。每Task标注：id/名称/描述/provides/consumes/depends_on/验收标准/预估文件。依赖DAG无环。输出到 orch-spec/{req}/tasks/tasks.md")
 
 # ═══ 步骤5: execute（每Task独立子代理并行） ═══
 for task in $(python3 -c "import json;tasks=json.load(open('orch-spec/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
@@ -181,19 +181,19 @@ Agent(subagent_type="orch:exception",
 
 # Agent A: 集成测试
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行集成测试(Repository/Service/API协作): 1)检查测试环境 2)npx vitest run --reporter=json 3)输出通过率/失败详情。写入 testing-report.md 的 ## 集成测试 章节")
+      prompt="执行集成测试(Repository/Service/API协作): 1)检查测试环境 2)npx vitest run --reporter=json 3)输出通过率/失败详情。写入 orch-spec/{req}/testing/testing-report.md 的 ## 集成测试 章节")
 
 # Agent B: E2E 测试（前端/全栈）
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行 E2E 测试: 1)npx playwright test --grep @e2e --reporter=json 2)输出通过率/失败截图路径。写入 testing-report.md 的 ## E2E 测试 章节")
+      prompt="执行 E2E 测试: 1)npx playwright test --grep @e2e --reporter=json 2)输出通过率/失败截图路径。写入 orch-spec/{req}/testing/testing-report.md 的 ## E2E 测试 章节")
 
 # Agent C: 性能测试
 Agent(subagent_type="orch:tester", run_in_background=true,
-      prompt="执行性能测试: 1)运行性能用例 2)输出 P50/P95/P99 延迟 3)标记 >500ms 为失败。写入 testing-report.md 的 ## 性能测试 章节")
+      prompt="执行性能测试: 1)运行性能用例 2)输出 P50/P95/P99 延迟 3)标记 >500ms 为失败。写入 orch-spec/{req}/testing/testing-report.md 的 ## 性能测试 章节")
 
 # 全部完成后，统一验证
 Agent(subagent_type="orch:test-verifier",
-      prompt="读取 testing-report.md 全部章节，对每条验收标准独立运行验证命令(不接受历史输出)。标记 VERIFIED/PARTIAL/MISSING。拒绝'应该能工作'类声明")
+      prompt="读取 orch-spec/{req}/testing/testing-report.md 全部章节，对每条验收标准独立运行验证命令(不接受历史输出)。标记 VERIFIED/PARTIAL/MISSING。拒绝'应该能工作'类声明")
 
 # ═══ 步骤7: archive ═══
 Agent(subagent_type="orch:archiver",
@@ -207,11 +207,11 @@ Agent(subagent_type="orch:archiver",
 
 # Agent A: context-budget 估算（后台）
 Agent(run_in_background=true,
-      prompt='Skill("orch:context-budget", args="write-to-eval") 读取各组件大小，写入 .workflow-eval.json 的 estimated_tokens')
+      prompt='Skill("orch:context-budget", args="write-to-eval") 读取各组件大小，写入 orch-spec/{req}/.workflow-eval.json 的 estimated_tokens')
 
 # Agent B: cost DB 实记（后台）
 Agent(run_in_background=true,
-      prompt="查询 ~/.claude/orch-costs/usage.db 获取本需求实际 token 消耗，写入 .workflow-eval.json 的 stages[].actual_tokens 和 token_usage")
+      prompt="查询 ~/.claude/orch-costs/usage.db 获取本需求实际 token 消耗，写入 orch-spec/{req}/.workflow-eval.json 的 stages[].actual_tokens 和 token_usage")
 
 # ═══ 串行合并：对比诊断 ═══
 # A+B 都完成后：
