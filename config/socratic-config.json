@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "ambiguityThreshold": 0.2,
+  "maxRounds": 20,
+  "softWarningRounds": 10,
+  "minRoundsBeforeExit": 3,
+  "enableChallengeAgents": true,
+  "defaultExecutionMode": null,
+  "weightsGreenfield": {
+    "goal": 0.40,
+    "constraints": 0.30,
+    "criteria": 0.30
+  },
+  "weightsBrownfield": {
+    "goal": 0.35,
+    "constraints": 0.25,
+    "criteria": 0.25,
+    "context": 0.15
+  }
+}

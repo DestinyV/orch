@@ -1,0 +1,34 @@
+---
+description: SDD+TDD Coding Style Rules
+globs: *.ts, *.tsx, *.js, *.jsx, *.py, *.java, *.go
+---
+
+# Coding Style (SDD+TDD)
+
+## Naming
+
+- **Files**: kebab-case for config, PascalCase for components, camelCase for utilities
+- **Classes/Interfaces**: PascalCase (`UserService`, `IUserRepository`)
+- **Functions/Variables**: camelCase (`getUserById`, `isActive`)
+- **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
+- **Types/Interfaces**: PascalCase prefix with I for interfaces (`IUser`), T for types (`TUser`)
+
+## Structure
+
+- One concern per file, max 200 lines per module
+- Group imports: external → internal → relative
+- Export at declaration, not at bottom
+- No default exports (named exports only)
+
+## Spec-Driven
+
+- Every public API must trace back to a spec scenario
+- Annotate complex logic with `// FROM-SPEC: <scenario-id>`
+- Keep implementation aligned with design.md architecture
+
+## Quality
+
+- No unused variables or imports
+- No `any` type (TypeScript); use `unknown` and narrow
+- Prefer `const` over `let`; never use `var`
+- Error messages must be descriptive, not generic

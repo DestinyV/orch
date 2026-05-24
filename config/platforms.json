@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "platforms": {
+    "claude-code": {
+      "skill_tool": "Skill(\"orch:{name}\")",
+      "agent_tool": "Agent(subagent_type=\"orch:{name}\")",
+      "supports_subagents": true,
+      "hook_system": true
+    },
+    "cursor": {
+      "skill_tool": "@orch-{name}",
+      "agent_tool": "Cursor Agent + rules",
+      "supports_subagents": false,
+      "hook_system": false,
+      "rules_dir": ".cursor/rules/"
+    },
+    "gemini-cli": {
+      "skill_tool": "activate_skill orch-{name}",
+      "agent_tool": "serial execution (no subagent)",
+      "supports_subagents": false,
+      "hook_system": false
+    },
+    "opencode": {
+      "skill_tool": "@orch-{name}",
+      "agent_tool": "@orch-{name} in sub-context",
+      "supports_subagents": true,
+      "hook_system": false
+    },
+    "codex": {
+      "skill_tool": "reference in AGENTS.md",
+      "agent_tool": "spawn_agent",
+      "supports_subagents": true,
+      "hook_system": false
+    },
+    "codebuddy": {
+      "skill_tool": "instruction files",
+      "agent_tool": "CodeBuddy agents",
+      "supports_subagents": true,
+      "hook_system": false
+    }
+  }
+}

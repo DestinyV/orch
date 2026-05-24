@@ -1,0 +1,33 @@
+{
+  "name": "orch-cursor-hooks",
+  "version": "2.21.0",
+  "description": "Cursor hook mappings for SDD+TDD workflow plugin",
+
+  "observe": {
+    "preToolUse": {
+      "description": "Before each tool call, check if workflow state exists and log progress",
+      "script": "if [ -f \"spec-dev/{requirement_desc_abstract}/.workflow-state.json\" ]; then echo \"Workflow active\"; fi"
+    },
+    "postToolUse": {
+      "description": "After tool call, record compact suggestion metrics",
+      "script": "echo \"{\\\"tool\\\": \\\"$CURSOR_TOOL_NAME\\\", \\\"timestamp\\\": \\\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\\\"}\" >> .workflow-eval.json"
+    }
+  },
+
+  "compactSuggestion": {
+    "preCompact": {
+      "description": "Before context compaction, save current workflow step",
+      "script": "if [ -f \".workflow-state.json\" ]; then cp .workflow-state.json .workflow-state.precompact.json; fi"
+    },
+    "postCompact": {
+      "description": "After compaction, verify workflow state is intact",
+      "script": "if [ -f \".workflow-state.json\" ]; then echo \"State preserved\"; fi"
+    }
+  },
+
+  "skills": {
+    "discoveryPath": "skills/",
+    "entrySkill": "workflow-control",
+    "pattern": "**/skills/*/SKILL.md"
+  }
+}

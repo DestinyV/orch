@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SDD-TDD Workflow State",
+  "type": "object",
+  "required": ["version", "requirement", "current_stage", "stages"],
+  "properties": {
+    "version": { "type": "string", "description": "Schema version" },
+    "requirement": { "type": "string", "description": "Requirement description" },
+    "requirement_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "project_mode": { "type": "string", "enum": ["frontend", "backend", "fullstack", "mobile"] },
+    "current_stage": { "type": "string" },
+    "status": { "type": "string", "enum": ["in_progress", "completed", "failed", "paused"] },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stage": { "type": "string" },
+          "status": { "type": "string", "enum": ["done", "in_progress", "failed", "skipped"] },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "tokens": { "type": "integer" },
+          "duration": { "type": "integer" }
+        }
+      }
+    },
+    "heartbeat": {
+      "type": "object",
+      "properties": {
+        "last_update": { "type": "string", "format": "date-time" },
+        "task_progress": { "type": "integer" },
+        "task_total": { "type": "integer" }
+      }
+    }
+  }
+}

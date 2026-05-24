@@ -1,0 +1,24 @@
+{
+  "version": "2.0",
+  "observer": {
+    "enabled": false,
+    "run_interval_minutes": 5,
+    "min_observations_to_analyze": 20
+  },
+  "instinct": {
+    "min_confidence_for_apply": 0.5,
+    "confidence_increment": 0.05,
+    "confidence_decrement": 0.1,
+    "decay_per_week": 0.02,
+    "promote_min_confidence": 0.8,
+    "promote_min_projects": 2
+  },
+  "distill": {
+    "core_frequency_threshold": 3,
+    "similarity_merge_threshold": 70
+  },
+  "refresh": {
+    "expire_days": 30,
+    "auto_prune_days": 30
+  }
+}

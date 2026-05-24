@@ -1,0 +1,57 @@
+# Solution documentation schema for knowledge-continuum Layer 3
+# Two tracks: bug (defects/failures) and knowledge (practices/patterns)
+
+tracks:
+  bug:
+    description: "缺陷和故障的诊断与修复"
+    problem_types:
+      - build_error
+      - test_failure
+      - runtime_error
+      - performance_issue
+      - database_issue
+      - security_issue
+      - ui_bug
+      - integration_issue
+      - logic_error
+  knowledge:
+    description: "实践、模式、约定、决策"
+    problem_types:
+      - best_practice
+      - documentation_gap
+      - workflow_issue
+      - developer_experience
+      - architecture_pattern
+      - design_pattern
+      - tooling_decision
+      - convention
+
+categories:
+  bug:
+    - build-errors/
+    - test-failures/
+    - runtime-errors/
+    - performance-issues/
+    - database-issues/
+    - security-issues/
+    - ui-bugs/
+    - integration-issues/
+    - logic-errors/
+  knowledge:
+    - architecture-patterns/
+    - design-patterns/
+    - tooling-decisions/
+    - conventions/
+    - workflow-issues/
+    - developer-experience/
+    - documentation-gaps/
+    - best-practices/
+
+required_fields:
+  title: { type: string, description: "清晰的问题标题" }
+  date: { type: string, pattern: "^\\d{4}-\\d{2}-\\d{2}$", description: "文档创建日期" }
+  category: { type: string, description: "docs/solutions 子目录" }
+  module: { type: string, description: "模块或受影响区域" }
+  problem_type: { type: enum, values: [build_error, test_failure, runtime_error, performance_issue, database_issue, security_issue, ui_bug, integration_issue, logic_error, developer_experience, best_practice, documentation_gap, workflow_issue, architecture_pattern, design_pattern, tooling_decision, convention] }
+  component: { type: string, description: "组件或分层" }
+  severity: { type: enum, values: [critical, high, medium, low] }

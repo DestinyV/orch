@@ -1,0 +1,70 @@
+{
+  "version": "1.0",
+  "stages": {
+    "spec-creation": {
+      "requiredFiles": [
+        "spec/requirement.md",
+        "spec/data-models.md",
+        "spec/business-rules.md",
+        "spec/glossary.md"
+      ],
+      "minTotalSize": 500,
+      "requiredSections": {
+        "requirement.md": ["工作模式", "功能描述"],
+        "data-models.md": ["字段", "类型", "约束"]
+      },
+      "requiredPatterns": ["WHEN-THEN", "TEST-VERIFY"]
+    },
+    "code-design": {
+      "requiredFiles": [
+        "design/design.md"
+      ],
+      "minTotalSize": 300,
+      "requiredSections": {
+        "design.md": ["架构设计", "组件设计", "决策记录"]
+      },
+      "optionalFiles": [
+        "design/diagrams/*.md",
+        "design/sql-ddl.md"
+      ]
+    },
+    "code-task": {
+      "requiredFiles": [
+        "tasks/tasks.md"
+      ],
+      "minTotalSize": 200,
+      "requiredSections": {
+        "tasks.md": ["依赖关系", "验收标准"]
+      },
+      "requiredPatterns": ["provides:", "consumes:"]
+    },
+    "code-execute": {
+      "requiredFiles": [
+        "execution/execution-report.md"
+      ],
+      "requiredChecks": [
+        "src/ non-empty",
+        "tests/ Created",
+        "Code reviewed"
+      ]
+    },
+    "code-test": {
+      "requiredFiles": [
+        "testing/testing-report.md"
+      ],
+      "minTotalSize": 200,
+      "requiredSections": {
+        "testing-report.md": ["验证矩阵", "测试结果"]
+      },
+      "requiredChecks": [
+        "Coverage >= 85% (standard) / 60% (quick)",
+        "E2E test executed (frontend/fullstack)"
+      ]
+    },
+    "spec-archive": {
+      "requiredFiles": [
+        "spec/archive-log.md"
+      ]
+    }
+  }
+}

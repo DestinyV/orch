@@ -1,0 +1,40 @@
+---
+description: SDD+TDD Development Workflow
+globs: *
+---
+
+# Development Workflow
+
+## Core Flow
+
+```
+/spec-creation → /test-design + /code-design (parallel)
+  → /api-contract (fullstack only) → /code-task
+  → /code-execute (TDD: RED-GREEN-REFACTOR-REVIEW)
+  → /exception-handler (backend/fullstack auto)
+  → /code-test (integration/E2E/performance)
+  → /spec-archive → /knowledge-continuum
+```
+
+## Entry Point
+
+Use `/workflow-control "requirement"` as the single entry. It auto-detects mode (frontend/backend/fullstack), dispatches parallel branches, enforces HARD-GATEs, and supports interrupt recovery.
+
+## Principles
+
+- **Spec-First**: All development begins with /spec-creation (BDD format WITH WHEN-THEN)
+- **Design-Driven**: /code-design produces architecture blueprints before any code
+- **Test-Complete**: Unit tests in /code-execute, high-level tests in /code-test
+- **Archive**: /spec-archive merges validated specs into enterprise spec library
+
+## Mode Detection
+
+- `frontend`: UI only, no database, no API contracts
+- `backend`: Logic + data, skip frontend steps
+- `fullstack`: All steps including api-contract
+
+## HARD-GATE Checkpoints
+
+- Step 5 (code-execute): test environment must be available before starting
+- Step 5.5 (exception-handler): project convention scan must complete
+- Step 6 (code-test): all unit tests from code-execute must pass

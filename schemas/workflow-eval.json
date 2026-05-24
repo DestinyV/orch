@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SDD-TDD Workflow Evaluation",
+  "type": "object",
+  "required": ["req_id", "status", "stages", "token_usage", "events", "diagnosis"],
+  "properties": {
+    "req_id": { "type": "string", "description": "需求 ID" },
+    "status": { "type": "string", "enum": ["initialized", "in_progress", "completed"] },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage", "status"],
+        "properties": {
+          "stage": { "type": "string" },
+          "status": { "type": "string", "enum": ["done", "in_progress", "failed", "skipped", "pending"] },
+          "tokens_input": { "type": "integer", "description": "本阶段输入 token 数" },
+          "tokens_output": { "type": "integer", "description": "本阶段输出 token 数" },
+          "duration_seconds": { "type": "integer", "description": "本阶段耗时（秒）" },
+          "agent": { "type": "string", "description": "派遣的 Agent" },
+          "hard_gates": { "type": "array", "items": { "type": "string" }, "description": "触发的 HARD-GATE" }
+        }
+      }
+    },
+    "token_usage": {
+      "type": "object",
+      "description": "按阶段汇总的 token 消耗",
+      "properties": {
+        "total_input": { "type": "integer" },
+        "total_output": { "type": "integer" },
+        "by_stage": { "type": "object" }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["compensation", "hard_gate", "error", "user_intervention", "stage_complete"] },
+          "stage": { "type": "string" },
+          "message": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "diagnosis": {
+      "type": "object",
+      "properties": {
+        "bottlenecks": { "type": "array", "items": { "type": "string" } },
+        "recommendations": { "type": "array", "items": { "type": "string" } },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}

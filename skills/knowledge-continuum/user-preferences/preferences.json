@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "updated_at": "",
+  "preferences": {
+    "default_project_mode": "",
+    "default_needs_database": true,
+    "default_sql_dialect": "mysql",
+    "default_mode": "standard",
+    "diagram_preferences": {
+      "use_case": true,
+      "class_diagram": true,
+      "sequence_diagram": false,
+      "state_diagram": false,
+      "component_diagram": true,
+      "deployment_diagram": false
+    },
+    "common_pitfalls": [],
+    "always_check": [
+      "异常处理是否完整",
+      "列表分页和排序是否支持",
+      "表单防重复提交",
+      "后端二次校验"
+    ],
+    "preference_history": []
+  }
+}

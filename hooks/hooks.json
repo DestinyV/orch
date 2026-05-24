@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-start.js\"",
+            "description": "Check incomplete workflows and restore state on session start",
+            "timeout": 10
+          }
+        ],
+        "id": "session:init"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-compact.js\"",
+            "description": "Save workflow state before compaction",
+            "timeout": 5
+          }
+        ],
+        "id": "precompact:state"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-evaluate.js\"",
+            "description": "Evaluate session + detect incomplete workflow for continuation",
+            "timeout": 10
+          }
+        ],
+        "id": "stop:evaluate"
+      }
+    ]
+  }
+}

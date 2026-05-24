@@ -1,0 +1,39 @@
+---
+description: SDD+TDD Git Workflow Conventions
+globs: *
+---
+
+# Git Workflow
+
+## Branching
+
+- `main`: production-ready, always green
+- `feature/<requirement-id>`: single feature branch per requirement
+- Each code-execute Task uses an isolated **git worktree** (not branch)
+
+## Worktree Isolation (Required)
+
+Every Task in /code-execute must use a dedicated git worktree:
+```
+git worktree add .worktrees/task-<n> <base-branch>
+```
+This prevents cross-task interference during parallel implementation.
+
+## Commit Etiquette
+
+- One commit per logical change (not per file)
+- Commit messages: `<type>(<scope>): <description>`
+- Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`
+- Scope: the skill name (e.g., `code-execute`, `spec-creation`)
+
+## Workflow State
+
+- `.workflow-state.json` is git-ignored (session-local)
+- Execution reports under `spec-dev/` are committed as artifacts
+- Never commit worktree directories (`.worktrees/`)
+
+## Safety
+
+- No force push to main
+- No --no-verify (never skip hooks)
+- Always create new commits, never amend shared history

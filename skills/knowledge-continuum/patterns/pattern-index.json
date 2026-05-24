@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "updated_at": "",
+  "patterns": [
+    {
+      "id": "arch-001",
+      "name": "架构模式选择",
+      "file": "architecture-patterns.md",
+      "keywords": ["架构", "微服务", "单体", "分层", "CQRS", "事件驱动", "DDD"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "high"
+    },
+    {
+      "id": "data-001",
+      "name": "数据治理模式",
+      "file": "data-governance.md",
+      "keywords": ["数据库", "迁移", "索引", "主键", "外键", "审计字段", "DDL", "DML"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "high"
+    },
+    {
+      "id": "api-001",
+      "name": "接口契约模式",
+      "file": "api-contracts.md",
+      "keywords": ["API", "REST", "接口", "分页", "排序", "错误码", "幂等", "响应格式"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "high"
+    },
+    {
+      "id": "sec-001",
+      "name": "安全防护模式",
+      "file": "security-patterns.md",
+      "keywords": ["认证", "授权", "XSS", "CSRF", "SQL注入", "加密", "JWT", "OAuth"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "high"
+    },
+    {
+      "id": "integ-001",
+      "name": "系统集成模式",
+      "file": "integration-patterns.md",
+      "keywords": ["集成", "消息队列", "Webhook", "回调", "RPC", "gRPC", "同步", "异步"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "medium"
+    },
+    {
+      "id": "perf-001",
+      "name": "性能优化模式",
+      "file": "performance-patterns.md",
+      "keywords": ["性能", "缓存", "CDN", "懒加载", "N+1", "索引优化", "连接池"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "medium"
+    },
+    {
+      "id": "resil-001",
+      "name": "容错与韧性模式",
+      "file": "resilience-patterns.md",
+      "keywords": ["重试", "熔断", "降级", "超时", "限流", "幂等", "事务", "回滚"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "high"
+    },
+    {
+      "id": "ui-001",
+      "name": "交互与状态模式",
+      "file": "ui-interaction.md",
+      "keywords": ["表单", "Loading", "防重复提交", "分页", "骨架屏", "乐观更新", "错误提示"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "medium"
+    },
+    {
+      "id": "deploy-001",
+      "name": "部署与发布模式",
+      "file": "deployment-patterns.md",
+      "keywords": ["部署", "CI/CD", "灰度", "回滚", "Docker", "K8s", "环境变量"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "low"
+    },
+    {
+      "id": "obs-001",
+      "name": "可观测性模式",
+      "file": "observability.md",
+      "keywords": ["日志", "监控", "告警", "Tracing", "Metrics", "链路追踪", "Sentry"],
+      "frequency": 0,
+      "last_used": "",
+      "severity": "medium"
+    }
+  ],
+  "stats": {
+    "total_patterns": 10,
+    "high_severity": 5,
+    "medium_severity": 4,
+    "low_severity": 1
+  }
+}

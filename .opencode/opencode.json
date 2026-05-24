@@ -1,0 +1,67 @@
+{
+  "name": "orch",
+  "version": "2.21.0",
+  "description": "SDD+TDD workflow for OpenCode — Spec-Driven Development + Test-Driven Development",
+
+  "skills": {
+    "workflow-control": {
+      "entry": true,
+      "description": "Unified entry point: auto-orchestrates the full 10-stage workflow",
+      "skillFile": "skills/workflow-control/SKILL.md"
+    },
+    "spec-creation": {
+      "description": "Requirement analysis and BDD spec generation (WHEN-THEN format)",
+      "skillFile": "skills/spec-creation/SKILL.md"
+    },
+    "test-design": {
+      "description": "Convert TEST-VERIFY into test specs, fixtures, and templates",
+      "skillFile": "skills/test-design/SKILL.md"
+    },
+    "code-design": {
+      "description": "Architecture and technical design (DB-first, API-contract-driven)",
+      "skillFile": "skills/code-design/SKILL.md"
+    },
+    "api-contract": {
+      "description": "API contract definition and 5-dimension review (fullstack only)",
+      "skillFile": "skills/api-contract/SKILL.md"
+    },
+    "code-task": {
+      "description": "Break design into actionable code-level tasks",
+      "skillFile": "skills/code-task/SKILL.md"
+    },
+    "code-execute": {
+      "description": "TDD implementation with git-worktree isolation and two-stage review",
+      "skillFile": "skills/code-execute/SKILL.md"
+    },
+    "exception-handler": {
+      "description": "Exception pattern scanning and code generation (backend/fullstack)",
+      "skillFile": "skills/exception-handler/SKILL.md"
+    },
+    "code-test": {
+      "description": "High-level testing (integration/E2E/performance) and closure verification",
+      "skillFile": "skills/code-test/SKILL.md"
+    },
+    "spec-archive": {
+      "description": "Merge validated specs into enterprise spec library",
+      "skillFile": "skills/spec-archive/SKILL.md"
+    },
+    "knowledge-continuum": {
+      "description": "Knowledge compounding: pattern recognition, distillation, and adaptation",
+      "skillFile": "skills/knowledge-continuum/SKILL.md"
+    },
+    "script-writer": {
+      "description": "Tool-first strategy: use scripts for file operations over direct reads",
+      "skillFile": "skills/script-writer/SKILL.md"
+    }
+  },
+
+  "toolMapping": {
+    "Skill": "skill",
+    "Agent": "@mention"
+  },
+
+  "agentDiscovery": {
+    "path": "agents/",
+    "pattern": "*.md"
+  }
+}

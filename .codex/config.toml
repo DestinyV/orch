@@ -1,0 +1,26 @@
+[project]
+name = "orch"
+version = "2.21.0"
+description = "SDD+TDD Development Workflow Plugin"
+
+[skills]
+discovery_path = "skills/"
+entry_skill = "workflow-control"
+auto_load_pattern = "**/skills/*/SKILL.md"
+
+[agents]
+discovery_path = "agents/"
+registry_file = "AGENTS.md"
+
+[tools]
+# Map Claude Code tool names to Codex equivalents
+mapping_file = "skills/using-orch/references/codex-tools.md"
+
+[hooks]
+pre_skill = "check_workflow_state"
+post_skill = "record_eval_metric"
+
+[workflow]
+state_file = ".workflow-state.json"
+eval_file = ".workflow-eval.json"
+output_base = "spec-dev/"

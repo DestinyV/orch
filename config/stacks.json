@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "stacks": {
+    "frontend": {
+      "frameworks": ["react", "vue", "angular", "svelte"],
+      "languages": ["typescript", "javascript"],
+      "test_frameworks": ["vitest", "jest", "cypress", "playwright"]
+    },
+    "backend": {
+      "frameworks": ["express", "fastify", "django", "flask", "spring-boot", "gin", "fastapi"],
+      "languages": ["typescript", "python", "java", "go", "rust"],
+      "test_frameworks": ["jest", "pytest", "junit", "go-test", "cargo-test"]
+    },
+    "database": {
+      "types": ["postgresql", "mysql", "sqlite", "mongodb", "redis"],
+      "orms": ["prisma", "typeorm", "sequelize", "sqlalchemy", "django-orm", "gorm"]
+    },
+    "mobile": {
+      "frameworks": ["react-native", "flutter"],
+      "languages": ["typescript", "dart"],
+      "test_frameworks": ["jest", "flutter-test"]
+    },
+    "fullstack": {
+      "frameworks": ["nextjs", "nuxt", "remix"],
+      "languages": ["typescript"],
+      "test_frameworks": ["vitest", "playwright"]
+    }
+  }
+}
