@@ -10,7 +10,7 @@
 | `/req-change` | 需求变更管理 |
 | `/session-save` | 会话保存 |
 | `/session-resume` | 会话恢复 |
-| `/spec-import` | 规范迁移导入 |
+| `/spec-migrate` | 规范迁移导入 |
 | `/instinct-status` | Instinct 状态 |
 | `/instinct-export` | Instinct 导出 |
 | `/instinct-import` | Instinct 导入 |

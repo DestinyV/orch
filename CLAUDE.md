@@ -66,7 +66,7 @@ orch/
 │                    #   scripts/continuous-learning/using-orch/
 │                    #   context-budget/depth/compact/
 │                    #   cost/ralph-loop/clarify/debug/req-change/
-│                    #   spec-import）
+│                    #   spec-migrate）
 ├── agents/          # 28个 Agents（11工作流核心 + 17扩展）
 ├── commands/        # 14个斜杠命令
 ├── rules/           # 语言规则（common/typescript/python/zh）
@@ -91,7 +91,7 @@ orch/
 | Skill | 职责 | 阶段 |
 |-------|------|------|
 | scripts | 工具优先策略 | Utility |
-| spec-import | 规范迁移导入 | Utility |
+| spec-migrate | 规范迁移导入 | Utility |
 | workflow | 统一入口+流程编排 | 入口 |
 | spec | 需求分析和规范生成 | Spec |
 | test-design | 测试规范 + Fixture 生成 | Test-Design |
