@@ -44,6 +44,7 @@ description: |
 **优先读取**：`orch-spec/{req_id}/project-context.md`（spec 阶段1的探索结果），直接复用，避免重复扫描。
 
 **项目上下文提取**：若 project-context.md 不存在，使用 `Skill("orch:scripts")` 调用 `extract-project-context.py` 从项目根目录提取技术栈/分层/命名约定。
+**CodeGraph MCP 补充**：CodeGraph MCP 可用时，优先使用 `codegraph_explore "{模块名} 的模块划分和架构模式"` 获取架构概览，再用 `codegraph_trace "关键入口" "核心函数"` 追踪调用链路，替代 project-context.md 扫描。
 
 **补充分析**：基于 spec 文档理解需求，派遣 **code-architect** Agent 进行架构蓝图分析。架构分析中的代码库扫描使用 `Skill("orch:scripts")` 工具优先策略（Grep搜索→Python3批量过滤→兜底Read）。
 

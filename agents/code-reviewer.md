@@ -99,6 +99,21 @@ deep 模式额外检查：
 - 常规审查：置信度 ≥ 80 才报告
 - 以下场景升级为 ADVERSARIAL：安全相关代码 / 高 severity 模式 / 同一文件第三次审查
 
+### CodeGraph MCP 影响分析（如已安装）
+
+CodeGraph MCP 工具可用时，审查变更影响范围：
+
+```bash
+# 检查变更影响范围
+codegraph_impact "变更方法名"
+
+# 确认调用方兼容性
+codegraph_callers "变更方法名" --depth 1
+
+# 搜索相关符号
+codegraph_search "变更涉及的关键字"
+```
+
 ### 设计原则和架构一致性
 
 架构模式一致性（层间依赖是否符合design.md） | 设计模式遵循/滥用 | SOLID原则 | 严禁只写注释不实现 | 空函数体检测 | 层边界违反。

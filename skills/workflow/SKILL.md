@@ -44,6 +44,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `commands/start-dev.m
 4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec
 5. 初始化 `.workflow-state.json` + `.workflow-eval.json`
 6. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`
+7. **CodeGraph 可选加速**：检测 `codegraph` 命令是否存在，不存在则自动安装（`npm i -g @colbymchenry/codegraph 2>/dev/null || npm i -g @colbymchenry/codegraph`）。已安装则：`cd $CLAUDE_PLUGIN_ROOT && codegraph init -i 2>/dev/null && echo '{"mcpServers":{"codegraph":{"command":"codegraph","args":["serve","--mcp"],"env":{}}}}' > .mcp.json && nohup codegraph serve --mcp > /dev/null 2>&1 &`。成功后各 Agent 可使用 `codegraph_search/explore/context/trace/callers/callees/impact/node` MCP 工具代替 grep/Read 进行代码检索。安装失败或不存在时自然回退到 grep/Read。
 
 ### 步骤0.5: 苏格拉底澄清
 
@@ -139,7 +140,7 @@ Agent(subagent_type="orch:code-explorer", run_in_background=true,
 
 # Agent C: 代码模式探索
 Agent(subagent_type="orch:code-explorer", run_in_background=true,
-      prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索。输出到 orch-spec/{req_id}/project-context.md 的 ## 代码模式 章节")
+      prompt="扫描 src/ 提取架构约定和代码模式。工具优先：使用 Skill('orch:scripts') 进行批量检索。CodeGraph MCP 已安装时依次使用: codegraph_explore \"src/ 模块划分和分层\" → codegraph_context \"核心模块接口\" → codegraph_callers \"主要入口点\"。输出到 orch-spec/{req_id}/project-context.md 的 ## 代码模式 章节")
 
 # 全部完成后，合并 A+B+C 三部分为完整 orch-spec/{req_id}/project-context.md
 # 小型项目(<200文件)可保持串行
