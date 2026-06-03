@@ -55,7 +55,7 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.6.0 (2026-05-24)
+**版本**：v0.7.0 (2026-05-24)
 
 ## 架构与文件结构
 
