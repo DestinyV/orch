@@ -85,6 +85,8 @@ Task ≥6 个时生成任务依赖 DAG（拓扑排序批次图）；provides/con
 
 ## 关键约束
 
+<HARD-GATE>即使只有 1 个 Task 也必须生成 tasks.md。禁止跳过 task 阶段直接执行。</HARD-GATE>
+
 - 任务独立可实现 | 依赖关系准确无环 | 验收标准可验证 | Test Case 100%覆盖 | 无遗留TODO
 
 **TDD 任务配对**：每实现 Task 须在同批次配测试 Task（`depends_on` 指向实现 Task），确保 RED→GREEN→REFACTOR→REVIEW 同批次完成。批次校验由 workflow 步骤5 执行。

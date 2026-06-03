@@ -161,6 +161,7 @@ Agent(subagent_type="orch:tasker",
       prompt="读取 orch-spec/{req}/design/design.md 拆解 Task 清单。每Task标注：id/名称/描述/provides/consumes/depends_on/验收标准/预估文件。依赖DAG无环。输出到 orch-spec/{req}/tasks/tasks.md")
 
 # ═══ 步骤5: execute（每Task独立子代理并行） ═══
+<HARD-GATE>禁止在主上下文中直接编码。每个 Task 必须通过 executor 子代理执行，不得跳过 agent 派遣直接写文件。</HARD-GATE>
 for task in $(python3 -c "import json;tasks=json.load(open('orch-spec/{req}/tasks/tasks.json'));[print(t['id']) for t in tasks if not t.get('depends_on')]"); do
   Agent(subagent_type="orch:executor", run_in_background=true,
         prompt="<HARD-GATE>禁止编造测试结果。每阶段必须执行命令并将stdout粘贴为证据。RED: 运行测试确认FAIL粘贴失败输出; GREEN: 运行测试确认PASS粘贴通过输出; REFACTOR: 再次运行确认全部PASS; REVIEW: 运行lint+typecheck+coverage粘贴结果。出口验证: TDD四阶段日志缺任一个命令输出则驳回。Git+Trailers(Constraint/Rejected/Spec)")
@@ -168,7 +169,7 @@ done
 
 # TDD监督派遣
 Agent(subagent_type="orch:tdd-guide",
-      prompt="审查每Task TDD四阶段日志: RED有失败证据/GREEN有通过证据/REFACTOR测试未回归/REVIEW全达标。任一不满足驳回")
+      prompt="审查每Task TDD四阶段日志: RED有失败证据/GREEN有通过证据/REFACTOR测试未回归/REVIEW全达标。任一不满足驳回 (标记 FAILED)")
       prompt="对已完成批次两阶段审查。规范审查(对照design.md检查架构/命名/结构)。质量审查(对照rules/检查type/lint/DRY/SOLID)。仅报告confidence≥80。输出: CRITICAL|WARNING|INFO + file:line")
 
 # ═══ 步骤5.5: exception（后端/全栈） ═══

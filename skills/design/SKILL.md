@@ -237,6 +237,8 @@ ls -la orch-spec/{req_id}/design/diagrams/
 
 输出 design.md，结构：需求分析 → 设计方案（架构/设计模式/分层/组件/数据流） → 参考对比 → 技术方案 → 实现清单 → 决策记录 → 风险。模板见 `templates/design-template.md`。
 
+<HARD-GATE>design.md 生成后必须 AskUserQuestion 确认通过，用户确认前禁止进入 task 阶段。</HARD-GATE>
+
 ### 审批与交付
 
 展示 design.md，用户确认/修改后交付。
