@@ -198,7 +198,11 @@ print(f'[eval] {stage_name} stage recorded')
 
 ---
 
+<!-- ⏩ 步骤7 完成后必须立即继续步骤8，禁止停止或声明完成 -->
+
 ## 步骤8: evaluation
+
+<HARD-GATE>archive 完成后禁止跳过 evaluation。不执行则 .workflow-eval.json 无 diagnosis，步骤9 无法提取 learnings。</HARD-GATE>
 
 ### 做什么
 
@@ -213,7 +217,11 @@ print(f'[eval] {stage_name} stage recorded')
 
 ---
 
+<!-- ⏩ 步骤8 完成后必须立即继续步骤9，禁止停止或声明完成 -->
+
 ## 步骤9: continuous-learning
+
+<HARD-GATE>evaluation 完成后禁止跳过 continuous-learning。learnings[] 为空不允许标记 status=completed。</HARD-GATE>
 
 ### 做什么
 
