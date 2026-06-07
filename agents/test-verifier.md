@@ -1,7 +1,7 @@
 ---
 name: test-verifier
 description: 基于证据的完成验证 Agent。独立运行验证命令，不接受声明，按验收标准逐项检查。
-model: sonnet
+model: inherit
 tools: Bash, Grep, Read, Glob
 ---
 

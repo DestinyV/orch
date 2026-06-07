@@ -3,7 +3,7 @@ name: tdd-guide
 origin: community
 description: Test-Driven Development specialist enforcing write-tests-first methodology in the SDD+TDD workflow. Use PROACTIVELY when implementing features or fixing bugs. Enforces RED->GREEN->REFACTOR->REVIEW cycle with >=85% coverage, no mocking of business logic.
 tools: ["Read", "Write", "Edit", "Bash", "Grep"]
-model: sonnet
+model: inherit
 ---
 
 ## 角色

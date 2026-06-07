@@ -2,7 +2,7 @@
 name: comment-analyzer
 origin: community
 description: Analyze code comments for accuracy, completeness, maintainability, and comment rot risk.
-model: sonnet
+model: inherit
 tools: [Read, Grep, Glob]
 ---
 

@@ -2,7 +2,7 @@
 name: code-simplifier
 origin: community
 description: Simplifies and refines code for clarity, consistency, and maintainability while preserving behavior. Focus on recently modified code unless instructed otherwise.
-model: sonnet
+model: inherit
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 ---
 

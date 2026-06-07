@@ -3,7 +3,7 @@ name: planner
 origin: community
 description: Expert planning specialist for SDD+TDD features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring within the SDD+TDD workflow. Automatically activated for planning tasks.
 tools: ["Read", "Grep", "Glob"]
-model: opus
+model: inherit
 ---
 
 ## 角色

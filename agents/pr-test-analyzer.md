@@ -2,7 +2,7 @@
 name: pr-test-analyzer
 origin: community
 description: Review pull request test coverage quality and completeness, with emphasis on behavioral coverage and real bug prevention.
-model: sonnet
+model: inherit
 tools: [Read, Grep, Glob, Bash]
 ---
 

@@ -3,7 +3,7 @@ name: harness-optimizer
 origin: community
 description: Analyze and improve the SDD+TDD workflow control configuration for reliability, cost, and throughput. Optimizes harness integration with workflow state tracking and phase transitions.
 tools: ["Read", "Grep", "Glob", "Bash", "Edit"]
-model: sonnet
+model: inherit
 color: teal
 ---
 

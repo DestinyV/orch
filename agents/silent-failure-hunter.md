@@ -2,7 +2,7 @@
 name: silent-failure-hunter
 origin: community
 description: Review code for silent failures, swallowed errors, bad fallbacks, and missing error propagation.
-model: sonnet
+model: inherit
 tools: [Read, Grep, Glob, Bash]
 ---
 
