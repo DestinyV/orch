@@ -10,6 +10,21 @@
 
 生成需求级上下文 `orch-spec/{req_id}/req-context/`（project-map/tech-summary/key-files/decisions/cross-repo）。
 
+**全量探索产出**（context/ 不存在时首次生成 8 文件）：
+- `index.json` — 注册中心，含全部 section 的 tags 标签
+- `tech-stack.md` — 技术栈（语言/框架/数据库/存储）
+- `architecture.md` — 架构分层 + 模块划分
+- `conventions.md` — 命名规范 + API 风格
+- `code-patterns.md` — 跨需求代码模式
+- `file-map.yaml` — 入口 / 关键目录 / 文件锚点
+- `logic-chains/api-calls.yaml`（空，归档时填充）
+- `logic-chains/component-deps.yaml`（空，归档时填充）
+
+**增量更新规则**（context/ 已存在时）：
+- Agent A 文档探索：新发现追加到 `tech-stack.md` / `architecture.md` / `conventions.md`
+- Agent C 代码探索：新代码模式追加到 `code-patterns.md`；新目录或入口追加到 `file-map.yaml`
+- 不重复追加已有内容（同类追加，不做全量重写）
+
 ### 为什么
 
 10 个需求 = 1 次全量 + 9 次按需匹配。

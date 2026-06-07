@@ -4,7 +4,7 @@ description: |
   知识复利引擎 — 从工作流执行记录中提取用户纠正、效率优化、质量模式、项目约定，沉淀到 orch-spec/ 供下次需求增强。
 
   输入：.workflow-eval.json
-  输出：orch-spec/patterns/ + orch-spec/user-preferences/preferences.json
+  输出：orch-spec/context/learnings.md + orch-spec/user-preferences/preferences.json
 ---
 
 # continuous-learning — 知识复利引擎
@@ -51,7 +51,7 @@ description: |
 
 | 来源 | 沉淀内容 | 写入位置 |
 |------|---------|---------|
-| design ADR 决策记录 | 架构决策 → 下次复用 | `patterns/architecture.md` |
+| design ADR 决策记录 | 架构决策 → 下次复用 | `context/learnings.md → ## 架构决策` |
 | exception 阶段异常模式 | 项目异常规范 → 下次直接使用 | `preferences.json → exception_patterns` |
 | project-context.md 技术栈 | 技术栈快照 → 跳过重复探索 | `preferences.json → tech_stack` |
 
@@ -79,7 +79,7 @@ Agent(subagent_type="orch:knowledge-curator",
     2. stages[] 中耗时占比>50% → 瓶颈
     3. diagnosis 中覆盖率<85%/审查<80 → 质量问题
     4. design ADR + exception patterns → 项目约定
-    输出写入 orch-spec/patterns/ 和 orch-spec/user-preferences/preferences.json",
+    输出写入 orch-spec/context/learnings.md 和 orch-spec/user-preferences/preferences.json",
   run_in_background=false)
 ```
 
@@ -126,7 +126,7 @@ json.dump(state, open('orch-spec/{req_id}/.workflow-state.json', 'w'), indent=2)
 
 ## 输出
 
-- `orch-spec/patterns/` — 更新的模式文件（corrections/quality/testing/naming/architecture）
+- `orch-spec/context/learnings.md` — 更新的知识沉淀（用户纠正/效率/质量/项目约定）
 - `orch-spec/user-preferences/preferences.json` — 更新的 always_check[] + rejected_approaches[] + bottlenecks[] + task_sizing + concurrency
 - `.workflow-eval.json`（更新）— learnings[] 字段已写入
 - `.workflow-state.json`（更新）— status: completed

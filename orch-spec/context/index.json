@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "updated_at": "2026-06-07",
+  "sections": {
+    "tech-stack": {
+      "path": "orch-spec/context/tech-stack.md",
+      "tags": ["全局", "技术栈"],
+      "stability": "stable",
+      "last_refreshed": "2026-06-07"
+    },
+    "architecture": {
+      "path": "orch-spec/context/architecture.md",
+      "tags": ["全局", "架构", "模块", "插件"],
+      "stability": "stable",
+      "last_refreshed": "2026-06-07"
+    },
+    "conventions": {
+      "path": "orch-spec/context/conventions.md",
+      "tags": ["全局", "规范", "命名"],
+      "stability": "stable",
+      "last_refreshed": "2026-06-07"
+    },
+    "code-patterns": {
+      "path": "orch-spec/context/code-patterns.md",
+      "tags": ["全局", "代码模式"],
+      "stability": "stable",
+      "last_refreshed": "2026-06-07"
+    },
+    "file-map": {
+      "path": "orch-spec/context/file-map.yaml",
+      "tags": ["全局", "文件", "路径"],
+      "stability": "stable",
+      "last_refreshed": "2026-06-07"
+    },
+    "api-calls": {
+      "path": "orch-spec/context/logic-chains/api-calls.yaml",
+      "tags": ["API", "路由", "调用链"],
+      "stability": "evolving",
+      "last_refreshed": "2026-06-07"
+    },
+    "component-deps": {
+      "path": "orch-spec/context/logic-chains/component-deps.yaml",
+      "tags": ["依赖", "模块"],
+      "stability": "evolving",
+      "last_refreshed": "2026-06-07"
+    }
+  }
+}

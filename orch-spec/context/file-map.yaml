@@ -1,0 +1,48 @@
+project:
+  name: "orch"
+  root: "E:/YYWorkSpace/projects/orch"
+  language: "TypeScript / Python / Markdown"
+  type: "Claude Code Plugin / SDD+TDD Workflow Engine"
+
+entry_points:
+  - path: "commands/start-dev.md"
+    role: "工作流入口"
+  - path: "commands/spec-migrate.md"
+    role: "规范迁移导入"
+  - path: "agents/workflow.md"
+    role: "工作流编排 Agent"
+
+key_directories:
+  - path: "skills/"
+    purpose: "22 个工作流 Skill"
+    convention: "每 skill 独立目录，含 SKILL.md + references/ + templates/"
+  - path: "agents/"
+    purpose: "26 个子代理 Agent"
+    convention: "单文件单 agent，含 frontmatter + 角色描述"
+  - path: "commands/"
+    purpose: "14 个斜杠命令"
+    convention: "单文件单命令，含 frontmatter + usage"
+  - path: "scripts/hooks/"
+    purpose: "钩子实现（SessionStart/PreCompact/Stop）"
+  - path: "scripts/lib/"
+    purpose: "工具库（cost-db.js, state-store.js, hook-flags.js）"
+  - path: ".claude-plugin/"
+    purpose: "插件元数据（plugin.json, marketplace.json）"
+  - path: "orch-spec/context/"
+    purpose: "项目级上下文注册中心"
+  - path: "orch-spec/spec/"
+    purpose: "主规范库"
+
+key_files:
+  - path: "skills/workflow/SKILL.md"
+    purpose: "流程编排引擎（步骤0-9 编排逻辑）"
+  - path: "skills/workflow/references/agent-dispatch-code.md"
+    purpose: "步骤1-9 Agent 派遣意图与验证"
+  - path: "skills/workflow/references/flow-execution-reference.md"
+    purpose: "全部阶段输入/输出契约"
+  - path: "skills/design/references/table-design-spec.md"
+    purpose: "表设计规范（命名/字段/索引/约束/反模式）"
+  - path: "services/cost-tracking/usage.db"
+    purpose: "成本追踪 SQLite 数据库"
+
+api_routes: []

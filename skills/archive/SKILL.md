@@ -89,13 +89,14 @@ Agent(
 
 <HARD-GATE>归档完成时必须同步更新 orch-spec/context/，禁止跳过上下文同步。</HARD-GATE>
 
-| 同步数据 | 来源 | 写入目标 | 目的 |
-|---------|------|---------|------|
-| 需求摘要 | `{req_id}/spec/` → 场景/模型/规则 | `context/requirements.yaml` | Layer 1 历史匹配 |
-| API 路由 | `{req_id}/design/design.md` | `context/logic-chains/api-calls.yaml` | Layer 1 调用链复用 |
-| 模块依赖 | `{req_id}/tasks/tasks.md` → provides/consumes | `context/logic-chains/component-deps.yaml` | Layer 1 依赖复用 |
-| 需求上下文 | `{req_id}/req-context/` → key-files + decisions | `context/file-map.yaml` + `context/learnings.md` | Layer 1 文件定位复用 |
-| 标签索引 | 需求描述 + tags | `context/index.json` | Layer 1 关键词匹配 |
+| 同步数据 | 来源（提取方式） | 写入目标 | 目的 |
+|---------|-----------------|---------|------|
+| 需求摘要 | `{req_id}/spec/` → 场景数/模型数/规则数 | `context/requirements.yaml` 追加一条 | Layer 1 历史匹配 |
+| API 路由 | `{req_id}/design/design.md` → 提取 GET/POST/PUT/DELETE 定义 | `context/logic-chains/api-calls.yaml` 追加 `chains[]` | Layer 1 调用链复用 |
+| 模块依赖 | `{req_id}/tasks/tasks.md` → provides/consumes | `context/logic-chains/component-deps.yaml` 追加 `dependencies[]` | Layer 1 依赖复用 |
+| 文件路径 | `{req_id}/req-context/key-files.md` → 涉及文件清单 | `context/file-map.yaml` → `key_files[]` 追加 | Layer 1 文件定位复用 |
+| 架构决策 | `{req_id}/req-context/decisions.md` → ADR | `context/learnings.md` → `## 架构决策` 追加 | Layer 1 知识复用 |
+| 标签索引 | 需求描述 + tags | `context/index.json` → `sections[]` 追加 + tags 更新 | Layer 1 关键词匹配 |
 
 > 归档报告模板: `references/workflow-detail.md`
 
