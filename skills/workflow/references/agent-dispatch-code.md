@@ -6,7 +6,7 @@
 
 ### 做什么
 
-从项目上下文中提取本需求相关的知识。三层检索：注册中心匹配 → RAG补全 → 全量探索。
+从项目上下文中提取本需求相关的知识。三层检索：注册中心匹配 → CodeGraph 代码图谱补全（零文件扫描）→ 全量探索兜底。
 
 生成需求级上下文 `orch-spec/{req_id}/req-context/`（project-map/tech-summary/key-files/decisions/cross-repo）。
 

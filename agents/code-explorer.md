@@ -24,6 +24,23 @@ color: blue
 5. 新发现的知识追加到 context/ 对应文件
 ```
 
+## CodeGraph MCP 工具（优先于文件扫描）
+
+项目已安装 CodeGraph 时（`.codegraph/index.db` 存在），以下 MCP 工具可用，优先于 Grep/Glob/Read 文件扫描：
+
+| 阶段 | CodeGraph 工具 | 替代操作 | 说明 |
+|------|---------------|---------|------|
+| 架构理解 | `codegraph_explore` | grep 目录 + Read 文件 | 查询模块划分、分层结构、接口定义 |
+| 模式提取 | `codegraph_search` | glob + grep 遍历 | 搜索特定符号或模式的实现位置 |
+| 依赖分析 | `codegraph_context` 或 `codegraph_callers` | 手动追踪引用 | 获取模块间的调用关系、数据流 |
+| 路径映射 | `codegraph_node` | Read 多文件 | 获取符号的文件位置和行号 |
+
+使用原则：
+- **同一次查询**优先用 `codegraph_explore`（覆盖广），再视需要用 `codegraph_node` 获取细节
+- `codegraph_search` 替代 grep 搜索符号名称
+- `codegraph_context` 替代阅读多个相关文件来理解模块
+- 未安装或不可用时自然回退到 Grep/Glob/Read
+
 ## 核心职责
 
 - **架构一致性和功能复用信息**给 design 和 task
