@@ -43,19 +43,23 @@ print(f'[eval] {stage_name} stage recorded')
 
 生成需求级上下文 `orch-spec/{req_id}/req-context/`（project-map/tech-summary/key-files/decisions/cross-repo）。
 
+<HARD-GATE>context/ 不存在时（首次运行），Layer 3 全量探索必须完整生成以下 8 文件，缺一不可：index.json / tech-stack.md / architecture.md / conventions.md / code-patterns.md / file-map.yaml / logic-chains/api-calls.yaml / logic-chains/component-deps.yaml</HARD-GATE>
+
 **全量探索产出**（context/ 不存在时首次生成 8 文件）：
 - `index.json` — 注册中心，含全部 section 的 tags 标签
 - `tech-stack.md` — 技术栈（语言/框架/数据库/存储）
 - `architecture.md` — 架构分层 + 模块划分
 - `conventions.md` — 命名规范 + API 风格
-- `code-patterns.md` — 跨需求代码模式
-- `file-map.yaml` — 入口 / 关键目录 / 文件锚点
+- `code-patterns.md` — 跨需求代码模式（搜索 `src/` 下最常见的 3-5 个代码模式）
+- `file-map.yaml` — 入口 / 关键目录 / 文件锚点（含真实文件路径）
 - `logic-chains/api-calls.yaml`（空，归档时填充）
 - `logic-chains/component-deps.yaml`（空，归档时填充）
 
 **增量更新规则**（context/ 已存在时）：
-- Agent A 文档探索：新发现追加到 `tech-stack.md` / `architecture.md` / `conventions.md`
-- Agent C 代码探索：新代码模式追加到 `code-patterns.md`；新目录或入口追加到 `file-map.yaml`
+- Agent A 发现新 **模块名** → 追加到 `architecture.md`
+- Agent A 发现新 **命名规范** → 追加到 `conventions.md`
+- Agent C 发现新 **代码模式** → 追加到 `code-patterns.md`
+- 新目录或入口 → 追加到 `file-map.yaml`
 - 不重复追加已有内容（同类追加，不做全量重写）
 
 ### 为什么
@@ -67,7 +71,7 @@ print(f'[eval] {stage_name} stage recorded')
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
 | code-explorer ×3 | `run_in_background=true` | 三路必须并行启动。Agent A 始终执行（增量文档摘要）。Agent B 读 context/requirements.yaml 替代扫描目录。Agent C 仅首次或覆盖不足时执行 |
-| — | 预检 | `<HARD-GATE> 禁止在未检查 orch-spec/context/index.json 前执行全量探索` |
+| — | 预检 | `<HARD-GATE> 检查 orch-spec/context/index.json 存在性 + 校验每个注册 section 的文件是否存在。缺失文件必须补生成，不可跳过。index.json 不存在 → Layer 3 全量生成 8 文件。` |
 | — | 出口 | `orch-spec/{req_id}/req-context/` 含 3+ 文件 + `project-context.md` 非空 |
 
 ---
@@ -206,14 +210,18 @@ print(f'[eval] {stage_name} stage recorded')
 
 ### 做什么
 
-诊断工作流质量（三维度九指标）。context-budget + cost 并行 → 对比评分。
+诊断工作流质量（三维度九指标），数据来自 `.workflow-eval.json` 的 `stages[]` 和 `~/.claude/orch-costs/usage.db`。
+
+**数据来源**：
+- 成功度：`stages[]` → 阶段完成数/用户干预事件/HARD-GATE触发/回退记录
+- 效率：`usage.db`（按 stage 分组查询 token 消耗和耗时）
+- 质量：execute REVIEW 输出（覆盖率）/ code-reviewer 报告（审查评分）/ archive 报告（冲突数）
 
 ### 派遣约束
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| 双路 | `run_in_background=true` | `<HARD-GATE> archive 后禁止跳过` |
-| — | 出口 | `diagnosis.成功度/效率/质量` 均有评分 + `diagnosis.score` 0-100 |
+| 双路 | `run_in_background=true` | `<HARD-GATE> archive 后禁止跳过。cost DB 存在时从 DB 读取实际 tokens；不存在时用 context-budget 估算` |
 
 ---
 

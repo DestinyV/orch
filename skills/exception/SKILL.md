@@ -110,6 +110,12 @@ try {
 ## Output
 
 - `src/` — 添加异常处理后的代码
+- `exception-report.md` — 异常分析报告，含以下字段：
+
+| 异常场景 | 错误码 | 触发文件 | 异常类型 | 修复代码 | 说明 |
+|---------|--------|---------|---------|---------|------|
+| 数据库查询返回 null | BIZ-001 | UserService.java:42 | 业务异常 | `throw new BizException(...)` | 查询用户不存在 |
+| RPC 调用超时 | RMT-001 | PaymentClient.java:18 | 远程异常 | `catch (TimeoutException)` | 支付网关超时 |
 ## 多语言支持
 
 本 Skill 支持多种后端语言的异常处理：
