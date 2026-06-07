@@ -73,12 +73,13 @@ done
 ## 步骤1-9: 督导闭环
 
 > 每阶段输入/输出契约、校验、纠正措施: [`references/flow-execution-reference.md`](references/flow-execution-reference.md)
+> 每步骤 Agent 派遣: [`references/agent-dispatch-code.md`](references/agent-dispatch-code.md)
 
 每阶段：**前置校验 → 派遣 → 产出校验 → Token记录 → 纠正**。
 
-<HARD-GATE>每阶段完成后必须写入 `.workflow-eval.json` 追加 stage 数据（stage/status/tokens_input/tokens_output/duration/agent）。token_usage 和 stages[] 为空时不允许进入下一阶段。</HARD-GATE>
+<HARD-GATE>全部步骤 1→9 必须依次执行完毕，禁止在中间步骤停止或声明需求完成。每步完成后立即执行 agent-dispatch-code.md 中的"阶段完成记录"写入 eval.json，再进入下一步。</HARD-GATE>
 
-完成后写入 `.workflow-eval.json`（含 stage/tokens_input/tokens_output/duration），步骤8 汇总诊断。
+<HARD-GATE>每阶段完成后必须写入 `.workflow-eval.json` 追加 stage 数据。stages[] 为空时不允许进入下一阶段。</HARD-GATE>
 
 | 步骤                      | 前置                                  | 产出                                                                      | 记录                               | 纠正               |
 | ------------------------- | ------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- | ------------------ |

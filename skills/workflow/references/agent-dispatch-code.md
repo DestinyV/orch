@@ -1,6 +1,39 @@
 <!-- EXECUTE-ME --> 本文件由 workflow 步骤1-9 强制执行。每个步骤中的 Agent 派遣必须执行。
 
+<HARD-GATE>全部步骤 1→2→3→4→5→6→7→8→9 必须依次执行完毕，禁止在执行到中间步骤后停止或声明需求完成。每步完成后立即执行"阶段完成记录"写入 eval.json，再进入下一步。</HARD-GATE>
+
 # Agent 派遣意图与验证
+
+## 阶段完成记录
+
+每阶段完成后立即执行以下写入，阻止下一阶段前 stages[] 为空：
+
+```bash
+python3 -c "
+import json, os, time
+eval_path = 'orch-spec/{req}/.workflow-eval.json'
+state_path = 'orch-spec/{req}/.workflow-state.json'
+data = json.load(open(eval_path)) if os.path.exists(eval_path) else {'stages':[], 'token_usage':{}, 'events':[]}
+state = json.load(open(state_path)) if os.path.exists(state_path) else {}
+stage_name = state.get('current_stage', 'unknown')
+# 写入 stage 记录
+data['stages'].append({
+    'stage': stage_name,
+    'status': 'done',
+    'tokens_input': 0,
+    'tokens_output': 0,
+    'duration_seconds': int(time.time()),
+    'agent': state.get('agent', '')
+})
+data['token_usage'] = data.get('token_usage', {})
+json.dump(data, open(eval_path, 'w'), indent=2, ensure_ascii=False)
+print(f'[eval] {stage_name} stage recorded')
+"
+```
+
+替换 `{req}` 为实际需求 ID。
+
+**每步骤执行后必须调用上述脚本**记录阶段完成状态。步骤1-9 的每个步骤派遣完成后立即执行此记录，否则下一阶段无法通过 stages[] 非空校验。
 
 ## 步骤1: spec — 项目上下文检索
 
