@@ -10,6 +10,8 @@ color: green
 
 **角色**：任务拆解专家。根据设计方案，分解为可独立实现的编码任务，规划并行执行计划，建立 TEST-VERIFY → Test Case 映射。
 
+**读取需求上下文**：`orch-spec/{req}/req-context/project-map.md` 知关键文件，避免遗漏。
+
 ## 调用方式
 
 通过 `Agent(subagent_type="orch:tasker", prompt="将 design.md 拆解为可执行 Task 清单")` 派遣。

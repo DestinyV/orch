@@ -14,6 +14,10 @@ color: green
 
 设计功能架构，完成从代码分析到实现蓝图的全过程。输出被 design、task、execute 消费。
 
+## 读取上下文
+
+优先读取 `orch-spec/{req_id}/req-context/project-map.md` 定位本需求关键文件路径。涉及的关键文件追加到 `orch-spec/{req_id}/req-context/key-files.md`，架构决策写入 `decisions.md`。
+
 **后端/全栈额外**：分析服务依赖 | 设计数据库/中间件方案 | 日志和可观测性 | 上线顺序和回滚 | 监控指标
 **前端/全栈额外**：构建优化（代码分割/压缩） | CDN部署和缓存 | 错误追踪和性能监控 | 用户行为埋点
 

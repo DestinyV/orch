@@ -14,6 +14,10 @@ color: red
 
 根据 task 提供的实现任务，完成从规划到实现、集成和验证的全过程。输出可直接运行和部署的生产级代码。
 
+## 读取需求上下文
+
+执行前读取 `orch-spec/{req}/req-context/key-files.md` 和 `decisions.md`，了解本需求涉及的文件和设计约束，避免重复探索。执行后将实际修改的文件路径追加到 `orch-spec/{req}/req-context/key-files.md`。
+
 ## 调用方式
 
 通过 `Agent(subagent_type="orch:executor", prompt="...", run_in_background=true)` 派遣。
