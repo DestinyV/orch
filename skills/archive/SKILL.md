@@ -83,21 +83,25 @@ Agent(
 
 基于 archiver 返回结果，输出到 `orch-spec/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
 
+### 步骤6: 同步上下文注册中心
+
+归档完成后将本需求知识同步到 `orch-spec/context/`，供后续需求复用。
+
+<HARD-GATE>归档完成时必须同步更新 orch-spec/context/，禁止跳过上下文同步。</HARD-GATE>
+
+| 同步数据 | 来源 | 写入目标 | 目的 |
+|---------|------|---------|------|
+| 需求摘要 | `{req_id}/spec/` → 场景/模型/规则 | `context/requirements.yaml` | Layer 1 历史匹配 |
+| API 路由 | `{req_id}/design/design.md` | `context/logic-chains/api-calls.yaml` | Layer 1 调用链复用 |
+| 模块依赖 | `{req_id}/tasks/tasks.md` → provides/consumes | `context/logic-chains/component-deps.yaml` | Layer 1 依赖复用 |
+| 需求上下文 | `{req_id}/req-context/` → key-files + decisions | `context/file-map.yaml` + `context/learnings.md` | Layer 1 文件定位复用 |
+| 标签索引 | 需求描述 + tags | `context/index.json` | Layer 1 关键词匹配 |
+
+> 归档报告模板: `references/workflow-detail.md`
+
 ### 可选清理
 
 用户多层确认后，备份并删除原需求目录。
-
-## 参考文档速查
-
-| 参考文档 | 使用场景 | 步骤 |
-|---------|---------|------|
-| `references/workflow-detail.md` | 完整工作流步骤和归档报告模板 | 步骤5 |
-
-### 设计图模板
-| 模板 | 输出文件 | 步骤 |
-|------|---------|------|
-| `templates/diagrams/merge-conflict.md` | 合并冲突关系图 | 步骤4.5 |
-| `templates/diagrams/spec-evolution.md` | 规范演进时间线 | 步骤4.5 |
 
 ## 归档合并协议
 
