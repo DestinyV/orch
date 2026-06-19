@@ -43,11 +43,15 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `${CLAUDE_PLUGIN_ROOT
 3. AskUserQuestion 确认：数据库类型/快速或标准/设计图偏好。fullstack 时追加确认：后端仓库路径/前端仓库路径/API base URL → 写入 `orch-spec/{req_id}/req-context/cross-repo.md`
 4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec
 5. 初始化 `.workflow-state.json` + `.workflow-eval.json`
-6. **上下文继承基线生成**（避免重复探索）：读取 `orch-spec/context/.exploration-state.json` 和 `orch-spec/context/requirements.yaml`，按 [`references/context-inheritance-protocol.md`](references/context-inheritance-protocol.md) 执行：
-   - 从需求描述提取关键词 → 匹配 `index.json` tags → 确定可继承的 context sections
-   - 匹配 `requirements.yaml` 中的历史需求 → 确定可继承的相似需求 req-context
-   - 生成 `orch-spec/context/.baseline-context.json`（继承基线，供 code-explorer 增量探索使用）
-   - 对 code-explorer 的 prompt 注入 `baseline_context: {基线内容}`
+6. **上下文继承基线生成**（避免重复探索）：读取 `orch-spec/context/.exploration-state.json`，执行以下判断：
+   - `.exploration-state.json` 不存在 → **首次运行**，步骤1 进入全量探索模式
+   - `last_explored_sha` == `git rev-parse HEAD` → **项目代码未变更**，进入增量探索模式（只匹配关键词继承 context，跳过全部代码扫描）
+   - `last_explored_sha` ≠ HEAD → **代码有变更**，进入增量探索模式（继承 context + 只扫描 `git diff --name-only` 的变更文件）
+   - 然后按 [`references/context-inheritance-protocol.md`](references/context-inheritance-protocol.md) 执行：
+     - 从需求描述提取关键词 → 匹配 `index.json` tags → 确定可继承的 context sections
+     - 匹配 `requirements.yaml` 中的历史需求 → 确定可继承的相似需求 req-context
+     - 生成 `orch-spec/context/.baseline-context.json`（继承基线，供 code-explorer 增量探索使用）
+     - 对 code-explorer 的 prompt 注入 `baseline_context: {基线内容}`
 7. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`
 7. **CodeGraph 可选加速**：检测 `codegraph` 命令是否存在，不存在则自动安装（`npm i -g @colbymchenry/codegraph 2>/dev/null || npm i -g @colbymchenry/codegraph`）。已安装则：`cd $CLAUDE_PLUGIN_ROOT && codegraph init -i 2>/dev/null && echo '{"mcpServers":{"codegraph":{"command":"codegraph","args":["serve","--mcp"],"env":{}}}}' > .mcp.json && nohup codegraph serve --mcp > /dev/null 2>&1 &`。成功后各 Agent 可使用 `codegraph_search/explore/context/trace/callers/callees/impact/node` MCP 工具代替 grep/Read 进行代码检索。安装失败或不存在时自然回退到 grep/Read。
 
@@ -109,7 +113,7 @@ done
 
 | 批次      | 步骤    | Agent                                  | 调度策略                                                                       |
 | --------- | ------- | -------------------------------------- | ------------------------------------------------------------------------------ |
-| 批次1     | 1       | `code-explorer` ×3                     | **三路并行**：A 文档 / B 历史 / C 代码，全部完成后合并 + 生成 req-context/    |
+| 批次1     | 1       | `code-explorer` ×N                     | **根据探索深度分级**：L0(1 Agent) / L1(2 Agent) / L2-L3(3 Agent 并行) 参见 `references/context-inheritance-protocol.md`。全部完成后合并 + 生成 req-context/ + project-map.json |
 | **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞**                           |
 | —         | 3.5     | `contract-creator`                     | 批次2 全部完成后串行，仅 fullstack                                             |
 | —         | 4       | `tasker`                               | 批次2+3.5 完成后串行                                                           |
@@ -127,7 +131,6 @@ done
 | `e2e-runner`         | 前端/全栈 E2E                                      | test           |
 | `loop-operator`      | Task > 3 批次                                      | execute        |
 | `planner`            | 用户要求                                           | design         |
-| `tdd-guide` | standard 模式, 每批次审查TDD四阶段日志, 不满足驳回 | execute 每批次 |
 
 ### 需求上下文双层次
 
