@@ -106,6 +106,7 @@ description: |
 **探索结果输出**：
 - `orch-spec/{req_id}/project-context.md` — 标准模式：架构探索结果，供 design 复用（已有）
 - `orch-spec/{req_id}/req-context/project-map.json` — **结构化项目地图**：JSON 格式的模块/文件/API/数据模型/测试目标索引。所有下游阶段从此读取文件路径信息，不再自行 grep/glob 探索。
+- `orch-spec/{req_id}/req-context/exception-patterns.md` — **异常模式缓存**（仅后端/全栈）：一次性扫描项目异常约定，所有 executor 直接读取缓存。
 
 **数据库需求判定**（当需求涉及数据持久化时）：
 ```
