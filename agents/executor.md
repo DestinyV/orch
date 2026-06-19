@@ -90,6 +90,23 @@ git worktree add .claude/worktrees/{task-id}-{name} HEAD
 
 <GATE>standard 模式下，必须先写测试并确认失败（RED），才能写实现代码（GREEN）。跳过 RED 阶段直接写实现 → 视为违反协议，该 Task 失败</GATE>
 
+### 1.6 增量恢复协议（T2 — resume_from）
+
+当 Task 被重新派遣（因前一轮部分阶段失败），`resume_from` 参数指定从哪个阶段继续：
+
+| resume_from | 跳过 | 重新执行 |
+|------------|------|---------|
+| `review` | RED+GREEN+REFACTOR | 仅 REVIEW（lint/type/coverage） |
+| `refactor` | RED+GREEN | REFACTOR→REVIEW |
+| `green` | RED | GREEN→REFACTOR→REVIEW |
+| `red` | — | 完整 RED→GREEN→REFACTOR→REVIEW |
+| `none`（默认） | — | 完整流程 |
+
+**恢复协议**：
+- 接收 `resume_from` 参数时，直接跳到对应阶段，不重做已通过阶段
+- 读取 `current_artifacts`（上一轮已完成代码和测试），在此基础上继续
+- 恢复评估：新完成的阶段 `confidence -= 10`（比首次执行更严格）
+
 ### 1.8 Task 复杂度自评
 
 在进入实现规划前，快速自评 Task 复杂度（不消耗额外 Read）：
@@ -147,19 +164,49 @@ TDD 流程额外：确定 test case 处理顺序 | 规划每个 RED/GREEN/REFACT
 
 **验证铁律**：未运行验证命令→不能声称通过。必须实际运行并展示证据（exit 0、0 failures）。
 
-#### 4.1 命令输出读取策略（Token 效率）
+#### 4.1 命令输出读取策略（Token 效率 — <GATE>强约束</GATE>）
 
-运行验证命令时，采用摘要优先策略：
+运行验证命令时，**必须**遵循摘要优先策略：
 
-| 场景 | 策略 |
-|------|------|
-| 测试通过 | 只读 exit code + 最后 3 行（`| tail -3`） |
-| 测试失败 | 读取完整输出定位失败原因 |
-| Lint/类型检查通过 | 只读 exit code + 错误计数行 |
-| Lint/类型检查失败 | 读取完整输出定位问题 |
-| 覆盖率报告 | 只读 summary 段（`| grep -A5 "Coverage"` 或等效） |
+<GATE>通过场景的输出只允许读取 exit code + 最后 3 行（`| tail -3`），禁止全量 stdout 进上下文。</GATE>
+<GATE>失败场景才读取完整输出，定位失败原因后停止。</GATE>
+
+| 场景 | 策略 | 命令示例 |
+|------|------|---------|
+| 测试通过 | exit code + `tail -3` | `npm test 2>&1 \| tail -3` |
+| 测试失败 | `grep -A5 "FAIL\|Error"` | `npm test 2>&1 \| grep -A5 "FAIL"` |
+| Lint 通过 | exit code + 错误计数 | `eslint src/ 2>&1 \| tail -1` |
+| Lint 失败 | `grep -A5 "error\|warning"` | `eslint src/ 2>&1 \| grep -A5 "error"` |
+| 覆盖率 | 只读 summary 段 | `npm run test:coverage 2>&1 \| grep -E "All files\|Coverage\|%"` |
+
+<GATE>违反此策略（全量读取通过场景的 stdout）→ 视为 Token 浪费，该 Task 扣减质量评分。</GATE>
 
 **验证铁律仍然生效**：exit code 和关键输出必须展示为证据。摘要模式只省略通过场景的冗余输出。
+
+### 4.2 注入上下文自检（Token 效率 — <GATE>强约束</GATE>）
+
+开始编码前，输出已注入上下文清单，并自我检查：
+
+```json
+{
+  "injected_context": {
+    "task_spec": true,
+    "project_map_subgraph": true,
+    "relevant_design": true,
+    "test_templates": true,
+    "exception_patterns": true
+  },
+  "self_check": "以上上下文已全部在 prompt 中，无需自行 Read 任何文件",
+  "supplemental_reads": []
+}
+```
+
+<GATE>已注入上下文禁止用 Read 工具重复读取。仅当自检确认注入信息不足时，才补充 Read。</GATE>
+
+**典型违反行为**：
+- ❌ 启动后 Read(orch-spec/{req}/tasks/tasks.md) — 已在 prompt 的 task_spec 中
+- ❌ 启动后 Read(orch-spec/{req}/design/design.md) — 已在 relevant_design 中
+- ✅ 需要某个未注入的细节（如第三方的 API 文档）时才 Read 对应文件
 
 ### 5. 实现总结
 
