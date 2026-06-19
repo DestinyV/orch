@@ -44,7 +44,7 @@
 
 ## 项目概述
 
-**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。22 Skills + 24 Agents + 11 Commands，覆盖从需求到归档的全生命周期。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。
+**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。22 Skills + 24 Agents + 11 Commands，覆盖从需求到归档的全生命周期。
 
 **核心工作流**：
 ```
@@ -67,7 +67,7 @@ orch/
 │                    #   context-budget/depth/compact/
 │                    #   cost/ralph-loop/clarify/debug/req-change/
 │                    #   spec-migrate）
-├── agents/          # 28个 Agents（11工作流核心 + 17扩展）
+├── agents/          # 24个 Agents（12工作流核心 + 12扩展）
 ├── commands/        # 14个斜杠命令
 ├── rules/           # 语言规则（common/typescript/python/zh）
 ├── scripts/lib/     # 运行时脚本（resolve-root/project-detect/state-store/utils）
@@ -138,7 +138,7 @@ orch/
 | knowledge-curator | 知识复利执行 |
 | archiver | 规范归档合并 |
 
-另含 13 个扩展 Agents（planner/tdd-guide/code-cleaner/comment-analyzer/conversation-analyzer/loop-operator/e2e-runner/debug/clarifier/doc-updater/code-explorer/contract-creator/exception），详情见 `AGENTS.md`。
+另含 7 个扩展 Agents（planner/code-cleaner/comment-analyzer/conversation-analyzer/loop-operator/e2e-runner/doc-updater/goal-evaluator），详情见 `AGENTS.md`。
 
 ### 支持技术栈
 

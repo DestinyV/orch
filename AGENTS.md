@@ -1,6 +1,6 @@
 # orch — Agent Registry
 
-SDD+TDD 工作流专用 Agent 注册表。共 25 个 Agents（11 工作流核心 + 14 扩展能力）。
+SDD+TDD 工作流专用 Agent 注册表。共 24 个 Agents（12 工作流核心 + 12 扩展能力）。
 
 ## 工作流核心 Agents
 
@@ -24,7 +24,6 @@ SDD+TDD 工作流专用 Agent 注册表。共 25 个 Agents（11 工作流核心
 | Agent | 职责 | 来源 |
 |-------|------|------|
 | [code-cleaner](agents/code-cleaner.md) | 代码清理（简化+死代码+静默失败） | 合并 |
-| [code-reviewer](agents/code-reviewer.md) | 综合性审查 | 保留 |
 | [comment-analyzer](agents/comment-analyzer.md) | 代码注释分析 | 引入 |
 | [conversation-analyzer](agents/conversation-analyzer.md) | 对话分析 | 引入 |
 | [contract-creator](agents/contract-creator.md) | 接口契约定义 | 已有 |
