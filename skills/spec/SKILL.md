@@ -46,6 +46,20 @@ description: |
 
 - `orch-spec/{req_id}/spec/` — 完整规范目录（requirement.md + scenarios/*.md + data-models.md + business-rules.md + glossary.md）
 
+### 文档产出预算（Document Budget）
+
+<GATE>首轮最多生成 5 个核心文件：requirement.md + 至少 1 个 scenario + data-models.md + business-rules.md + glossary.md。禁止首轮即生成全部 11+ 文件。</GATE>
+
+- **首轮（必须）**：5 个核心文件，15 分钟内完成
+- **第二轮（确认后）**：AskUserQuestion 确认核心 spec 后，按需生成：
+  - 后端/全栈：infrastructure.md / deployment.md / backend-monitoring.md
+  - 前端/全栈：frontend-deployment.md / frontend-monitoring.md
+  - 数据库：sql-ddl.md
+  - 按需：security.md / diagrams/
+- **第三轮（标准模式）**：project-context.md（在 spec 末尾生成，供 design 复用）
+
+<GATE>用户未确认核心 spec 前，禁止进入第二轮文件生成。</GATE>
+
 ## Phase 0: 苏格拉底澄清检测（前置）
 
 <GATE>检测到 clarification.md 存在时必须读取；不存在时必须检测需求模糊度决定是否派遣 clarify。</GATE>

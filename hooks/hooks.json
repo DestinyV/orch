@@ -15,6 +15,20 @@
         "id": "session:init"
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/stage-gate.js\"",
+            "description": "Stage gate: block Skill calls when prerequisite stages are incomplete",
+            "timeout": 5
+          }
+        ],
+        "id": "pretool:stage-gate"
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Skill|Agent",

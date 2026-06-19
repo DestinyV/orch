@@ -55,7 +55,7 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.9.7 (2026-06-19)
+**版本**：v0.9.8 (2026-06-20)
 
 ## 架构与文件结构
 
@@ -198,9 +198,10 @@ orch/
 
 ### 执行协议
 - Explore first, then plan — 不探索代码库就不设计
-- 2+ 独立任务并行执行 — 批次级并行，批次间串行
+- **并行强制执行** — 批次内 2+ 无依赖 Task 必须同时 `run_in_background=true` 派遣，禁止将并行 Task 逐个串行执行
 - Authoring 和 review 分离 — 从不自我审批，两阶段审查严格排序
 - 拒绝"应该/可能" — 每条验收标准必须有新鲜证据
+- **文档预算** — specs 首轮 ≤5 文件，15 分钟内产出代码
 
 ### 钩子系统
 | 事件 | 钩子 | 用途 |
@@ -219,12 +220,37 @@ orch/
 
 ## 核心约束
 
+### 阶段纪律（最高优先级）
+
+<GATE>工作流阶段必须按序执行，禁止跳过任何阶段。PreToolUse hook 会在跳过阶段时阻断 Skill 调用。</GATE>
+
+| ✅ 必须 | ❌ 禁止 |
+|---------|--------|
+| 步骤 1 spec 完成后才能进入步骤 2/3 | 跳过步骤 1（spec）直接 test-design/design |
+| 步骤 3 design 完成后才能进入步骤 4 task | 跳过步骤 4（task）直接 execute 编码 |
+| 步骤 4 task 完成后才能进入步骤 5 execute | execute 中跳过 RED 阶段直接 GREEN |
+| 步骤 5 execute 完成后才能进入步骤 6 test | 跳过步骤 8/9（evaluation/continuous-learning）直接结束 |
+| 步骤 6 test 完成后才能进入步骤 7/8/9 | 步骤 2-3 并行时串行执行其中任一个 |
+
+### 文档产出约束
+
+| ✅ 必须 | ❌ 禁止 |
+|---------|--------|
+| spec 首轮最多生成 5 个核心文件（requirement + scenarios + data-models + business-rules + glossary） | spec 阶段一次生成 10+ 文件 |
+| 15 分钟内产出第一段工作代码 | 30 分钟仍在生成 markdown 无代码 |
+| 辅助文件（infrastructure/deployment/monitoring/security/diagrams）在用户确认核心 spec 后按需生成 | 不确认就全量生成 |
+
+### 工作流纪律
+
 | ✅ 必须 | ❌ 禁止 |
 |---------|--------|
 | 首次使用前运行 spec 生成规范 | 跳过设计阶段直接编码 |
 | 设计审批通过后才能进入 task | execute 中跳过规范或质量审查 |
 | 遵循 Task 清单严格执行 | 发现问题不修复就继续下一个 Task |
 | test 闭环验证（≥80% 覆盖率） | 为了让测试通过修改源代码逻辑 |
+| 每阶段完成后写入 .workflow-eval.json | 跳过 .workflow-eval.json 写入 |
+| 批次内无依赖 Task 并行派遣（run_in_background=true） | 将并行 Task 串行执行 |
+| 知识复利步骤 8-9 在工作流末尾执行 | 工作流完成前声明"完成"而不执行步骤 8-9 |
 
 ## 关键要点
 

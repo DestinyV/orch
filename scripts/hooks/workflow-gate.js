@@ -141,6 +141,47 @@ function main() {
     }
   }
 
+  // 新增：Agent 参数校验 + 串行降级检测
+  if (toolName.includes('agent')) {
+    const agentInput = (input.tool_input || input.arguments || {});
+
+    // Agent 参数校验
+    const agentType = agentInput.subagent_type || agentInput.agent || '';
+    if (agentType && !agentType.startsWith('orch:')) {
+      console.error('[GATE] Warning: Agent type not under orch namespace. This may not follow workflow conventions.');
+    }
+
+    // 串行降级检测：Agent 调用未设置 run_in_background=true
+    const isBackground = agentInput.run_in_background === true ||
+                         (typeof agentInput.run_in_background === 'string' &&
+                          agentInput.run_in_background === 'true');
+
+    if (!isBackground) {
+      for (const { reqId, state } of workflows) {
+        if (state.status !== 'in_progress') continue;
+
+        // 检查当前批次是否有多个待执行的并行 Task
+        const executeStage = (state.stages || []).find(s => s.stage === '5_code_execute');
+        if (executeStage && executeStage.status === 'in_progress') {
+          const progress = executeStage.progress || {};
+          const batch = executeStage.batches ?
+            executeStage.batches.find(b => b.status === 'in_progress') : null;
+
+          if (batch && Array.isArray(batch.tasks) && batch.tasks.length >= 2) {
+            const msg = `GATE: Agent dispatched without run_in_background=true in batch with ${batch.tasks.length} parallel tasks. This may indicate serial degradation.`;
+            console.error(`[GATE] ${msg}`);
+            appendEvalEvent(reqId, {
+              type: 'warning',
+              stage: '5_code_execute',
+              message: msg,
+              timestamp: new Date().toISOString(),
+            });
+          }
+        }
+      }
+    }
+  }
+
   if (hasIssues) {
     console.error('[GATE] Validation completed with warnings (fail-open). Check .workflow-eval.json events[] for details.');
   }
