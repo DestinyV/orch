@@ -35,11 +35,34 @@ print(f'[eval] {stage_name} stage recorded')
 
 **每步骤执行后必须调用上述脚本**记录阶段完成状态。步骤1-9 的每个步骤派遣完成后立即执行此记录，否则下一阶段无法通过 stages[] 非空校验。
 
+## 步骤0.3: 自主优化规则注入
+
+步骤0 初始化完成后，从 `preferences.json → optimization.rules[]` 加载所有 `active` 且 `confidence ≥ 30` 的优化规则。
+
+**按 injection_point 分发**：
+- `workflow_step0` → 当前工作流步骤0 直接使用（调整批次/并行度/阶段选择）
+- `spec_prompt` → 暂存到 `.workflow-state.json.injected_optimizations[]`，步骤1 spec agent 派遣时注入 prompt
+- `design_prompt` → 步骤3 code-architect 派遣时注入 prompt
+- `execute_prompt` → 步骤5 executor 派遣时注入 prompt
+- `review_prompt` → code-reviewer 派遣时注入 prompt
+
+**每步骤派遣前**：检查 `.workflow-state.json → injected_optimizations[]`，有匹配 `injection_point` 的规则则注入 agent prompt。
+
+所有注入的规则 ID 记录到 `.workflow-eval.json → applied_optimizations[]`，供下一轮步骤9 评估效果。
+
+<GATE>trial 状态规则（confidence < 30）禁止注入任何阶段</GATE>
+
 ## 步骤1: spec — 项目上下文检索
 
 ### 做什么
 
-从项目上下文中提取本需求相关的知识。三层检索：注册中心匹配 → CodeGraph 代码图谱补全（零文件扫描）→ 全量探索兜底。
+从项目上下文中提取本需求相关的知识。五步按序检索，前一步匹配即止，不继续探索：
+
+1. **project-context** — 检查 `orch-spec/{req_id}/project-context.md`（由 spec 阶段输出），存在则直接使用
+2. **历史 spec** — 检查 `orch-spec/spec/` 下归档的规范文档，匹配需求关键词
+3. **req-context** — 检查 `orch-spec/` 下历史需求的 `req-context/`，匹配相似需求继承上下文
+4. **AI 知识库 / 项目 wiki** — 扫描 `docs/`、`wiki/`、`README.md` 等项目文档，以及 AI 知识库（Claude memory、RAG 索引、项目级 `.md` 知识沉淀），提取架构/约定信息
+5. **项目探索** — 使用 Grep/Glob/Read 进行代码扫描，生成 context 文件
 
 生成需求级上下文 `orch-spec/{req_id}/req-context/`（project-map/tech-summary/key-files/decisions/cross-repo）。
 
@@ -234,6 +257,9 @@ print(f'[eval] {stage_name} stage recorded')
 ### 做什么
 
 从工作流提取可复用知识（四维沉淀），写入 context/learnings.md 和 preferences.json。
+同时执行**自主进化规则提取**：从 `.workflow-eval.json` → `diagnosis.deviation` → 遍历所有 `deviation > 20%` 的指标 + `events[].type=user_intervention` → 生成/更新 `optimization.rules[]`。
+
+**效果评估**：对比已注入规则的 deviation 变化，更新每条规则的 confidence（有效+15，无效-20，不变-10）。
 
 ### 派遣约束
 

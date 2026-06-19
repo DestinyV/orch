@@ -44,6 +44,21 @@
 }
 ```
 
+### 注入优化规则（步骤0.3 初始化后）
+
+```json
+{
+  "injected_optimizations": [
+    {
+      "id": "opt-001",
+      "rule_id": "tok-001",
+      "injection_point": "execute_prompt",
+      "injected_at": "ISO时间"
+    }
+  ]
+}
+```
+
 ## .workflow-eval.json
 
 效果评估数据，路径同上。模板见 `../workflow/templates/eval-template.json`。

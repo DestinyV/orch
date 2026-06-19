@@ -1,10 +1,11 @@
 ---
 name: continuous-learning
 description: |
-  知识复利引擎 — 从工作流执行记录中提取用户纠正、效率优化、质量模式、项目约定，沉淀到 orch-spec/ 供下次需求增强。
+  知识复利引擎 + 自主进化系统 — 从工作流执行记录中提取用户纠正、效率优化、质量模式、项目约定，沉淀到 orch-spec/ 供下次需求增强。
+  通过偏差分析自动生成优化假设，经多轮验证形成自进化闭环。
 
   输入：.workflow-eval.json
-  输出：orch-spec/context/learnings.md + orch-spec/user-preferences/preferences.json
+  输出：orch-spec/context/learnings.md + orch-spec/user-preferences/preferences.json + optimization rules
 ---
 
 # continuous-learning — 知识复利引擎
@@ -54,6 +55,20 @@ description: |
 | design ADR 决策记录 | 架构决策 → 下次复用 | `context/learnings.md → ## 架构决策` |
 | exception 阶段异常模式 | 项目异常规范 → 下次直接使用 | `preferences.json → exception_patterns` |
 | project-context.md 技术栈 | 技术栈快照 → 跳过重复探索 | `preferences.json → tech_stack` |
+
+### 5. 自主进化规则（自动发现，无需预设分类）
+
+**不预设优化方向**。任何可数值化的偏差都是优化候选。
+
+| 发现方式 | 判断逻辑 | 沉淀位置 |
+|---------|---------|---------|
+| Token 消耗偏离基线 > 20% | tokens_total 偏离同类型均值 → 生成优化假设 | `preferences.json → optimization.rules[]` |
+| 阶段耗时偏离基线 > 20% | duration_sec 偏离基线 → 生成优化假设 | 同上 |
+| 用户干预事件（不限阶段） | user_intervention 频繁 → 生成纠正假设 | 同上 |
+| Hard-gate 触发频次偏离 | hard_gate_triggers 偏离 → 生成质量假设 | 同上 |
+| Agent retry 偏离 | retries 偏离 → 生成上下文假设 | 同上 |
+
+**所有偏差统一按 `deviation > 20%` 阈值触发，不存在预设的"重要偏差"清单。** |
 
 ## 工作流程
 
@@ -124,17 +139,41 @@ json.dump(state, open('orch-spec/{req_id}/.workflow-state.json', 'w'), indent=2)
 "
 ```
 
+### 步骤5: 自主进化规则提取
+
+> 详见 [`references/optimization-rules.md`](references/optimization-rules.md)
+
+从 `.workflow-eval.json` 的 `diagnosis.deviation` 中自动发现优化机会：
+
+```bash
+Agent(subagent_type="orch:knowledge-curator",
+  prompt="自主进化规则提取：
+    从 orch-spec/{req_id}/.workflow-eval.json 的 diagnosis.deviation 中：
+    1. 遍历所有 deviation > 20% 的指标
+    2. 对每个偏差，检查是否已有匹配的优化规则（同 observation.source）
+    3. 有匹配 → 更新 evolution 字段（applied_count/effective_count）
+    4. 无匹配 → 创建新优化假设（initial confidence=30, status=trial）
+    5. 读取 events[] 中 type=user_intervention → 提取纠正模式
+    6. events[].type=user_intervention 不受 deviation 阈值限制，全部分析
+    7. 对连续 3 轮 ineffective 的规则标记 status=archived
+    
+    输出写入 orch-spec/user-preferences/preferences.json → optimization.rules[]
+    规则格式详见 skills/continuous-learning/references/optimization-rules.md",
+  run_in_background=false)
+```
+
 ## 输出
 
 - `orch-spec/context/learnings.md` — 更新的知识沉淀（用户纠正/效率/质量/项目约定）
-- `orch-spec/user-preferences/preferences.json` — 更新的 always_check[] + rejected_approaches[] + bottlenecks[] + task_sizing + concurrency
-- `.workflow-eval.json`（更新）— learnings[] 字段已写入
+- `orch-spec/user-preferences/preferences.json` — 更新的 always_check[] + rejected_approaches[] + bottlenecks[] + task_sizing + concurrency + **optimization.rules[]**
+- `.workflow-eval.json`（更新）— learnings[] 字段已写入, applied_optimizations[] 已写入
 - `.workflow-state.json`（更新）— status: completed
 
 ## 关键约束
 
 <GATE>evaluation 未完成时禁止进入 continuous-learning</GATE>
 <GATE>learnings[] 为空时不允许标记 status=completed</GATE>
+<GATE>optimization.rules[] 中 trial 状态的规则（confidence<30）禁止注入工作流，仅在下一轮生效</GATE>
 
-✅ 必须：读取 eval.json diagnosis | 提取 learnings | 更新 preferences.json
-❌ 禁止：跳过沉淀直接 completed | learnings[] 为空还标记完成
+✅ 必须：读取 eval.json diagnosis | 提取 learnings | 更新 preferences.json | 提取优化规则
+❌ 禁止：跳过沉淀直接 completed | learnings[] 为空还标记完成 | trial 规则注入工作流

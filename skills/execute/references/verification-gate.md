@@ -39,6 +39,37 @@ IDENTIFY → RUN → READ → VERIFY → CLAIM
 ### 5. CLAIM（声明）
 **只有在 VERIFY 通过后**才能声明完成
 
+## Token 效率验证策略
+
+当验证命令通过时，采用摘要模式读取输出。完整输出仅在验证失败时读取。
+
+### 摘要读取示例
+
+```bash
+# 测试 — 只读 summary
+npm test 2>&1 | tail -5
+# 期望看到: "Tests: 5 passed, 5 total" 或 exit 0
+
+# 类型检查 — 只读错误计数
+tsc --noEmit 2>&1 | tail -3
+# 期望看到: "Found 0 errors" 或 exit 0
+
+# 覆盖率 — 只读 summary 表
+npm test -- --coverage 2>&1 | grep -A10 "Coverage summary"
+# 期望看到: 行/分支/函数/语句覆盖率 ≥ 85%
+
+# Lint — 只读问题计数
+eslint src/ 2>&1 | tail -3
+# 期望看到: "0 errors, 0 warnings" 或 exit 0
+```
+
+### 摘要读取判定
+
+- exit code = 0 **且** summary 行显示 0 errors/failures → 通过，无需读全文
+- exit code ≠ 0 **或** summary 行无法确认 → 读取完整输出定位问题
+
+**此策略不影响验证铁律**：仍然运行命令 + 读取输出 + 展示证据。仅改变读取范围。
+
 ## 验证对照表
 
 | 声称 | 必须提供 | 不足的证据 |

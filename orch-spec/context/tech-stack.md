@@ -27,4 +27,3 @@ Claude Code 插件（企业级 SDD+TDD 工作流编排）
 ## 依赖
 - Node.js >= 18（hooks 和 scripts）
 - sqlite3 CLI（cost 追踪查询）
-- codegraph（可选，代码图谱加速）

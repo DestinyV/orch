@@ -45,24 +45,6 @@ Agent(
 )
 ```
 
-### Step 2.5: CodeGraph MCP 辅助追踪（如已安装）
-
-CodeGraph MCP 工具可用时，优先使用以下工具代替手动 grep/Read：
-
-```bash
-# 追踪调用链
-codegraph_trace "疑似异常方法" "可能根因方法"
-
-# 查找调用者
-codegraph_callers "失败方法名" --depth 2
-
-# 了解模块上下文
-codegraph_context "异常相关模块的接口和依赖"
-
-# 批量搜索符号
-codegraph_search "关键字或模式名"
-```
-
 ### Step 3: 修复建议
 
 基于收敛的假设，生成最小的修复方案。

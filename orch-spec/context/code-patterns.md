@@ -11,7 +11,7 @@
 - 优先 `model: inherit`，无思考参数冲突风险
 
 ## 上下文模式
-- 三层检索: 注册中心匹配 → CodeGraph 图谱补全 → 全量探索兜底
+- 五步检索: project-context → 历史 spec → req-context → AI 知识库/项目 wiki → 项目探索
 - 需求级上下文: req-context/ 在步骤1 生成，各阶段逐步填充
 - 项目级上下文: archive 步骤6 同步沉淀
 

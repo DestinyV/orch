@@ -42,8 +42,14 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `${CLAUDE_PLUGIN_ROOT
 2. project-mode：直接 AskUserQuestion 让用户从 [frontend / backend / fullstack / mobile] 中选择，**禁止通过分析项目或需求特征推断**
 3. AskUserQuestion 确认：数据库类型/快速或标准/设计图偏好。fullstack 时追加确认：后端仓库路径/前端仓库路径/API base URL → 写入 `orch-spec/{req_id}/req-context/cross-repo.md`
 4. 加载知识增强 → `preferences.json` → `always_check[]` 注入 spec
-5. 初始化 `.workflow-state.json` + `.workflow-eval.json`
-6. **上下文继承基线生成**（避免重复探索）：读取 `orch-spec/context/.exploration-state.json`，执行以下判断：
+5. **加载自主优化规则** → `preferences.json` → `optimization.rules[]`（仅加载 `active` 且 `confidence ≥ 30` 的规则）：
+   - 按 `injection_point` 分组（`workflow_step0` / `spec_prompt` / `design_prompt` / `execute_prompt` / `review_prompt`）
+   - `workflow_step0` 规则 → 调整批次调度/并行度/阶段选择
+   - 其他 injection_point → 暂存到 `.workflow-state.json` → `injected_optimizations[]`，供对应步骤注入
+   - 所有注入规则的 ID 写入 `.workflow-eval.json` → `applied_optimizations[]`
+   - <GATE>trial 状态规则（confidence < 30）禁止注入</GATE>
+6. 初始化 `.workflow-state.json` + `.workflow-eval.json`
+7. **上下文继承基线生成**（避免重复探索）：读取 `orch-spec/context/.exploration-state.json`，执行以下判断：
    - `.exploration-state.json` 不存在 → **首次运行**，步骤1 进入全量探索模式
    - `last_explored_sha` == `git rev-parse HEAD` → **项目代码未变更**，进入增量探索模式（只匹配关键词继承 context，跳过全部代码扫描）
    - `last_explored_sha` ≠ HEAD → **代码有变更**，进入增量探索模式（继承 context + 只扫描 `git diff --name-only` 的变更文件）
@@ -52,8 +58,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `${CLAUDE_PLUGIN_ROOT
      - 匹配 `requirements.yaml` 中的历史需求 → 确定可继承的相似需求 req-context
      - 生成 `orch-spec/context/.baseline-context.json`（继承基线，供 code-explorer 增量探索使用）
      - 对 code-explorer 的 prompt 注入 `baseline_context: {基线内容}`
-7. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`
-7. **CodeGraph 可选加速**：检测 `codegraph` 命令是否存在，不存在则自动安装（`npm i -g @colbymchenry/codegraph 2>/dev/null || npm i -g @colbymchenry/codegraph`）。已安装则：`cd $CLAUDE_PLUGIN_ROOT && codegraph init -i 2>/dev/null && echo '{"mcpServers":{"codegraph":{"command":"codegraph","args":["serve","--mcp"],"env":{}}}}' > .mcp.json && nohup codegraph serve --mcp > /dev/null 2>&1 &`。成功后各 Agent 可使用 `codegraph_search/explore/context/trace/callers/callees/impact/node` MCP 工具代替 grep/Read 进行代码检索。安装失败或不存在时自然回退到 grep/Read。
+8. 检测需求模糊度 → 模糊 > 0.2 时派遣 `clarify`；否则级联 `spec`
 
 ### 步骤0.5: 苏格拉底澄清
 

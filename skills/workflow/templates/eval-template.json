@@ -236,6 +236,7 @@
     "user_interactions_total": 0
   },
   "events": [],
+  "applied_optimizations": [],
   "diagnosis": {
     "bottlenecks": [],
     "warnings": [],

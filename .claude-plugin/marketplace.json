@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "orch",
-      "version": "0.9.6",
+      "version": "0.9.7",
       "source": "./",
       "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整13步工作流。包含22个专业Skills（spec、test-design、design、contract、task、execute、exception、test、archive、workflow、scripts、continuous-learning、context-budget、depth、compact、cost、ralph-loop、clarify、debug、req-change、using-orch、spec-migrate），24个Agents，11个Commands，支持前端、后端、数据库、微服务等全类型项目。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。",
       "category": "development",

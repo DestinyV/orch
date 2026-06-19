@@ -14,7 +14,7 @@ color: blue
 
 | 模式 | 触发条件 | 策略 |
 |------|---------|------|
-| **完整探索** | context/ 不存在 / 首次运行 | 三层检索 → 全量扫描 → 生成 8 个 context 文件 + project-map.json |
+| **完整探索** | context/ 不存在 / 首次运行 | 五步按序检索（project-context→历史spec→req-context→AI知识库/项目wiki→项目探索）→ 全量扫描 → 生成 8 个 context 文件 + project-map.json |
 | **增量探索** | baseline_context 已提供（由 workflow 步骤0 传入） | 从 baseline 加载已知内容 + 只扫描 `git diff` 变更文件 + 生成 project-map.json |
 
 **核心产出**：`req-context/project-map.json`（结构化项目地图，供 design/execute/test 直接使用，无需再自行探索）
@@ -107,17 +107,6 @@ color: blue
 无论何种模式，最后输出一份完整的 project-map.json：
 - 全量模式：从全量扫描结果生成
 - 增量模式：从 baseline_context + 新增扫描结果合并生成
-
-## CodeGraph MCP 工具（优先于文件扫描）
-
-项目已安装 CodeGraph 时，以下 MCP 工具优先于 Grep/Glob/Read：
-
-| 阶段 | CodeGraph 工具 | 替代操作 |
-|------|---------------|---------|
-| 架构理解 | `codegraph_explore` | grep 目录 + Read 文件 |
-| 模式提取 | `codegraph_search` | glob + grep 遍历 |
-| 依赖分析 | `codegraph_context` | 手动追踪引用 |
-| 路径映射 | `codegraph_node` | Read 多文件 |
 
 ## 输出约定
 

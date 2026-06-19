@@ -26,6 +26,19 @@ color: red
 
 **说明**：此方式的 token 消耗只有自行读取 req-context 文件的 1/5-1/3，因为主代理只注入 Task-specific 的上下文子集，而非全量 project-context。
 
+### 上下文信任原则
+
+<GATE>主代理已注入的上下文（Task 规范/project-map 子图/设计决策/测试模板/异常模式缓存）禁止用 Read 工具重复读取。</GATE>
+
+- 已注入上下文在 prompt 中 → 直接引用，不自行 Read
+- 仅在注入信息不足以完成当前步骤时，才补充读取
+- 补充读取前先判断：是否可以从已注入上下文推导？
+
+**违反此原则的典型行为**：
+- ❌ 启动后立即 `Read(orch-spec/{req}/tasks/tasks.md)`（已在 prompt 中）
+- ❌ 启动后立即 `Read(orch-spec/{req}/design/design.md)`（已注入 relevant_design）
+- ✅ 需要某个未注入的细节时才读取对应文件
+
 ## 调用方式
 
 通过 `Agent(subagent_type="orch:executor", prompt="...", run_in_background=true)` 派遣。
@@ -41,35 +54,31 @@ Agent(
 
 ### 0. 提交规范
 
-代码实现完成后，git commit 必须附带 Git Trailers 记录决策上下文：
-
-```
-<type>(<scope>): <description>
-
-Constraint: <约束条件>
-Rejected: <方案> | <原因>（如有被拒绝方案）
-Spec: <scenario-id>
-```
-
-trailer 类型详见 `rules/common/git-workflow.md`。
+代码实现完成后，git commit 必须附带 Git Trailers（格式详见 `rules/common/git-workflow.md`）。
+核心 trailer：Constraint / Rejected / Spec。
 
 ### 0.5 工作环境准备
 
 <GATE>禁止在主上下文直接编码。必须通过 worktree 或至少子代理隔离执行。</GATE>
 
-如果 worktree 创建失败，按序尝试修复：
-1. `rm -rf .claude/worktrees/{task-id} && git worktree add .claude/worktrees/{task-id} {branch}`
-2. `git worktree prune && rm -rf .claude/worktrees/{task-id} && git worktree add -b {task-id} .claude/worktrees/{task-id} HEAD`
-3. 降级：创建隔离目录 `mkdir -p .claude/sandbox/{task-id}` 代替 worktree
-4. 最终降级：同目录但保持子代理隔离（不修改主上下文文件）
+worktree 创建按标准协议执行（详见 `skills/execute/references/git-worktrees-guide.md`），降级优先级：
+1. 标准 worktree 创建
+2. 清理冲突后重试
+3. 从 HEAD 新分支创建
+4. prune 后重试
+5. 降级到隔离目录（禁止降级到主上下文串行）
 
-不允许直接在主上下文编辑文件。
+快速参考：
+```bash
+git worktree add .claude/worktrees/{task-id}-{name} HEAD
+```
 
 ### 1. 任务理解与上下文建立
 
-阅读 tasks.md 中当前 Task 的目标/交付物/验收标准 | 理解 design 的设计规范和接口定义 | 参考 code-architect 的架构蓝图 | 理解集成点 | 审查项目约定（CLAUDE.md）。
+从 prompt 中已注入的上下文（task-spec / relevant_design / test_templates）提取当前 Task 的目标、交付物、验收标准。
+仅当注入信息不足以理解集成点或项目约定时，才补充 Read 对应文件。
 
-**TDD 前置依赖**（由 test-designer 提供）：
+**TDD 前置依赖**（由 test-designer 提供，已注入 prompt 或按需 Read）：
 - `test-spec.md`：完整的 test case 列表、期望行为、Mock 策略
 - `fixtures.json`：有效输入、边界值、特殊值、API/DB Mock 定义
 - `test-*.template`：测试骨架代码，可直接运行
@@ -80,6 +89,21 @@ trailer 类型详见 `rules/common/git-workflow.md`。
 - **无 test-spec.md**（quick 模式）：使用传统流程（设计→实现→测试），仍需编写必要测试
 
 <GATE>standard 模式下，必须先写测试并确认失败（RED），才能写实现代码（GREEN）。跳过 RED 阶段直接写实现 → 视为违反协议，该 Task 失败</GATE>
+
+### 1.8 Task 复杂度自评
+
+在进入实现规划前，快速自评 Task 复杂度（不消耗额外 Read）：
+
+| 复杂度 | 特征 | TDD 深度 |
+|--------|------|---------|
+| **trivial** | 变更 < 30 行，纯函数/单文件/无外部依赖 | RED+GREEN 合并 → REVIEW（跳过 REFACTOR） |
+| **simple** | 变更 30-100 行，单模块内 | 标准四阶段 |
+| **medium** | 变更 100-300 行，跨模块 | 标准四阶段 + 完整 REVIEW |
+| **complex** | 变更 > 300 行，多模块/架构变更 | 标准四阶段 + 逐 test case REVIEW |
+
+自评结果写入 TDD 进度日志首行。trivial Task 的 REFACTOR 阶段标记为 N/A。
+
+<GATE>trivial 判定错误导致质量问题 → 下次同类型 Task 升级为 simple。</GATE>
 
 ### 2. 实现规划
 
@@ -122,6 +146,20 @@ TDD 流程额外：确定 test case 处理顺序 | 规划每个 RED/GREEN/REFACT
 编译/语法检查 | 导入验证 | 与现有系统交互测试 | 类型检查（TS strict） | 性能验证。
 
 **验证铁律**：未运行验证命令→不能声称通过。必须实际运行并展示证据（exit 0、0 failures）。
+
+#### 4.1 命令输出读取策略（Token 效率）
+
+运行验证命令时，采用摘要优先策略：
+
+| 场景 | 策略 |
+|------|------|
+| 测试通过 | 只读 exit code + 最后 3 行（`| tail -3`） |
+| 测试失败 | 读取完整输出定位失败原因 |
+| Lint/类型检查通过 | 只读 exit code + 错误计数行 |
+| Lint/类型检查失败 | 读取完整输出定位问题 |
+| 覆盖率报告 | 只读 summary 段（`| grep -A5 "Coverage"` 或等效） |
+
+**验证铁律仍然生效**：exit code 和关键输出必须展示为证据。摘要模式只省略通过场景的冗余输出。
 
 ### 5. 实现总结
 

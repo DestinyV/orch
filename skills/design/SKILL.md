@@ -49,8 +49,6 @@ description: |
 **架构决策**：写入 `orch-spec/{req_id}/req-context/decisions.md`，设计中识别的关键文件追加到 `key-files.md`。
 
 **项目上下文提取**：若以上均不存在，使用 `Skill("orch:scripts")` 调用 `extract-project-context.py` 提取。
-**CodeGraph MCP 补充**：CodeGraph 可用时使用 `codegraph_explore` / `codegraph_trace` 获取架构概览和调用链路。
-
 **补充分析**：基于 spec 文档理解需求，派遣 **code-architect** Agent 进行架构蓝图分析。架构分析中的代码库扫描使用 `Skill("orch:scripts")` 工具优先策略（Grep搜索→Python3批量过滤→兜底Read）。
 
 ```bash
