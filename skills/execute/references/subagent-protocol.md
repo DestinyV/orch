@@ -21,6 +21,8 @@
 artifacts: [file paths]     # 本 Task 产生的文件清单
 provides: [api names]        # 提供给下游的 API/接口
 context: { key: value }      # 传递给下游的上下文
+failed_phase: RED|GREEN|REFACTOR|REVIEW  # 失败阶段（用于增量恢复 P1.3）
+current_artifacts: {...}     # 当前产物快照（增量恢复时传递已完成部分）
 
 # DONE_WITH_CONCERNS 额外
 concerns: [description]      # 遗留问题
@@ -31,17 +33,37 @@ blocked_by: [reason]         # 阻塞原因
 suggested_action: str        # 建议处理方式
 ```
 
-这些字段向后兼容 — 原有 4 种状态不变，附加字段可选。
+## Standard SubagentContext（P4.1 标准化）
 
-## 两阶段审查严格排序
+所有 Agent 派遣使用以下标准化上下文 JSON 格式（由主代理注入 prompt，非自行读取文件）：
 
+```json
+{
+  "task": {
+    "id": "Task-3",
+    "description": "实现 OrderService.placeOrder()",
+    "provides": "OrderService",
+    "consumes": ["InventoryService"],
+    "acceptance_criteria": ["库存不足时返回 OrderError"],
+    "covers": {"scenario": "scenarios/order.md", "scene_id": "INSUFFICIENT_STOCK"}
+  },
+  "context": {
+    "relevant_design": "OrderService 调用 InventoryService.check()",
+    "relevant_spec": "WHEN 用户下单 AND 库存不足 THEN 返回 OrderError",
+    "test_templates": ["tests/test-order.template"],
+    "previous_batch_results": ["Task-1: API contract defined"]
+  },
+  "artifacts": {
+    "source_files": [],
+    "test_files": [],
+    "commit_sha": null
+  }
+}
 ```
-规范审查 → 质量审查
-```
 
-- **必须先执行规范审查**，确认代码符合 design.md 架构规范
-- **规范审查通过后**才能执行质量审查
-- 规范审查失败不进入质量审查，直接进入修复循环
+## 两阶段审查合并
+
+> code-reviewer 已重构为单次综合性审查（规范合规 + 代码质量 + TDD 完整性一并执行）。不再需要两次串行派遣。
 
 ## 模型选择策略
 

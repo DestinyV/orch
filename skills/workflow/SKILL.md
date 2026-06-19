@@ -119,7 +119,7 @@ done
 | —         | 4       | `tasker`                               | 批次2+3.5 完成后串行                                                           |
 | 批次3     | 5       | `executor` ×N + `code-reviewer`        | 批次4 完成后，同批次内无依赖 Task 并行启动                                      |
 | —         | 5.5     | `exception`                            | 步骤5 子过程自动                                                               |
-| —         | 6       | `tester` ×3 + `test-verifier`          | **三路并行**：集成/E2E/性能同时跑，全部完成后 test-verifier 串行验证           |
+| —         | 6       | `tester` ×3 + `test-verifier`          | **四路并行**（P4.4 优化）：集成/E2E/性能三路 tester 并行，**每个完成后立即启动对应 test-verifier**（不等待全部完成，提前发现失败） |
 | —         | 7       | `archiver`                             | 步骤6 完成后串行                                                               |
 | —         | 8       | evaluation                             | **双路并行**：`context-budget` 估算 + `cost` DB 实记同时跑，后合并诊断对比     |
 | —         | 9       | `knowledge-curator`                    | 步骤8 完成后串行                                                               |
@@ -151,6 +151,30 @@ done
 4. 最后 failed → AskUserQuestion（重试/跳过/查看错误）
 5. 步骤5 中断：检测 `execute.status=in_progress` → 列出已完成 Task，从未完成恢复
 6. 上下文过大时，中断恢复前先调用 `Skill("orch:context-budget")` 审计 → `Skill("orch:compact")` 建议 compaction 后再继续
+
+## Checkpoint 更新协议（P4.2）
+
+每 batch 完成后必须更新 `.workflow-state.json` 的 progress 字段：
+
+```yaml
+# batch 完成后的更新
+execute:
+  status: in_progress
+  current_batch: 2
+  progress:
+    completed: 3
+    total: 5
+    checkpoint_reason: "batch-2-completed"  # 标识 checkpoint 原因
+    verification_hash: "a1b2c3d"            # 已完成 Task 产物的 git hash
+  batches:
+    - batch: 1
+      tasks: ["Task-1", "Task-2"]
+      status: done
+      completed_at: "2026-06-19T10:30:00Z"
+    - batch: 2
+      tasks: ["Task-3", "Task-4", "Task-5"]
+      status: in_progress
+```
 
 ## 快速模式
 

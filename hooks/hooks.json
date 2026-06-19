@@ -22,7 +22,7 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/workflow-gate.js\"",
-            "description": "HARD-GATE validation: stage sequence, output files, state consistency (fail-open)",
+            "description": "HARD-GATE validation: stage sequence, output files, state consistency. Standard mode: fail-open (warn). Goal mode: fail-closed on @critical paths.",
             "timeout": 5
           }
         ],
