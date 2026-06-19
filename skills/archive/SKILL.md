@@ -186,6 +186,38 @@ print(f'[archive] Updated exploration state (SHA: {sha[:8]})')
 - `context/requirements.yaml` — 追加了本需求条目
 - `.exploration-state.json` — `last_explored_sha` 更新
 
+### 步骤7（E1）：更新跨工作流基线
+
+将本需求执行数据合并到 `.workflow-baseline.json`（滚动窗口最近 5 次）：
+
+```bash
+python3 -c "
+import json, os
+req = '{requirement_desc_abstract}'
+baseline_path = 'orch-spec/context/.workflow-baseline.json'
+eval_path = f'orch-spec/{req}/.workflow-eval.json'
+if os.path.exists(baseline_path) and os.path.exists(eval_path):
+    baseline = json.load(open(baseline_path))
+    eval_data = json.load(open(eval_path))
+    for stage_record in eval_data.get('stages', []):
+        stage_name = stage_record.get('stage', 'unknown')
+        if stage_name in baseline.get('stages', {}):
+            entry = baseline['stages'][stage_name]
+            entry['tokens'].append(stage_record.get('tokens_input', 0) + stage_record.get('tokens_output', 0))
+            entry['duration_sec'].append(stage_record.get('completed_at', 0))
+            entry['hard_gates'].append(len(stage_record.get('hard_gates', [])))
+            # Keep rolling window
+            for key in ['tokens', 'duration_sec', 'hard_gates', 'retries']:
+                if len(entry[key]) > 5:
+                    entry[key] = entry[key][-5:]
+            entry['avg_tokens'] = round(sum(entry['tokens']) / len(entry['tokens'])) if entry['tokens'] else 0
+            entry['avg_duration'] = round(sum(entry['duration_sec']) / len(entry['duration_sec'])) if entry['duration_sec'] else 0
+    baseline['project_level']['total_workflows'] += 1
+    json.dump(baseline, open(baseline_path, 'w'), indent=2)
+    print(f'[archive] Updated baseline: {baseline[\"project_level\"][\"total_workflows\"]} workflows recorded')
+"
+```
+
 ### 可选清理
 
 用户多层确认后，备份并删除原需求目录。

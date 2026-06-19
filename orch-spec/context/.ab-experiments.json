@@ -1,0 +1,20 @@
+{
+  "_description": "A/B 实验跟踪。knowledge-curator 创建新规则时自动生成实验，对比注入/不注入的效果偏差。",
+  "_meta": {
+    "version": 1,
+    "updated_at": ""
+  },
+  "experiments": [
+    {
+      "id": "exp-001",
+      "rule_id": "opt-001",
+      "created_at": "",
+      "status": "running|completed|aborted",
+      "control_batches": [],
+      "treatment_batches": [],
+      "control_deviation_avg": 0,
+      "treatment_deviation_avg": 0,
+      "conclusion": ""
+    }
+  ]
+}

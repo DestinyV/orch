@@ -122,7 +122,7 @@ done
 | **批次2** | **2-3** | **`test-designer` + `code-architect`** | **两 Agent 同时 `run_in_background=true`，互不阻塞**                           |
 | —         | 3.5     | `contract-creator`                     | 批次2 全部完成后串行，仅 fullstack                                             |
 | —         | 4       | `tasker`                               | 批次2+3.5 完成后串行                                                           |
-| 批次3     | 5       | `executor` ×N + `code-reviewer`        | 批次4 完成后，同批次内无依赖 Task 并行启动                                      |
+| 批次3     | 5       | `executor` ×N + `code-reviewer`        | 批次4 完成后，同批次内无依赖 Task 并行启动。**每 batch 完成后执行微进化检查点**（`references/intra-workflow-adaptation.md`） |
 | —         | 5.5     | `exception`                            | 步骤5 子过程自动                                                               |
 | —         | 6       | `tester` ×3 + `test-verifier`          | **四路并行**（P4.4 优化）：集成/E2E/性能三路 tester 并行，**每个完成后立即启动对应 test-verifier**（不等待全部完成，提前发现失败） |
 | —         | 7       | `archiver`                             | 步骤6 完成后串行                                                               |

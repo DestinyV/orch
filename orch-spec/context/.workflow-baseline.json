@@ -1,0 +1,21 @@
+{
+  "_description": "跨工作流执行基线数据。archive 步骤每次工作流完成后更新，供 continuous-learning 计算 deviation 和 knowledge-curator 生成进化规则。",
+  "_meta": {
+    "version": 1,
+    "rolling_window": 5,
+    "updated_at": ""
+  },
+  "stages": {
+    "spec": {"tokens": [], "duration_sec": [], "hard_gates": [], "retries": [], "avg_tokens": 0, "avg_duration": 0},
+    "design": {"tokens": [], "duration_sec": [], "hard_gates": [], "retries": [], "avg_tokens": 0, "avg_duration": 0},
+    "execute": {"tokens": [], "duration_sec": [], "hard_gates": [], "retries": [], "avg_tokens": 0, "avg_duration": 0},
+    "test": {"tokens": [], "duration_sec": [], "hard_gates": [], "retries": [], "avg_tokens": 0, "avg_duration": 0},
+    "archive": {"tokens": [], "duration_sec": [], "hard_gates": [], "retries": [], "avg_tokens": 0, "avg_duration": 0}
+  },
+  "project_level": {
+    "total_workflows": 0,
+    "avg_total_tokens": 0,
+    "avg_total_duration": 0,
+    "avg_user_interventions_per_workflow": 0
+  }
+}

@@ -108,7 +108,26 @@ Step 9:
   - 连续 3 轮 ineffective → status = archived, 停止使用
 ```
 
-### 置信度机制
+#### 规则冲突仲裁（E5）
+
+同一 `injection_point` 存在多条 active 规则时：
+
+1. 按 `confidence` 降序排列
+2. 只注入 `confidence` 最高的一条，其余标记 `suppressed`
+3. **A/B 对决**：当多条 active 规则竞争同一 injection_point 时，交替注入（第N轮用规则A，第N+1轮用规则B），比较 deviation 变化
+4. 连续 2 轮效果更优者保留，劣者 `status = archived`
+
+```json
+// 冲突仲裁标记
+{
+  "id": "opt-005",
+  "status": "suppressed",
+  "suppressed_by": "opt-004",
+  "suppressed_reason": "lower_confidence: 45 vs 60"
+}
+```
+
+## 置信度机制
 
 | 事件 | confidence 变化 |
 |------|----------------|

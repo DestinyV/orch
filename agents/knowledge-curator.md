@@ -49,6 +49,7 @@ color: purple
 - 遍历所有 `deviation > 20%` 的指标：
   - 匹配现有 `optimization.rules[]` → 命中则更新 `evolution` 字段
   - 未命中则创建新规则（`confidence=30, status=trial`）
+- 读取 `.workflow-baseline.json` 对比同 source 的 deviation 变化（E3）
 - 读取 `events[].type=user_intervention`（不受阈值限制）：
   - 提取纠正模式 → 生成用户干预优化假设
 - 评估已生效规则的效果：
@@ -56,6 +57,7 @@ color: purple
   - deviation 不变 → `confidence -= 10`
   - deviation 扩大 → `confidence -= 20`
   - 连续 3 轮 ineffective → `status = archived`
+- **A/B 实验创建**（E7）：新规则创建时，50% 概率注入（treatment）vs 50% 不注入（control），记录到 `.ab-experiments.json`
 - 写入 `preferences.json → optimization.rules[]`
 - 规则格式详见 `skills/continuous-learning/references/optimization-rules.md`
 

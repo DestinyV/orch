@@ -53,7 +53,7 @@ function main() {
     timestamp:   new Date().toISOString(),
     session_id:  sessionId,
     project:     getProjectFromCwd(),
-    stage:       '',
+    stage:       getCurrentStage(),
     model:       model,
     input_tokens:  inputTokens,
     output_tokens: outputTokens,

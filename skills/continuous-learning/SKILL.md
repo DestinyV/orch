@@ -143,7 +143,80 @@ json.dump(state, open('orch-spec/{req_id}/.workflow-state.json', 'w'), indent=2)
 
 > 详见 [`references/optimization-rules.md`](references/optimization-rules.md)
 
-从 `.workflow-eval.json` 的 `diagnosis.deviation` 中自动发现优化机会：
+#### 步骤5a: 对比基线计算 deviation
+
+```bash
+# 将本轮执行数据 vs .workflow-baseline.json 对比
+python3 -c "
+import json, os
+req = '{requirement_desc_abstract}'
+eval_path = f'orch-spec/{req}/.workflow-eval.json'
+baseline_path = 'orch-spec/context/.workflow-baseline.json'
+if os.path.exists(eval_path) and os.path.exists(baseline_path):
+    eval_data = json.load(open(eval_path))
+    baseline = json.load(open(baseline_path))
+    deviations = []
+    for stage_record in eval_data.get('stages', []):
+        sn = stage_record.get('stage', '')
+        bl = baseline.get('stages', {}).get(sn, {})
+        actual_tokens = stage_record.get('tokens_input', 0) + stage_record.get('tokens_output', 0)
+        actual_duration = stage_record.get('completed_at', 0)
+        if bl.get('avg_tokens', 0) > 0:
+            t_dev = round((actual_tokens - bl['avg_tokens']) / bl['avg_tokens'] * 100, 1)
+            d_dev = round((actual_duration - bl.get('avg_duration', 0)) / max(bl.get('avg_duration', 1), 1) * 100, 1)
+            if abs(t_dev) > 20:
+                deviations.append({'source': f'stage_token_{sn}', 'metric': 'tokens', 'deviation': t_dev, 'baseline': bl['avg_tokens'], 'actual': actual_tokens})
+            if abs(d_dev) > 20:
+                deviations.append({'source': f'stage_duration_{sn}', 'metric': 'duration', 'deviation': d_dev, 'baseline': bl.get('avg_duration', 0), 'actual': actual_duration})
+    eval_data['diagnosis']['deviation'] = {'items': deviations, 'baseline_updated': baseline.get('project_level', {}).get('total_workflows', 0)}
+    json.dump(eval_data, open(eval_path, 'w'), indent=2)
+    print(f'[evaluate] Found {len(deviations)} deviations > 20%')
+"
+```
+
+#### 步骤5b: 效果回测（E3）
+
+对比注入的优化规则效果：本轮 deviation vs 上一轮同 source deviation：
+
+```bash
+python3 -c "
+import json, os
+req = '{requirement_desc_abstract}'
+eval_path = f'orch-spec/{req}/.workflow-eval.json'
+prefs_path = 'orch-spec/user-preferences/preferences.json'
+if os.path.exists(eval_path) and os.path.exists(prefs_path):
+    eval_data = json.load(open(eval_path))
+    prefs = json.load(open(prefs_path))
+    rules = prefs.get('optimization', {}).get('rules', [])
+    applied = eval_data.get('applied_optimizations', [])
+    current_deviations = {d['source']: d['deviation'] for d in eval_data.get('diagnosis', {}).get('deviation', {}).get('items', [])}
+    for rule in rules:
+        if rule.get('id') in applied:
+            source = rule.get('observation', {}).get('source', '')
+            current_dev = current_deviations.get(source, 0)
+            prev_dev = rule.get('evolution', {}).get('last_effectiveness', 0)
+            if prev_dev != 0 and current_dev != 0:
+                diff = abs(current_dev) - abs(prev_dev)
+                if diff < -20:  # improvement
+                    rule['evolution']['confidence'] = rule['evolution'].get('confidence', 30) + 15
+                    rule['evolution']['effective_count'] = rule['evolution'].get('effective_count', 0) + 1
+                elif diff < 5:   # stable
+                    rule['evolution']['confidence'] = rule['evolution'].get('confidence', 30) - 10
+                else:            # worse
+                    rule['evolution']['confidence'] = rule['evolution'].get('confidence', 30) - 20
+                    rule['evolution']['ineffective_count'] = rule['evolution'].get('ineffective_count', 0) + 1
+                rule['evolution']['last_effectiveness'] = current_dev
+            # Archive if 3 consecutive ineffective
+            if rule['evolution'].get('ineffective_count', 0) >= 3:
+                rule['status'] = 'archived'
+    json.dump(prefs, open(prefs_path, 'w'), indent=2)
+    print(f'[evaluate] Updated confidence for {len(applied)} applied rules')
+"
+```
+
+#### 步骤5c: 规则提取
+
+从 `.workflow-eval.json` 的 deviations 中自动发现优化机会：
 
 ```bash
 Agent(subagent_type="orch:knowledge-curator",
