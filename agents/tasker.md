@@ -61,7 +61,9 @@ fullstack+接口契约时验证依赖链：
 
 ### 步骤3: 定义任务详情
 
-每个 Task 包含：目标 | 交付物(文件路径) | 依赖（Task ID） | provides/consumes | 验收标准 | 估时 | 详细说明
+每个 Task 包含：目标 | 交付物(文件路径) | 依赖（Task ID） | provides/consumes | 验收标准 | **covers（引用原始 spec 场景 ID）** | 估时 | 详细说明
+
+**covers 字段要求**：每个验收标准必须引用其来源的 spec 场景 ID，格式：`covers: scenarios/order.md#INSUFFICIENT_STOCK`。这是需求可追溯性的关键——executor 实现前直接读原始 spec 文本，避免 task 二次翻译丢失信息。
 
 ### 步骤4: 测试用例映射
 

@@ -149,7 +149,7 @@ description: |
 
 按 8 个维度系统拆解为 BDD 场景，确保**覆盖全面**。
 
-<HARD-GATE>每个场景至少包含 1 个异常 Case + 场景间依赖已声明且无环（DAG）。</HARD-GATE>
+<HARD-GATE>每个场景至少包含 2 个异常 Case（原为 1 个）。每个异常 Case 必须有精确的错误码/异常类型（如 `OrderError.INSUFFICIENT_STOCK`），不能使用"返回错误"等模糊描述。异常 Case 的数据模型必须可序列化为 JSON（确保 test fixtures 可自动生成）。场景间依赖已声明且无环（DAG）。</HARD-GATE>
 
 | 维度 | 拆解方法 | 最低覆盖 |
 |------|---------|---------|
