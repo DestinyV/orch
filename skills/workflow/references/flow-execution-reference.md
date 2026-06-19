@@ -1,5 +1,8 @@
 # 流程执行参考（Source of Truth）
 
+<!-- SOURCE OF TRUTH: 本文件是阶段契约的唯一权威定义。SKILL.md、start-dev.md、agent-dispatch-code.md 的步骤表为摘要引用，不再各自重述完整契约。修改阶段定义必须在本文件进行，然后同步摘要表。 -->
+
+
 各阶段输入/输出契约、校验规则、失败纠正。
 
 ## 阶段总览
@@ -7,24 +10,24 @@
 | 步骤 | Skill | Agent | 输入 | 输出 | 前置条件 | 调度 |
 |------|-------|-------|------|------|---------|------|
 | 0 | workflow | — | 需求描述 | .workflow-state.json + .workflow-eval.json | 无 | 入口 |
-| 0.5 | clarify | socratic-clarifier | 需求描述 | spec/clarification.md | 模糊度 > 0.2 | 条件 |
+| 0.5 | clarify | clarifier | 需求描述 | spec/clarification.md | 模糊度 > 0.2 | 条件 |
 | 1 | spec | code-explorer | 需求/澄清报告 | spec/{requirement,scenarios,...}.md | 步骤0 done | 自动 |
 | 2 | test-design | test-designer | spec/ | tests/test-spec.md + fixtures.json + test-*.template | 步骤1 done | 并行 |
 | 3 | design | code-architect | spec/ | design/design.md | 步骤1 done | 并行 |
 | 3.5 | contract | contract-creator | design.md | contract.md + review-report.md | 步骤3 done + fullstack | 条件 |
 | 4 | task | tasker | design.md | tasks/tasks.md | 步骤3 done [+ 3.5] | 串行 |
-| 5 | execute | code-executor, code-reviewer | tasks.md | src/ + execution/execution-report.md | 步骤4 done | 串行 |
+| 5 | execute | executor, code-reviewer | tasks.md | src/ + execution/execution-report.md | 步骤4 done | 串行 |
 | 5.5 | exception | exception | src/ | src/（异常处理代码） | 步骤5 内部 | 子过程 |
 | 6 | test | tester, test-verifier | src/ + tasks.md | tests/ + testing/testing-report.md | 步骤5 done | 串行 |
 | 7 | archive | archiver | spec/ + tests/ | orch-spec/spec/（已合并）+ archive-log.md | 步骤6 done + 全通过 | 串行 |
-| 8 | evaluation | — | .workflow-eval.json | 诊断报告 + context-budget + cost | 步骤7 done | 串行 |
+| 8 | evaluation | context-budget + cost DB | .workflow-eval.json | 诊断报告（estimated + actual + deviation） | 步骤7 done | 双路并行 |
 | 9 | continuous-learning | knowledge-curator | .workflow-eval.json | orch-spec/patterns/ + orch-spec/user-preferences/ | 步骤8 done | 串行 |
 
 ### 辅助技能集成
 
 | 技能 | Agent | 集成点 | 触发条件 |
 |------|-------|--------|---------|
-| debug | tracer | execute / test | Task 失败 ≥ 2 次 或测试失败 ≥ 2 次 |
+| debug | debug | execute / test | Task 失败 ≥ 2 次 或测试失败 ≥ 2 次 |
 | ralph-loop | loop-operator | execute | Task 超过 3 批次 |
 | context-budget | — | workflow 步骤8 | 效果评估时 |
 | compact | — | workflow 中断恢复 | 检测到上下文过大 |

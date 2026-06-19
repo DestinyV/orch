@@ -96,7 +96,7 @@ description: |
 ```
 
 **Step 4: 评分模糊度**
-接收答案后，派遣 socratic-clarifier agent 执行数学化评分：
+接收答案后，派遣 clarifier agent 执行数学化评分：
 
 ```bash
 Agent(subagent_type="orch:clarifier",
@@ -249,5 +249,5 @@ spec 读取澄清报告，直接进入场景拆解阶段，跳过需求理解问
 | 文档 | 场景 |
 |------|------|
 | `../../config/socratic-config.json` | 模糊度阈值 + 权重配置 |
-| `../../agents/socratic-clarifier.md` | Scoring Agent 定义 |
+| `../../agents/clarifier.md` | Scoring Agent 定义 |
 | `../../commands/start-dev.md` | 步骤0.5 编排 |

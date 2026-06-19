@@ -5,7 +5,7 @@ model: inherit
 tools: Read, Write, Grep, Glob
 ---
 
-# socratic-clarifier
+# clarifier
 
 苏格拉底式需求澄清 Agent。负责模糊度评分和问题生成。
 

@@ -82,7 +82,7 @@ orch 包含9个专业的Agents，在各个Skills中协同工作：
 |-------|------|--------|
 | **code-architect** | 通过分析现有代码库的模式和约定，设计功能架构并提供完整的实现蓝图 | 在design阶段，分析项目结构、提取设计模式、规划架构 |
 | **code-explorer** | 通过追踪执行路径、映射架构层、识别设计模式，深入分析现有代码实现 | 在spec和design阶段，提取架构约定和可复用代码 |
-| **code-executor** | 根据详细的实现任务，通过TDD流程（RED-GREEN-REFACTOR-REVIEW）编写高质量代码 | 在execute阶段，每个Task派遣独立子代理在git-worktree中实现 |
+| **executor** | 根据详细的实现任务，通过TDD流程（RED-GREEN-REFACTOR-REVIEW）编写高质量代码 | 在execute阶段，每个Task派遣独立子代理在git-worktree中实现 |
 | **code-reviewer** | 针对bug、逻辑错误、安全漏洞和代码质量进行审查，置信度过滤（≥80） | 在execute阶段3.3/3.4和test阶段2：规范审查+质量审查 |
 | **archiver** | 规范归档专家，对标分析、冲突检测、智能合并、一致性验证 | 在archive阶段派遣执行场景对标、合并和一致性检查 |
 | **test-designer** | 将TEST-VERIFY转换为测试用例，定义Mock策略，生成fixtures和测试框架代码 | 在test-design阶段分析场景、设计测试用例、生成测试模板 |

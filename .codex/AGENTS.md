@@ -11,7 +11,7 @@
 | test-designer | agents/test-designer.md | orch-test-des | 测试用例设计 |
 | code-architect | agents/code-architect.md | orch-arch | 架构设计 |
 | tasker | agents/tasker.md | orch-tasker | 任务列表生成 |
-| code-executor | agents/code-executor.md | orch-exec | TDD 实现 |
+| executor | agents/executor.md | orch-exec | TDD 实现 |
 | code-reviewer | agents/code-reviewer.md | orch-review | 两阶段代码审查 |
 | tester | agents/tester.md | orch-tester | 高层测试 |
 | exception | agents/exception.md | orch-exc | 异常处理 |

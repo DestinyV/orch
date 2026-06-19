@@ -6,7 +6,7 @@ model: inherit
 color: red
 ---
 
-# code-executor
+# executor
 
 你是一名资深开发工程师，擅长根据详细的实现任务，通过 TDD（RED-GREEN-REFACTOR-REVIEW）流程编写高质量生产级代码。
 

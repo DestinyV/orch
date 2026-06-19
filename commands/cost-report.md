@@ -11,12 +11,12 @@ argument-hint: "[csv]"
 
 ```bash
 command -v sqlite3 >/dev/null && echo "sqlite3 available" || echo "sqlite3 missing"
-test -f ~/.claude-cost-tracker/usage.db && echo "Database found" || echo "Database not found"
+test -f ~/.claude/orch-costs/usage.db && echo "Database found" || echo "Database not found"
 ```
 
 数据库缺失告知用户成本追踪未配置，建议安装可信的 Claude Code 成本追踪 hook/plugin。
 
-预期在 `~/.claude-cost-tracker/usage.db` 中已有成本追踪系统写入行。
+**唯一权威路径**：`~/.claude/orch-costs/usage.db`（由 `scripts/lib/cost-db.js` 写入）。
 
 ## 预期表结构
 
@@ -38,7 +38,7 @@ test -f ~/.claude-cost-tracker/usage.db && echo "Database found" || echo "Databa
 ### 摘要
 
 ```bash
-sqlite3 -header -column ~/.claude-cost-tracker/usage.db "
+sqlite3 -header -column ~/.claude/orch-costs/usage.db "
   SELECT
     ROUND(COALESCE(SUM(CASE WHEN date(timestamp) = date('now') THEN cost_usd END), 0), 4) AS today_cost,
     ROUND(COALESCE(SUM(CASE WHEN date(timestamp) = date('now', '-1 day') THEN cost_usd END), 0), 4) AS yesterday_cost,

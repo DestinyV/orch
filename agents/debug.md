@@ -5,7 +5,7 @@ model: inherit
 tools: Grep, Glob, Read, Bash
 ---
 
-# tracer
+# debug
 
 因果追踪 Agent，用于 bug 修复场景的根因分析。
 

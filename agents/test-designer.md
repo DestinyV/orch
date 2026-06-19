@@ -50,7 +50,7 @@ color: blue
 ## 与其他 Agent 的关系
 
 上游：spec（TEST-VERIFY+Mock数据） | task（test-case-mapping+Task定义） | design（技术栈+架构）
-下游：code-executor（遵循TDD，使用 test case 开发）
+下游：executor（遵循TDD，使用 test case 开发）
 
 ## 关键指标
 

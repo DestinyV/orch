@@ -22,7 +22,7 @@ data['stages'].append({
     'status': 'done',
     'tokens_input': 0,
     'tokens_output': 0,
-    'duration_seconds': int(time.time()),
+    'completed_at': int(time.time()),
     'agent': state.get('agent', '')
 })
 data['token_usage'] = data.get('token_usage', {})

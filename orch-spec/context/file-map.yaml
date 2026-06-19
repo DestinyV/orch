@@ -42,7 +42,7 @@ key_files:
     purpose: "全部阶段输入/输出契约"
   - path: "skills/design/references/table-design-spec.md"
     purpose: "表设计规范（命名/字段/索引/约束/反模式）"
-  - path: "services/cost-tracking/usage.db"
+  - path: "~/.claude/orch-costs/usage.db"
     purpose: "成本追踪 SQLite 数据库"
 
 api_routes: []

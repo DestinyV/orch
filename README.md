@@ -85,7 +85,7 @@ orch includes 9 professional Agents that collaborate across various Skills:
 |-------|---------------|-----------|
 | **code-architect** | Analyzes existing codebase patterns and conventions to design functional architecture and provide complete implementation blueprints | design stage: analyzes project structure, extracts design patterns, plans architecture |
 | **code-explorer** | Deep analysis of existing code implementations by tracing execution paths, mapping architecture layers, and identifying design patterns | spec and design stages: extracts architecture conventions and identifies reusable code |
-| **code-executor** | Writes high-quality code based on detailed implementation tasks with TDD (RED-GREEN-REFACTOR-REVIEW) | execute stage: each Task dispatched as independent subagent in isolated git-worktree |
+| **executor** | Writes high-quality code based on detailed implementation tasks with TDD (RED-GREEN-REFACTOR-REVIEW) | execute stage: each Task dispatched as independent subagent in isolated git-worktree |
 | **code-reviewer** | Reviews for bugs, logic errors, security vulnerabilities, and code quality issues with confidence-based filtering (≥80) | execute stages 3.3/3.4 and test stage 2: spec review + quality review |
 | **archiver** | Spec archiving expert: benchmark analysis, conflict detection, smart merging, consistency verification | archive stage: dispatched for scenario comparison, merging, and consistency checks |
 | **test-designer** | Converts TEST-VERIFY into test cases, defines Mock strategies, generates fixtures and test framework code | test-design stage: analyzes scenarios, designs test cases, generates test templates |

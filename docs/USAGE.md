@@ -3,7 +3,7 @@
 ## 入口
 
 ```
-/workflow "需求描述" → 自动执行完整 10 阶段流程
+/workflow "需求描述" → 自动执行完整 13 步流程
 ```
 
 或手动逐步调用各 Skill。
@@ -16,7 +16,7 @@
 
 ⟷ 表示可并行执行。
 
-## 10 阶段说明
+## 13 步说明
 
 | 阶段 | Skill | 输入 | 输出 | Agent |
 |------|-------|------|------|-------|
@@ -26,7 +26,7 @@
 | 设计 | `/design` | spec | `design/design.md` | code-architect |
 | 接口契约 | `/contract` | design.md | `contract.md + review-report.md` | contract-creator |
 | 任务 | `/task` | design.md + tests | `tasks/tasks.md` | tasker |
-| 执行 | `/execute` | tasks + tests | `src/ + execution-report.md` | code-executor + code-reviewer |
+| 执行 | `/execute` | tasks + tests | `src/ + execution-report.md` | executor + code-reviewer |
 | 异常处理 | `/exception` | src | `src/ (添加异常处理)` | exception |
 | 测试 | `/test` | src + spec | `testing-report.md` | code-reviewer |
 | 归档 | `/archive` | 测试通过的 spec | 合并到主规范库 | archiver |

@@ -55,7 +55,7 @@
 - [ ] 覆盖率 ≥85%（standard）/ ≥60%（quick）
 - [ ] 无伪代码/空函数体
 - [ ] 后端/全栈已调用 exception
-- [ ] code-executor + code-reviewer Agent 派遣记录
+- [ ] executor + code-reviewer Agent 派遣记录
 
 ### Exception-Handler 阶段（后端/全栈）
 - [ ] 项目约定扫描完成（异常类名/错误码格式/RPC模式）

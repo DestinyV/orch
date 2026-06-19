@@ -344,7 +344,7 @@ Agent(
 | `references/verification-gate.md` | 完成验证门控（IDENTIFY→RUN→READ→VERIFY→CLAIM） | 步骤3.6 |
 | `references/quick-reference.md` | Worktree 快速参考卡 | 步骤3.1 |
 | `references/workflow-detail.md` | 完整工作流步骤和示例 | 步骤4 |
-| `prompts/tdd-implementer-prompt.md` | code-executor Agent TDD实现提示词 | 步骤3.2 |
+| `prompts/tdd-implementer-prompt.md` | executor Agent TDD实现提示词 | 步骤3.2 |
 
 ### 跨 Skill
 | 参考文档 | 使用场景 | 阶段 |

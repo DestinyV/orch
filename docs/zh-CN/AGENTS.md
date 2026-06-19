@@ -9,7 +9,7 @@
 | test-designer | 测试设计和规范生成 | 规范完成后 |
 | code-architect | 代码设计规划 | 设计阶段 |
 | tasker | 任务列表生成 | 设计确认后 |
-| code-executor | TDD 代码实现 | 任务定义后 |
+| executor | TDD 代码实现 | 任务定义后 |
 | code-reviewer | 代码规范+质量审查 | 代码实现后 |
 | tester | 测试验证和闭环 | 代码审查后 |
 | exception | 异常模式扫描+代码生成 | 后端/全栈编码时 |

@@ -117,8 +117,8 @@ done
 
 | 辅助 Agent           | 触发条件                                           | 集成点         |
 | -------------------- | -------------------------------------------------- | -------------- |
-| `socratic-clarifier` | 模糊度 > 0.2                                       | clarify        |
-| `tracer`             | Task 失败 ≥ 2 次                                   | execute        |
+| `clarifier` | 模糊度 > 0.2                                       | clarify        |
+| `debug`             | Task 失败 ≥ 2 次                                   | execute        |
 | `e2e-runner`         | 前端/全栈 E2E                                      | test           |
 | `loop-operator`      | Task > 3 批次                                      | execute        |
 | `planner`            | 用户要求                                           | design         |

@@ -19,10 +19,15 @@
       "status": "done",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
       "user_interactions": 0,
-      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "—",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "0.5_socratic_clarify",
@@ -30,9 +35,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "socratic-clarifier", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "clarifier",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "1_spec_creation",
@@ -40,9 +50,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "code-explorer", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "code-explorer",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "2_test_design",
@@ -50,9 +65,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "test-designer", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "test-designer",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "3_code_design",
@@ -60,9 +80,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "code-architect", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "code-architect",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "3.5_api_contract",
@@ -70,9 +95,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "contract-creator", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "contract-creator",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "4_code_task",
@@ -80,9 +110,14 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
-      "agent": { "name": "tasker", "dispatched": false, "status": "", "retries": 0 }
+      "agent": {
+        "name": "tasker",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "5_code_execute",
@@ -90,11 +125,23 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
       "agents": [
-        { "name": "code-executor", "dispatched": false, "count": 0, "status": "", "retries": 0 },
-        { "name": "code-reviewer", "dispatched": false, "count": 0, "status": "", "retries": 0 }
+        {
+          "name": "executor",
+          "dispatched": false,
+          "count": 0,
+          "status": "",
+          "retries": 0
+        },
+        {
+          "name": "code-reviewer",
+          "dispatched": false,
+          "count": 0,
+          "status": "",
+          "retries": 0
+        }
       ]
     },
     {
@@ -103,8 +150,13 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
-      "agent": { "name": "exception", "dispatched": false, "status": "", "retries": 0 }
+      "completed_at": 0,
+      "agent": {
+        "name": "exception",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "6_code_test",
@@ -112,11 +164,21 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
+      "completed_at": 0,
       "hard_gate_triggers": 0,
       "agents": [
-        { "name": "tester", "dispatched": false, "status": "", "retries": 0 },
-        { "name": "test-verifier", "dispatched": false, "status": "", "retries": 0 }
+        {
+          "name": "tester",
+          "dispatched": false,
+          "status": "",
+          "retries": 0
+        },
+        {
+          "name": "test-verifier",
+          "dispatched": false,
+          "status": "",
+          "retries": 0
+        }
       ]
     },
     {
@@ -125,8 +187,13 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
-      "agent": { "name": "archiver", "dispatched": false, "status": "", "retries": 0 }
+      "completed_at": 0,
+      "agent": {
+        "name": "archiver",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "8_evaluation",
@@ -134,8 +201,13 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
-      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+      "completed_at": 0,
+      "agent": {
+        "name": "—",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     },
     {
       "stage": "9_knowledge_continuum",
@@ -143,12 +215,17 @@
       "status": "pending",
       "tokens_input": 0,
       "tokens_output": 0,
-      "duration_seconds": 0,
-      "agent": { "name": "knowledge-curator", "dispatched": false, "status": "", "retries": 0 }
+      "completed_at": 0,
+      "agent": {
+        "name": "knowledge-curator",
+        "dispatched": false,
+        "status": "",
+        "retries": 0
+      }
     }
   ],
   "summary": {
-    "stages_total": 14,
+    "stages_total": 13,
     "stages_done": 0,
     "stages_failed": 0,
     "stages_skipped": 0,
@@ -162,6 +239,12 @@
   "diagnosis": {
     "bottlenecks": [],
     "warnings": [],
-    "suggestions": []
+    "recommendations": [],
+    "deviation": {
+      "estimated_total": 0,
+      "actual_input": 0,
+      "actual_output": 0,
+      "deviation_rate": 0
+    }
   }
 }

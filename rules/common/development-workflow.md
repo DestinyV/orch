@@ -1,4 +1,4 @@
-# Development Workflow (SDD+TDD 10-Step)
+# Development Workflow (SDD+TDD 13-Step)
 
 > See [zh/development-workflow.md](../zh/development-workflow.md) for Chinese version.
 

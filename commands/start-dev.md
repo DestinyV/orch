@@ -5,7 +5,7 @@ argument-hint: 可选：需求描述
 
 # SDD+TDD 规范驱动开发工作流
 
-统一入口命令，编排 10 阶段 SDD+TDD 流程。
+统一入口命令，编排 13 步 SDD+TDD 流程。
 
 > **流程执行参考（Source of Truth）**: 各阶段的输入/输出契约、校验规则、失败纠正、Agent 派遣详见 [`skills/workflow/references/flow-execution-reference.md`](skills/workflow/references/flow-execution-reference.md)。
 
@@ -32,24 +32,24 @@ argument-hint: 可选：需求描述
 | 步骤 | Skill | Agent 派遣 | 前置 | 调度 |
 |------|-------|-----------|------|------|
 | 0 | workflow | — | 无 | 入口编排 |
-| 0.5 | clarify | socratic-clarifier | 模糊度 > 0.2 | 条件触发 |
+| 0.5 | clarify | clarifier | 模糊度 > 0.2 | 条件触发 |
 | 1 | spec | code-explorer | clarification done | 自动级联 |
 | 2 | test-design | test-designer | spec done | 与步骤3 并行 |
 | 3 | design | code-architect | spec done | 与步骤2 并行 |
 | 3.5 | contract | contract-creator | design done + fullstack | 条件触发 |
 | 4 | task | tasker | design [+ contract] | 串行 |
-| 5 | execute | code-executor, code-reviewer | task done | 串行 |
+| 5 | execute | executor, code-reviewer | task done | 串行 |
 | 5.5 | exception | exception | execute 内部 | 子过程自动 |
 | 6 | test | tester, test-verifier | execute done | 串行 |
 | 7 | archive | archiver | test done + 全通过 | 串行 |
-| 8 | evaluation | — | archive done | 串行 |
+| 8 | evaluation | — | archive done | 双路并行 |
 | 9 | continuous-learning | knowledge-curator | evaluation done | 串行 |
 
 ## 工作模式
 
 | 标签 | standard | quick |
 |------|----------|-------|
-| 流程 | 全 14 阶段 | spec → execute(精简) → test(精简) |
+| 流程 | 全 13 步 | spec → execute(精简) → test(精简) |
 | TDD | 必须，test-*.template 存在才允许编码 | 可跳过 |
 | 子代理 | 必须，N 个无依赖 Task 启动 N 个子代理并行 | 可选 |
 | 审查 | 两阶段（规范 + 质量） | 单阶段 |

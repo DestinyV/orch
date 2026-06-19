@@ -6,7 +6,7 @@
   "skills": {
     "workflow": {
       "entry": true,
-      "description": "Unified entry point: auto-orchestrates the full 10-stage workflow",
+      "description": "Unified entry point: auto-orchestrates the full 13-step workflow",
       "skillFile": "skills/workflow/SKILL.md"
     },
     "spec": {
