@@ -10,22 +10,35 @@ description: |
 
 查询 Claude Code 成本和用量历史。数据由 Stop hook（`cost-tracker.js`）在每次响应后自动从 transcript 采集并写入本地数据库。
 
-## 数据源（按优先级）
+## 数据源
 
 | 来源 | 路径 | 说明 |
 |------|------|------|
-| **orch 本地 DB** | `~/.claude/orch-costs/usage.db` | Stop hook 自动采集，写入即用 |
-| **orch 原始流水** | `~/.claude/orch-costs/costs.jsonl` | JSONL 格式，零依赖兜底 |
-| **社区 cost-tracker** | `~/.claude-cost-tracker/usage.db` | 兼容社区插件，若存在则自动回退 |
+| **orch 本地 DB** | `~/.claude/orch-costs/usage.db` | Stop hook 自动采集，**唯一权威数据源** |
+| **orch 原始流水** | `~/.claude/orch-costs/costs.jsonl` | JSONL 格式，零依赖兜底，DB 不可用时回退 |
+
+## ⚠️ 累计快照语义（避免高估）
+
+orch 的 `cost-tracker.js` 每次响应后把**整个 transcript 重算成累计值**写入一行。因此同一 `session_id` 会有多行，每行是该 session 截至该时刻的累计消耗。
+
+**禁止跨行直接 `SUM(cost_usd)`** —— 那会把同一会话的多个快照相加，严重高估。
+
+**正确做法**：先用子查询取每个 session 的最新一行（最新累计快照），再跨 session 聚合：
+
+```sql
+WITH latest AS (
+  SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+)
+SELECT ... FROM latest ...
+```
+
+下文所有查询示例均遵循此模式。
 
 ## 工作原理
 
 ```bash
-# 步骤1: 确认 DB 存在
+# 确认 DB 存在
 test -f ~/.claude/orch-costs/usage.db && echo "orch DB found"
-test -f ~/.claude-cost-tracker/usage.db && echo "community DB found"
-
-# 步骤2: orch DB 优先，社区 DB 回退
 ```
 
 ## 查询示例
@@ -33,14 +46,15 @@ test -f ~/.claude-cost-tracker/usage.db && echo "community DB found"
 ### 今日汇总
 
 ```bash
-# orch 本地 DB
 sqlite3 ~/.claude/orch-costs/usage.db "
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
   SELECT
     '今日: $' || ROUND(COALESCE(SUM(CASE WHEN date(timestamp) = date('now') THEN cost_usd END), 0), 4) ||
     ' | 总计: $' || ROUND(COALESCE(SUM(cost_usd), 0), 4) ||
-    ' | 调用: ' || COUNT(*) ||
-    ' | 会话: ' || COUNT(DISTINCT session_id)
-  FROM usage;
+    ' | 会话: ' || COUNT(*)
+  FROM latest;
 "
 ```
 
@@ -48,9 +62,12 @@ sqlite3 ~/.claude/orch-costs/usage.db "
 
 ```bash
 sqlite3 -header -column ~/.claude/orch-costs/usage.db "
-  SELECT project, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls,
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
+  SELECT project, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS sessions,
          SUM(input_tokens) AS input_tok, SUM(output_tokens) AS output_tok
-  FROM usage
+  FROM latest
   GROUP BY project
   ORDER BY cost DESC;
 "
@@ -60,8 +77,11 @@ sqlite3 -header -column ~/.claude/orch-costs/usage.db "
 
 ```bash
 sqlite3 -header -column ~/.claude/orch-costs/usage.db "
-  SELECT stage, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls
-  FROM usage
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
+  SELECT stage, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS sessions
+  FROM latest
   WHERE stage != ''
   GROUP BY stage
   ORDER BY cost DESC;
@@ -72,9 +92,12 @@ sqlite3 -header -column ~/.claude/orch-costs/usage.db "
 
 ```bash
 sqlite3 -header -column ~/.claude/orch-costs/usage.db "
-  SELECT model, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS calls,
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
+  SELECT model, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS sessions,
          SUM(input_tokens) AS input, SUM(output_tokens) AS output
-  FROM usage
+  FROM latest
   GROUP BY model
   ORDER BY cost DESC;
 "
@@ -84,9 +107,11 @@ sqlite3 -header -column ~/.claude/orch-costs/usage.db "
 
 ```bash
 sqlite3 -header -column ~/.claude/orch-costs/usage.db "
-  SELECT date(timestamp) AS date, ROUND(SUM(cost_usd), 4) AS cost,
-         COUNT(*) AS calls, COUNT(DISTINCT session_id) AS sessions
-  FROM usage
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
+  SELECT date(timestamp) AS date, ROUND(SUM(cost_usd), 4) AS cost, COUNT(*) AS sessions
+  FROM latest
   GROUP BY date(timestamp)
   ORDER BY date DESC
   LIMIT 7;
@@ -97,30 +122,36 @@ sqlite3 -header -column ~/.claude/orch-costs/usage.db "
 
 ```bash
 sqlite3 -header -column ~/.claude/orch-costs/usage.db "
+  WITH latest AS (
+    SELECT * FROM usage WHERE rowid IN (SELECT MAX(rowid) FROM usage GROUP BY session_id)
+  )
   SELECT session_id,
     MIN(timestamp) AS started,
     MAX(timestamp) AS ended,
-    ROUND(SUM(cost_usd), 4) AS cost,
-    COUNT(*) AS calls,
-    SUM(input_tokens) AS input_tok,
-    SUM(output_tokens) AS output_tok
-  FROM usage
+    ROUND(MAX(cost_usd), 4) AS cost,
+    MAX(input_tokens) AS input_tok,
+    MAX(output_tokens) AS output_tok
+  FROM latest
   GROUP BY session_id
-  ORDER BY started DESC
+  ORDER BY ended DESC
   LIMIT 10;
 "
 ```
 
+> 单 session 明细中 `cost_usd` 本身已是累计值，取 `MAX`（最新快照）即可，不再 SUM。`ended` 比 `started` 更适合排序（最新活动会话排前）。
+
 ## 无 DB 时的回退策略
 
-两种 DB 都不存在时：
+DB 不存在时：
 
 1. 告知用户 cost-tracker 未运行（Stop hook 未触发过）
-2. 建议运行任意 workflow 阶段产生一条记录
-3. 不编造数据，不硬编码定价
+2. 回退到 `~/.claude/orch-costs/costs.jsonl` 逐行解析（最后一行即是该 session 最新累计值）
+3. 建议运行任意 workflow 阶段产生一条记录
+4. 不编造数据，不硬编码定价
 
 ## 约束
 
 - 优先使用 `cost_usd` 列（source of truth），不手动计算价格
+- **跨行查询必须先取每 session 最新快照（`MAX(rowid) GROUP BY session_id`），禁止直接 SUM 全表**
 - 数据库不存在时不编造数据
 - 不硬编码模型定价（定价表仅在 hook 中用于估算，DB 中的 `cost_usd` 是已计算值）

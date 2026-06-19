@@ -15,6 +15,20 @@
         "id": "session:init"
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "Skill|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/workflow-gate.js\"",
+            "description": "HARD-GATE validation: stage sequence, output files, state consistency (fail-open)",
+            "timeout": 5
+          }
+        ],
+        "id": "posttool:hard-gate"
+      }
+    ],
     "PreCompact": [
       {
         "matcher": "*",
