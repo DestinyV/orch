@@ -144,7 +144,7 @@ TDD 流程额外：确定 test case 处理顺序 | 规划每个 RED/GREEN/REFACT
 - 最小实现：GREEN 阶段只做 test 需要的，不过度工程化
 - 小步重构：REFACTOR 阶段每次只改一个点，改完立即验证
 - Mock 策略：只 Mock 外部依赖（API/DB/第三方服务），不 Mock 业务逻辑和内部函数
-- 前端/全栈 Task：在单元测试通过后，还需进行浏览器测试 TDD 循环（RED-BROWSER→GREEN-BROWSER→验证）
+- 前端/全栈 Task：单元测试通过后，确保 Playwright 测试代码已编写（`data-testid` 选择器 / BROWSER-TESTABLE 覆盖 / 命名规范）。浏览器测试在**批次完成后由编排层统一运行**（非每 Task 独立启动浏览器），executor 仅确保测试代码存在且选择器正确。
 
 **代码完整性要求**：
 - ❌ 禁止：样式块只有注释 | 函数只有 TODO | 空事件处理器 | 条件分支只有 if 没有 else | 空对象属性

@@ -40,3 +40,12 @@ executor 派遣时的 Token 节省最佳实践。
 | `Glob("src/**/*.ts")` 全文扫描 | 使用 task-spec 中声明的文件路径 |
 | `Bash("cat ... | head -100")` 读百行输出 | 读 tail -5 或 grep summary |
 | `Grep("some pattern")` 全局搜索 | 先确认注入上下文是否已有答案 |
+
+## 浏览器测试批量化
+
+| 浪费模式 | 批量化做法 |
+|---------|-----------|
+| 每 Task 独立 `npx playwright test` | 批次完成后统一运行一次 |
+| 每 Task 独立启动/关闭浏览器实例 | 复用浏览器实例减少启动开销 |
+| executor 读取 Playwright 完整输出 | 仅确认测试代码存在，实际输出由批次级验证读取 |
+| 每个前端 Task 独立 RED-BROWSER→GREEN-BROWSER 循环 | executor 只编写测试代码，TDD 的 RED/GREEN 由单元测试保证，浏览器验证批量执行 |

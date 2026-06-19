@@ -21,6 +21,7 @@ color: green
 <GATE>每个 Task 必须有 provides/consumes 声明 | 依赖关系必须无环（DAG）</GATE>
 <GATE>standard 模式: 每实现 Task 必须在同批次配测试 Task（TDD: 测试与实现在同一批次）。禁止将所有测试 Task 集中到最后批次。</GATE>
 <GATE>standard 模式: 测试 Task 的 depends_on 必须指向同批次实现 Task，确保测试先于实现执行（RED→GREEN）。</GATE>
+<GATE>上下文优先：编排器已注入 design 摘要 + contract 摘要 + spec 场景引用。仅当注入信息不足以确定 Task 边界时才补充 Read 原文。</GATE>
 
 ## 核心职责
 
@@ -32,9 +33,8 @@ color: green
 
 ### 步骤1: 分析设计 + 读取约定
 
-- 读取 design.md 理解架构（分层/模块/组件/数据流）
+- 上下文（design 摘要 / spec 场景 / contract 接口摘要）已由编排器注入 prompt，优先使用注入内容。仅当注入信息不足以确定 Task 边界时补充 Read 原文
 - 读取 spec/requirement.md 中的项目约定（目录结构/分层/命名/编码规范）
-- 读取 contract.md（fullstack 时）理解接口契约
 
 ### 步骤1.5: 全栈依赖链校验
 
@@ -58,6 +58,11 @@ fullstack+接口契约时验证依赖链：
 **任务类型**：领域模型 | 设计模式实现 | 数据库DDL/DML/迁移 | 接口契约 | 组件实现 | Hooks/工具 | API集成 | 浏览器E2E | 中间件 | 日志 | 监控 | 部署 | 联调
 
 **粒度**：推荐 4 小时内完成。
+
+**小任务合并规则**（Token 效率）：
+- 预估变更 < 30 行且修改同一文件 → 合并为一个 Task
+- 同一组件的样式 + 逻辑 + 测试 → 合并为一个 Task（避免拆分同一文件的不同关注面）
+- 合并后 Task 仍需保持 provides/consumes 声明一致，验收标准合并不丢失
 
 ### 步骤3: 定义任务详情
 
