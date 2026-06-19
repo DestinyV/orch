@@ -47,11 +47,11 @@ description: |
 
 > 集成测试设计: `references/integration-test-prompt.md` | E2E 设计: `references/e2e-test-prompt.md` | 性能测试: `references/performance-test-prompt.md`
 
-<HARD-GATE>必须通过 Agent 派遣 tester，不允许主上下文直接运行测试。</HARD-GATE>
+<GATE>必须通过 Agent 派遣 tester，不允许主上下文直接运行测试。</GATE>
 
 **后端/全栈额外**：
 - 集成测试: Repository/Service/API 协作、事务边界、缓存。模板: `templates/backend-api-test.template.ts`
-- 契约测试（fullstack强制）: `<HARD-GATE>验证后端返回字段/类型/结构与 contract.md 一致</HARD-GATE>`。模板: `templates/contract-test-template.md`
+- 契约测试（fullstack强制）: `<GATE>验证后端返回字段/类型/结构与 contract.md 一致</GATE>`。模板: `templates/contract-test-template.md`
 - 基础设施: `templates/backend-unit-test-template.md` | `templates/backend-db-migration-test.template.ts` | `templates/backend-e2e-api-test.template.ts`
 
 **前端/全栈额外**：
@@ -62,7 +62,7 @@ description: |
 
 ### 4. 证据驱动验证
 
-<HARD-GATE>每条验收标准必须基于本次运行的命令输出。禁止"应该能工作"类声明。</HARD-GATE>
+<GATE>每条验收标准必须基于本次运行的命令输出。禁止"应该能工作"类声明。</GATE>
 
 > 反模式检查: `references/testing-anti-patterns.md`
 
@@ -75,7 +75,7 @@ description: |
 
 **目标逆向验证**：从目标反向验证数据真实流动——组件用真实 props(非桩)/API 返回真实数据(非mock)/状态正确传递/错误边界实际捕获异常。
 
-<HARD-GATE>前端未执行浏览器E2E测试前不声明通过。</HARD-GATE>
+<GATE>前端未执行浏览器E2E测试前不声明通过。</GATE>
 
 ### 5. 闭环验证
 

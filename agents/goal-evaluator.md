@@ -84,4 +84,4 @@ npm test -- --grep "TC-002|TC-003"
 
 ## 约束
 
-<HARD-GATE>不接受 executor 的自我报告 | 每条必须独立运行验证命令 | 必须输出 JSON 格式评分 | 覆盖率 raw output 必须贴入报告</HARD-GATE>
+<GATE>不接受 executor 的自我报告 | 每条必须独立运行验证命令 | 必须输出 JSON 格式评分 | 覆盖率 raw output 必须贴入报告</GATE>

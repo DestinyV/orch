@@ -22,7 +22,7 @@ description: |
 
 ### Phase 0: 前置验证
 
-<HARD-GATE>必须先扫描 orch-spec/ 确认目标需求，不允许跳过。</HARD-GATE>
+<GATE>必须先扫描 orch-spec/ 确认目标需求，不允许跳过。</GATE>
 
 1. 扫描 `orch-spec/` 下列出的所有需求目录
 2. 读取每个需求的 `.workflow-state.json`，获取状态（done/in_progress/pending）、当前阶段、scenario/Task 数量

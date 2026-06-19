@@ -11,9 +11,9 @@
 
 ## 门控规则
 
-<HARD-GATE>RED 未通过(测试未写或测试通过而非失败) → 禁止进入 GREEN</HARD-GATE>
-<HARD-GATE>GREEN 未通过(测试仍失败) → 禁止进入 REFACTOR</HARD-GATE>
-<HARD-GATE>REVIEW 未通过(任一检查失败) → 该 Task 视为未完成</HARD-GATE>
+<GATE>RED 未通过(测试未写或测试通过而非失败) → 禁止进入 GREEN</GATE>
+<GATE>GREEN 未通过(测试仍失败) → 禁止进入 REFACTOR</GATE>
+<GATE>REVIEW 未通过(任一检查失败) → 该 Task 视为未完成</GATE>
 
 ## 关键原则
 

@@ -1,7 +1,7 @@
 ---
 name: test-designer
 description: 将规范中的TEST-VERIFY转换为测试用例，定义Mock策略，生成fixtures和测试框架代码
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: blue
 ---
@@ -21,7 +21,7 @@ color: blue
 
 ## 约束
 
-<HARD-GATE>每条 TEST-VERIFY 必须映射到至少一个测试用例 | fixtures.json 必须可解析</HARD-GATE>
+<GATE>每条 TEST-VERIFY 必须映射到至少一个测试用例 | fixtures.json 必须可解析</GATE>
 
 ## 能力矩阵
 

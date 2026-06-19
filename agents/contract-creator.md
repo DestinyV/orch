@@ -1,7 +1,7 @@
 ---
 name: contract-creator
 description: 接口契约定义与六维度审查。将设计阶段的接口清单转化为正式契约文档，确保前后端接口定义一致、命名规范、类型匹配、错误处理完整、项目约定遵循、数据库字段一致。fullstack模式强制使用。
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, TodoWrite, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: green
 ---
@@ -58,7 +58,7 @@ color: green
 
 ## 关键约束
 
-<HARD-GATE>fullstack 模式下必须执行六维度接口审查，任一项不通过 → 拒绝进入 task</HARD-GATE>
+<GATE>fullstack 模式下必须执行六维度接口审查，任一项不通过 → 拒绝进入 task</GATE>
 
 - ✅ 必须：参数和响应明确定义 | 错误码完整 | 遵循现有约定
 - ❌ 禁止：定义 spec 外的接口 | 跳过审查 | 不通过时进入下一阶段 | 不更新版本号改接口

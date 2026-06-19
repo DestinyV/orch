@@ -1,7 +1,7 @@
 ---
 name: knowledge-curator
 description: 知识复利引擎执行专家。从工作流执行记录中提取关键决策和模式，沉淀到知识库，执行去重提炼和刷新，更新用户偏好以实现可持续提升优化。
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput, Write, Edit, Bash
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: purple
 ---
@@ -51,4 +51,4 @@ color: purple
 
 ## 约束
 
-<HARD-GATE>知识仅作为增强层，不得跳过任何必要的确认和校验步骤</HARD-GATE>
+<GATE>知识仅作为增强层，不得跳过任何必要的确认和校验步骤</GATE>

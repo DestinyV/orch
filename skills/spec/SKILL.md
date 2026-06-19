@@ -48,7 +48,7 @@ description: |
 
 ## Phase 0: 苏格拉底澄清检测（前置）
 
-<HARD-GATE>检测到 clarification.md 存在时必须读取；不存在时必须检测需求模糊度决定是否派遣 clarify。</HARD-GATE>
+<GATE>检测到 clarification.md 存在时必须读取；不存在时必须检测需求模糊度决定是否派遣 clarify。</GATE>
 
 在进入标准流程前，先检测是否已有苏格拉底澄清结果：
 
@@ -77,7 +77,7 @@ description: |
 | 审查 | 两阶段 | 单阶段 |
 | 测试 | 单元+E2E+视觉+组件+性能 | 单元+E2E |
 
-<HARD-GATE>快速模式仅在用户明确要求时启用（如"快速模式"、"跳过设计"、"快速修复"）。不确定时用标准模式。</HARD-GATE>
+<GATE>快速模式仅在用户明确要求时启用（如"快速模式"、"跳过设计"、"快速修复"）。不确定时用标准模式。</GATE>
 
 ### 模式确认输出
 
@@ -126,7 +126,7 @@ description: |
 
 场景拆解前对需求进行结构化追问，确保需求**澄清**（无歧义）且**闭环**（可验证满意）。
 
-<HARD-GATE>维度 1-4 必须逐条通过 AskUserQuestion 与用户确认，禁止替用户假设答案。维度5-10 有歧义时必须追问到底。至少完成 1 轮 AskUserQuestion 交互。</HARD-GATE>
+<GATE>维度 1-4 必须逐条通过 AskUserQuestion 与用户确认，禁止替用户假设答案。维度5-10 有歧义时必须追问到底。至少完成 1 轮 AskUserQuestion 交互。</GATE>
 
 | 维度 | 追问要点 | 闭环验证 |
 |------|---------|---------|
@@ -149,7 +149,7 @@ description: |
 
 按 8 个维度系统拆解为 BDD 场景，确保**覆盖全面**。
 
-<HARD-GATE>每个场景至少包含 2 个异常 Case（原为 1 个）。每个异常 Case 必须有精确的错误码/异常类型（如 `OrderError.INSUFFICIENT_STOCK`），不能使用"返回错误"等模糊描述。异常 Case 的数据模型必须可序列化为 JSON（确保 test fixtures 可自动生成）。场景间依赖已声明且无环（DAG）。</HARD-GATE>
+<GATE>每个场景至少包含 2 个异常 Case（原为 1 个）。每个异常 Case 必须有精确的错误码/异常类型（如 `OrderError.INSUFFICIENT_STOCK`），不能使用"返回错误"等模糊描述。异常 Case 的数据模型必须可序列化为 JSON（确保 test fixtures 可自动生成）。场景间依赖已声明且无环（DAG）。</GATE>
 
 | 维度 | 拆解方法 | 最低覆盖 |
 |------|---------|---------|
@@ -175,7 +175,7 @@ description: |
 
 ### 可视化确认（按需）
 
-<HARD-GATE>设计图=全部 或 按需触发阈值达标时，生成对应图供用户确认。快速模式跳过。</HARD-GATE>
+<GATE>设计图=全部 或 按需触发阈值达标时，生成对应图供用户确认。快速模式跳过。</GATE>
 
 读取 `requirement.md` 中的「设计图」标签，按 `references/diagram-trigger-rules.md`（引用自 design）判断触发条件：
 
@@ -193,7 +193,7 @@ description: |
 
 ### TDD 测试标准定义（standard 模式必须）
 
-<HARD-GATE>standard 模式下，每个场景的每个 Case 必须定义 TEST-VERIFY 和 Mock Data，否则不进入下一阶段。</HARD-GATE>
+<GATE>standard 模式下，每个场景的每个 Case 必须定义 TEST-VERIFY 和 Mock Data，否则不进入下一阶段。</GATE>
 
 每个 Case 后紧跟：
 ```
@@ -254,7 +254,7 @@ orch-spec/[需求ID]/
 
 ### 交付确认
 
-<HARD-GATE>前端/全栈场景中，未为每个UI交互定义BROWSER-TESTABLE验收标准前，不生成最终规范。</HARD-GATE>
+<GATE>前端/全栈场景中，未为每个UI交互定义BROWSER-TESTABLE验收标准前，不生成最终规范。</GATE>
 
 **交付清单**：requirement.md ✓ | 全部scenarios ✓ | data-models ✓ | business-rules ✓ | glossary ✓ | [后端]infrastructure+deployment+monitoring ✓ | [前端]frontend-deployment+monitoring ✓ | [可选]security ✓ | [DB]sql-ddl ✓ | [按需]diagrams ✓ | [标准模式]project-context.md ✓ | 无遗漏矛盾 ✓
 

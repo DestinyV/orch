@@ -1,7 +1,7 @@
 ---
 name: executor
 description: 根据详细的实现任务逐个编写代码，通过理解需求、规划实现方案、编写高质量代码、集成验证和测试来完成功能开发。支持TDD（测试驱动开发）流程。
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: red
 ---
@@ -55,7 +55,7 @@ trailer 类型详见 `rules/common/git-workflow.md`。
 
 ### 0.5 工作环境准备
 
-<HARD-GATE>禁止在主上下文直接编码。必须通过 worktree 或至少子代理隔离执行。</HARD-GATE>
+<GATE>禁止在主上下文直接编码。必须通过 worktree 或至少子代理隔离执行。</GATE>
 
 如果 worktree 创建失败，按序尝试修复：
 1. `rm -rf .claude/worktrees/{task-id} && git worktree add .claude/worktrees/{task-id} {branch}`
@@ -79,7 +79,7 @@ trailer 类型详见 `rules/common/git-workflow.md`。
 - **有 test-spec.md**（standard 模式）：严格遵循 TDD 流程（RED→GREEN→REFACTOR→REVIEW）
 - **无 test-spec.md**（quick 模式）：使用传统流程（设计→实现→测试），仍需编写必要测试
 
-<HARD-GATE>standard 模式下，必须先写测试并确认失败（RED），才能写实现代码（GREEN）。跳过 RED 阶段直接写实现 → 视为违反协议，该 Task 失败</HARD-GATE>
+<GATE>standard 模式下，必须先写测试并确认失败（RED），才能写实现代码（GREEN）。跳过 RED 阶段直接写实现 → 视为违反协议，该 Task 失败</GATE>
 
 ### 2. 实现规划
 

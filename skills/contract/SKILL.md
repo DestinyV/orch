@@ -39,7 +39,7 @@ fullstack 项目强制环节。
 
 ### 步骤 2-4: 派遣 contract-creator Agent
 
-<HARD-GATE>fullstack 模式下必须通过 Agent 派遣 contract-creator，不允许主上下文直接执行接口审查。</HARD-GATE>
+<GATE>fullstack 模式下必须通过 Agent 派遣 contract-creator，不允许主上下文直接执行接口审查。</GATE>
 
 ```bash
 Agent(
@@ -77,7 +77,7 @@ API 端点 ≥8 个时生成接口依赖图（前后端调用关系）；响应 
 
 ## 关键约束
 
-<HARD-GATE>fullstack 模式下必须执行接口审查，任一项不通过 → 拒绝进入 task</HARD-GATE>
+<GATE>fullstack 模式下必须执行接口审查，任一项不通过 → 拒绝进入 task</GATE>
 
 ✅ 必须：参数和响应明确定义 | 错误码完整 | 遵循现有约定
 ❌ 禁止：定义 spec 外的接口 | 跳过审查 | 不通过时进入下一阶段 | 不更新版本号改接口

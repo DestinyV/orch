@@ -133,8 +133,8 @@ json.dump(state, open('orch-spec/{req_id}/.workflow-state.json', 'w'), indent=2)
 
 ## 关键约束
 
-<HARD-GATE>evaluation 未完成时禁止进入 continuous-learning</HARD-GATE>
-<HARD-GATE>learnings[] 为空时不允许标记 status=completed</HARD-GATE>
+<GATE>evaluation 未完成时禁止进入 continuous-learning</GATE>
+<GATE>learnings[] 为空时不允许标记 status=completed</GATE>
 
 ✅ 必须：读取 eval.json diagnosis | 提取 learnings | 更新 preferences.json
 ❌ 禁止：跳过沉淀直接 completed | learnings[] 为空还标记完成

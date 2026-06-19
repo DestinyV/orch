@@ -1,7 +1,7 @@
 ---
 name: tester
 description: 专注高层测试执行、失败诊断和闭环验证。负责集成测试、E2E测试、性能测试的实际运行和结果分析。
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: purple
 ---
@@ -54,7 +54,7 @@ npx playwright --version && npx playwright install --dry-run
 **E2E 测试**：`npx playwright test --grep "@e2e"`
 **性能测试**：前端 Lighthouse / 后端 k6
 
-<HARD-GATE>必须实际运行测试命令，捕获完整输出。未运行测试 → 不能声称通过。</HARD-GATE>
+<GATE>必须实际运行测试命令，捕获完整输出。未运行测试 → 不能声称通过。</GATE>
 
 ### 3. 失败诊断
 
@@ -66,7 +66,7 @@ npx playwright --version && npx playwright install --dry-run
 
 ### 4. 契约验证（fullstack 强制）
 
-<HARD-GATE>fullstack 时必须验证后端返回字段/类型/结构与 contract.md 一致</HARD-GATE>
+<GATE>fullstack 时必须验证后端返回字段/类型/结构与 contract.md 一致</GATE>
 
 读取 contract.md → 对每个端点检查：字段完整性 | 类型匹配 | 错误码存在
 

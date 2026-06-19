@@ -153,4 +153,4 @@ Goal Baseline → Execute Batch → Evaluate → Adapt Plan → Loop or Exit
 - 不允许无限制循环（必须有硬限制）
 - 不允许静默失败（每轮必须验证）
 
-<HARD-GATE>每循环必须有退出条件 | 不允许无限制循环 | 不允许静默失败</HARD-GATE>
+<GATE>每循环必须有退出条件 | 不允许无限制循环 | 不允许静默失败</GATE>

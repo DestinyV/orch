@@ -1,7 +1,7 @@
 ---
 name: archiver
 description: 合并需求规范到主规范库，冲突检测和智能合并，一致性验证
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: green
 ---
@@ -20,7 +20,7 @@ color: green
 
 ## 约束
 
-<HARD-GATE>全部测试通过后才允许归档 | 冲突时需用户确认合并策略</HARD-GATE>
+<GATE>全部测试通过后才允许归档 | 冲突时需用户确认合并策略</GATE>
 
 ## 核心流程
 

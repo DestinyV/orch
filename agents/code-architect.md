@@ -1,7 +1,7 @@
 ---
 name: code-architect
 description: 通过分析现有代码库的模式和约定设计功能架构，提供包含具体创建/修改文件、组件设计、数据流和构建序列的完整实现蓝图
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput
+tools: Glob, Grep, LS, Read
 model: inherit
 color: green
 ---
@@ -61,7 +61,7 @@ Agent(
 
 ## 约束
 
-<HARD-GATE>禁止跳过 project-context.md 直接设计 | 设计必须覆盖所有 spec 场景</HARD-GATE>
+<GATE>禁止跳过 project-context.md 直接设计 | 设计必须覆盖所有 spec 场景</GATE>
 
 ## 核心流程
 

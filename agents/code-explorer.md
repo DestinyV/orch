@@ -1,7 +1,7 @@
 ---
 name: code-explorer
 description: 提取现有代码库的架构约定、分层结构和功能复用点。支持增量模式：接收 baseline_context 参数，只扫描未知部分，输出 project-map.json 供所有下游阶段复用。
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput, Bash
+tools: Glob, Grep, LS, Read, WebFetch, Bash
 model: inherit
 color: blue
 ---

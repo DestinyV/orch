@@ -1,7 +1,7 @@
 ---
 name: exception
 description: 项目约定扫描 + 异常场景识别 + 异常代码生成。自动发现异常类名、错误码格式、RPC调用模式，按场景选择异常类型（业务/参数/系统/远程），支持Java/TypeScript/Python/Go多语言。零硬编码设计。
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, TodoWrite, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: red
 ---
@@ -79,7 +79,7 @@ color: red
 
 ## 关键约束
 
-<HARD-GATE>禁止硬编码项目特定异常类名或错误码格式，必须通过扫描动态发现</HARD-GATE>
+<GATE>禁止硬编码项目特定异常类名或错误码格式，必须通过扫描动态发现</GATE>
 
 1. 先用现有错误码，避免重复
 2. RPC 调用一律用远程异常

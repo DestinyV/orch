@@ -1,6 +1,6 @@
 'use strict';
 /**
- * HARD-GATE Workflow Validator (PostToolUse hook)
+ * GATE Workflow Validator (PostToolUse hook)
  *
  * 在每次 Skill/Agent 调用后自动校验工作流状态：
  * - 阶段顺序合规（禁止跳过）
@@ -8,7 +8,7 @@
  * - 必要产出文件存在
  *
  * 设计原则：fail-open。违规时写入 .workflow-eval.json 的 events[] 并
- * 输出 stderr 警告，但不阻断执行。用户可在 evaluation 阶段查看 HARD-GATE 报告。
+ * 输出 stderr 警告，但不阻断执行。用户可在 evaluation 阶段查看 GATE 报告。
  *
  * 注册方式：hooks.json → PostToolUse → matcher: "Skill|Agent"
  */
@@ -70,7 +70,7 @@ function validateSequence(currentStage, doneStages) {
   for (const [stageName, order] of Object.entries(STAGE_ORDER)) {
     if (order >= cur) break;
     if (order !== 0.5 && !doneNames.has(stageName) && order < cur) {
-      issues.push(`HARD-GATE: stage "${stageName}" (order ${order}) not completed before "${currentStage}" (${cur})`);
+      issues.push(`GATE: stage "${stageName}" (order ${order}) not completed before "${currentStage}" (${cur})`);
     }
   }
   return issues;
@@ -83,7 +83,7 @@ function validateOutputs(stageName, reqId) {
   for (const out of required) {
     const outPath = path.join(PLUGIN_ROOT, 'orch-spec', reqId, out);
     if (!fs.existsSync(outPath)) {
-      issues.push(`HARD-GATE: required output missing: ${out}`);
+      issues.push(`GATE: required output missing: ${out}`);
     }
   }
   return issues;
@@ -131,7 +131,7 @@ function main() {
 
     hasIssues = true;
     for (const msg of allIssues) {
-      console.error(`[HARD-GATE] ${msg}`); // stderr doesn't block
+      console.error(`[GATE] ${msg}`); // stderr doesn't block
       appendEvalEvent(reqId, {
         type: 'hard_gate',
         stage: currentStage,
@@ -142,7 +142,7 @@ function main() {
   }
 
   if (hasIssues) {
-    console.error('[HARD-GATE] Validation completed with warnings (fail-open). Check .workflow-eval.json events[] for details.');
+    console.error('[GATE] Validation completed with warnings (fail-open). Check .workflow-eval.json events[] for details.');
   }
 }
 

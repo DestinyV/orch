@@ -22,7 +22,7 @@ tools: Read, Write, Grep, Glob
 
 ## 约束
 
-<HARD-GATE>必须使用 Opus 模型 | temperature 必须为 0.1 | 必须输出 JSON 格式</HARD-GATE>
+<GATE>必须使用 Opus 模型 | temperature 必须为 0.1 | 必须输出 JSON 格式</GATE>
 
 ## 职责
 

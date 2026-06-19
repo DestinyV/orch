@@ -224,7 +224,7 @@
 
 **并行执行协议**：
 1. 从 tasks.md 读取所有 Task 及其依赖，按拓扑排序划分批次（Batch 1 = 无依赖，Batch N = 依赖 Batch N-1）
-2. <HARD-GATE>standard 模式每批次必须包含对应的测试 Task，禁止将所有测试 Task 排在最后批次</HARD-GATE>
+2. <GATE>standard 模式每批次必须包含对应的测试 Task，禁止将所有测试 Task 排在最后批次</GATE>
 3. 同批次无依赖 Task 并行启动（`run_in_background=true`），测试 Task 优先执行（RED 先于 GREEN）
 4. **批次内并行**：N 个无依赖 Task 必须启动 N 个子代理，禁止串行化到主上下文
 5. **批次间串行**：前一批全部完成后才能启动下一批

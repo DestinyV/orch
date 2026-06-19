@@ -1,6 +1,6 @@
 <!-- EXECUTE-ME --> 本文件由 workflow 步骤1-9 强制执行。每个步骤中的 Agent 派遣必须执行。
 
-<HARD-GATE>全部步骤 1→2→3→4→5→6→7→8→9 必须依次执行完毕，禁止在执行到中间步骤后停止或声明需求完成。每步完成后立即执行"阶段完成记录"写入 eval.json，再进入下一步。</HARD-GATE>
+<GATE>全部步骤 1→2→3→4→5→6→7→8→9 必须依次执行完毕，禁止在执行到中间步骤后停止或声明需求完成。每步完成后立即执行"阶段完成记录"写入 eval.json，再进入下一步。</GATE>
 
 # Agent 派遣意图与验证
 
@@ -43,7 +43,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 生成需求级上下文 `orch-spec/{req_id}/req-context/`（project-map/tech-summary/key-files/decisions/cross-repo）。
 
-<HARD-GATE>context/ 不存在时（首次运行），Layer 3 全量探索必须完整生成以下 8 文件，缺一不可：index.json / tech-stack.md / architecture.md / conventions.md / code-patterns.md / file-map.yaml / logic-chains/api-calls.yaml / logic-chains/component-deps.yaml</HARD-GATE>
+<GATE>context/ 不存在时（首次运行），Layer 3 全量探索必须完整生成以下 8 文件，缺一不可：index.json / tech-stack.md / architecture.md / conventions.md / code-patterns.md / file-map.yaml / logic-chains/api-calls.yaml / logic-chains/component-deps.yaml</GATE>
 
 **全量探索产出**（context/ 不存在时首次生成 8 文件）：
 - `index.json` — 注册中心，含全部 section 的 tags 标签
@@ -71,7 +71,7 @@ print(f'[eval] {stage_name} stage recorded')
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
 | code-explorer ×3 | `run_in_background=true` | 三路必须并行启动。Agent A 始终执行（增量文档摘要）。Agent B 读 context/requirements.yaml 替代扫描目录。Agent C 仅首次或覆盖不足时执行 |
-| — | 预检 | `<HARD-GATE> 检查 orch-spec/context/index.json 存在性 + 校验每个注册 section 的文件是否存在。缺失文件必须补生成，不可跳过。index.json 不存在 → Layer 3 全量生成 8 文件。` |
+| — | 预检 | `<GATE> 检查 orch-spec/context/index.json 存在性 + 校验每个注册 section 的文件是否存在。缺失文件必须补生成，不可跳过。index.json 不存在 → Layer 3 全量生成 8 文件。` |
 | — | 出口 | `orch-spec/{req_id}/req-context/` 含 3+ 文件 + `project-context.md` 非空 |
 
 ---
@@ -90,7 +90,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| test-designer | `run_in_background=true` | `<HARD-GATE> 每条 TEST-VERIFY 必须映射到至少一个测试用例。fixtures.json 必须可解析` |
+| test-designer | `run_in_background=true` | `<GATE> 每条 TEST-VERIFY 必须映射到至少一个测试用例。fixtures.json 必须可解析` |
 | — | 出口 | `test-spec.md` 非空 + `fixtures.json` 可解析 |
 
 ---
@@ -109,7 +109,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| code-architect | `run_in_background=true` | `<HARD-GATE> 禁止跳过 project-context.md 直接设计。设计必须覆盖所有 spec 场景。生成后必须 AskUserQuestion 确认，未确认前禁止进入 task 阶段` |
+| code-architect | `run_in_background=true` | `<GATE> 禁止跳过 project-context.md 直接设计。设计必须覆盖所有 spec 场景。生成后必须 AskUserQuestion 确认，未确认前禁止进入 task 阶段` |
 | — | 出口 | `design.md` 含架构设计/组件设计/决策记录 + `decisions.md` 已追加 ADR |
 
 ---
@@ -124,7 +124,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| contract-creator | — | 仅 fullstack 触发。`<HARD-GATE> review-report 有 blocking 问题时禁止进入 task` |
+| contract-creator | — | 仅 fullstack 触发。`<GATE> review-report 有 blocking 问题时禁止进入 task` |
 | — | 出口 | `contract.md` + `review-report.md` 存在，0 blocking |
 
 ---
@@ -139,7 +139,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| tasker | — | `<HARD-GATE> 即使 1 个 Task 也必须生成 tasks.md。每 Task 标注 provides/consumes/depends_on/验收标准。依赖无环(DAG)` |
+| tasker | — | `<GATE> 即使 1 个 Task 也必须生成 tasks.md。每 Task 标注 provides/consumes/depends_on/验收标准。依赖无环(DAG)` |
 | — | 出口 | `tasks.md` 存在，每 Task 有 provides/consumes |
 
 ---
@@ -154,9 +154,9 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| executor ×N | `run_in_background=true`, 每 Task 独立 | `<HARD-GATE> 禁止主上下文直接编码。每 Task 必须通过子代理。禁止编造测试结果——RED 必有失败输出，GREEN 必有通过输出，REVIEW 必有 lint/typecheck/coverage 命令输出` |
+| executor ×N | `run_in_background=true`, 每 Task 独立 | `<GATE> 禁止主上下文直接编码。每 Task 必须通过子代理。禁止编造测试结果——RED 必有失败输出，GREEN 必有通过输出，REVIEW 必有 lint/typecheck/coverage 命令输出` |
 | code-reviewer | 批次完成后 | 两阶段审查（规范+质量），仅报告 confidence≥80 的问题 |
-| tdd-guide | 每批次完成 | `<HARD-GATE> TDD 四阶段任缺一个命令输出 → 标记 FAILED 驳回` |
+| tdd-guide | 每批次完成 | `<GATE> TDD 四阶段任缺一个命令输出 → 标记 FAILED 驳回` |
 | — | 出口 | 每 Task TDD 日志完整 + src/非空 + execution-report.md 存在 |
 
 ---
@@ -181,8 +181,8 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| tester ×3 | `run_in_background=true` | `<HARD-GATE> 三路必须并行。禁止分析代码后编造结果——报告必须包含命令原文+stdout代码块，禁止推断措辞` |
-| test-verifier | tester ×3 完成后 | `<HARD-GATE> 独立运行验证命令，不接受历史输出。标记 VERIFIED/PARTIAL/MISSING` |
+| tester ×3 | `run_in_background=true` | `<GATE> 三路必须并行。禁止分析代码后编造结果——报告必须包含命令原文+stdout代码块，禁止推断措辞` |
+| test-verifier | tester ×3 完成后 | `<GATE> 独立运行验证命令，不接受历史输出。标记 VERIFIED/PARTIAL/MISSING` |
 | — | 出口 | 每条 TEST-VERIFY 对应测试结果，testing-report.md 含 stdout 证据 |
 
 ---
@@ -197,7 +197,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| archiver | — | `<HARD-GATE> 归档前置：读取 req-context/ 全部文件沉淀到 context/。冲突必须标注 DECISION_NEEDED 后用户确认。禁止只写 log 不更新文件` |
+| archiver | — | `<GATE> 归档前置：读取 req-context/ 全部文件沉淀到 context/。冲突必须标注 DECISION_NEEDED 后用户确认。禁止只写 log 不更新文件` |
 | — | 出口 | 主规范已更新 + context/ 已同步 + archive-log.md 存在 |
 
 ---
@@ -206,7 +206,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 ## 步骤8: evaluation
 
-<HARD-GATE>archive 完成后禁止跳过 evaluation。不执行则 .workflow-eval.json 无 diagnosis，步骤9 无法提取 learnings。</HARD-GATE>
+<GATE>archive 完成后禁止跳过 evaluation。不执行则 .workflow-eval.json 无 diagnosis，步骤9 无法提取 learnings。</GATE>
 
 ### 做什么
 
@@ -221,7 +221,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| 双路 | `run_in_background=true` | `<HARD-GATE> archive 后禁止跳过。cost DB 存在时从 DB 读取实际 tokens；不存在时用 context-budget 估算` |
+| 双路 | `run_in_background=true` | `<GATE> archive 后禁止跳过。cost DB 存在时从 DB 读取实际 tokens；不存在时用 context-budget 估算` |
 
 ---
 
@@ -229,7 +229,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 ## 步骤9: continuous-learning
 
-<HARD-GATE>evaluation 完成后禁止跳过 continuous-learning。learnings[] 为空不允许标记 status=completed。</HARD-GATE>
+<GATE>evaluation 完成后禁止跳过 continuous-learning。learnings[] 为空不允许标记 status=completed。</GATE>
 
 ### 做什么
 
@@ -239,7 +239,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
-| knowledge-curator | — | `<HARD-GATE> evaluation 后禁止跳过。learnings[] 为空不允许标记 status=completed` |
+| knowledge-curator | — | `<GATE> evaluation 后禁止跳过。learnings[] 为空不允许标记 status=completed` |
 | — | 出口 | learnings[] 非空 + `status=completed` |
 
 ---

@@ -31,7 +31,7 @@ description: |
 
 ### 全栈依赖链校验
 
-<HARD-GATE>fullstack+接口契约时验证依赖链：数据库设计→接口契约→前后端任务，接口字段与数据库一致。任一不满足则暂停，回 design。</HARD-GATE>
+<GATE>fullstack+接口契约时验证依赖链：数据库设计→接口契约→前后端任务，接口字段与数据库一致。任一不满足则暂停，回 design。</GATE>
 
 **数据库设计验证**（needs-database=是时）：
 - [ ] design.md 中数据库设计章节已完成且用户已确认
@@ -47,7 +47,7 @@ description: |
 
 ### 步骤2-5: 派遣 tasker Agent
 
-<HARD-GATE>standard 模式必须通过 Agent 派遣 tasker 执行任务拆解，不允许主上下文直接拆解。</HARD-GATE>
+<GATE>standard 模式必须通过 Agent 派遣 tasker 执行任务拆解，不允许主上下文直接拆解。</GATE>
 
 ```bash
 Agent(
@@ -85,7 +85,7 @@ Task ≥6 个时生成任务依赖 DAG（拓扑排序批次图）；provides/con
 
 ## 关键约束
 
-<HARD-GATE>即使只有 1 个 Task 也必须生成 tasks.md。禁止跳过 task 阶段直接执行。</HARD-GATE>
+<GATE>即使只有 1 个 Task 也必须生成 tasks.md。禁止跳过 task 阶段直接执行。</GATE>
 
 - 任务独立可实现 | 依赖关系准确无环 | 验收标准可验证 | Test Case 100%覆盖 | 无遗留TODO
 

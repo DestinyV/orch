@@ -109,4 +109,4 @@ compact 建议提示（不修改文件，仅输出建议）。
 - 实现中途不 compact（丢失关键状态的风险）
 - 不自动执行 compact（用户决定）
 
-<HARD-GATE>实现中途禁止 compact | 仅提示建议不自动执行</HARD-GATE>
+<GATE>实现中途禁止 compact | 仅提示建议不自动执行</GATE>

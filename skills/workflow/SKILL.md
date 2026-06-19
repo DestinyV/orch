@@ -29,8 +29,8 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `${CLAUDE_PLUGIN_ROOT
 | Token 记录 | 每阶段完成后调用 `context-budget` 记录上下文消耗，记录到 `.workflow-eval.json` |
 | 上下文监控 | 阶段切换时检测上下文余量，不足时建议 compact 或精简后续步骤                    |
 
-<HARD-GATE>禁止在正式流程前执行代码探索，由 spec 内部负责。</HARD-GATE>
-<HARD-GATE>禁止跳过阶段。即使已有 spec 目录，也必须从步骤0开始，由状态检测决定中断恢复。</HARD-GATE>
+<GATE>禁止在正式流程前执行代码探索，由 spec 内部负责。</GATE>
+<GATE>禁止跳过阶段。即使已有 spec 目录，也必须从步骤0开始，由状态检测决定中断恢复。</GATE>
 
 ---
 
@@ -57,7 +57,7 @@ SDD+TDD 工作流的**入口编排器**。步骤控制 → `${CLAUDE_PLUGIN_ROOT
 
 ### 步骤0.5: 苏格拉底澄清
 
-<HARD-GATE>模糊度 > 0.2 时不允许跳过澄清。</HARD-GATE>
+<GATE>模糊度 > 0.2 时不允许跳过澄清。</GATE>
 
 ```bash
 Skill("orch:clarify", args="{requirement_desc}")
@@ -67,7 +67,7 @@ Skill("orch:clarify", args="{requirement_desc}")
 
 ### 流持续化检查
 
-<HARD-GATE>检测到未完成状态时提示用户，不允许静默退出。</HARD-GATE>
+<GATE>检测到未完成状态时提示用户，不允许静默退出。</GATE>
 
 ```bash
 for f in orch-spec/*/.workflow-state.json; do
@@ -86,9 +86,9 @@ done
 
 每阶段：**前置校验 → 派遣 → 产出校验 → Token记录 → 纠正**。
 
-<HARD-GATE>全部步骤 1→9 必须依次执行完毕，禁止在中间步骤停止或声明需求完成。每步完成后立即执行 agent-dispatch-code.md 中的"阶段完成记录"写入 eval.json，再进入下一步。</HARD-GATE>
+<GATE>全部步骤 1→9 必须依次执行完毕，禁止在中间步骤停止或声明需求完成。每步完成后立即执行 agent-dispatch-code.md 中的"阶段完成记录"写入 eval.json，再进入下一步。</GATE>
 
-<HARD-GATE>每阶段完成后必须写入 `.workflow-eval.json` 追加 stage 数据。stages[] 为空时不允许进入下一阶段。</HARD-GATE>
+<GATE>每阶段完成后必须写入 `.workflow-eval.json` 追加 stage 数据。stages[] 为空时不允许进入下一阶段。</GATE>
 
 | 步骤                      | 前置                                  | 产出                                                                      | 记录                               | 纠正               |
 | ------------------------- | ------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------- | ------------------ |
@@ -103,13 +103,13 @@ done
 | 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
 | 9 continuous-learning | evaluation done | orch-spec/patterns/ + preferences.json 更新 | — | — |
 
-<HARD-GATE>步骤8(evaluation)和步骤9(continuous-learning)不可跳过。archive完成后必须自动执行。</HARD-GATE>
+<GATE>步骤8(evaluation)和步骤9(continuous-learning)不可跳过。archive完成后必须自动执行。</GATE>
 
 ---
 
 ## Agent 派遣总览
 
-<HARD-GATE>以下派遣指令必须逐条执行。读取并执行 `references/agent-dispatch-code.md` 中的全部 Agent() 调用，禁止跳过任何步骤。</HARD-GATE>
+<GATE>以下派遣指令必须逐条执行。读取并执行 `references/agent-dispatch-code.md` 中的全部 Agent() 调用，禁止跳过任何步骤。</GATE>
 
 | 批次      | 步骤    | Agent                                  | 调度策略                                                                       |
 | --------- | ------- | -------------------------------------- | ------------------------------------------------------------------------------ |

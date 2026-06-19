@@ -190,4 +190,4 @@ print('Written estimates to ' + str(eval_path))
 - 默认模式：Context Budget Report — 组件开销分解、问题清单、Top 优化建议
 - `write-to-eval` 模式：估算数据写入 `.workflow-eval.json` 的 `stages[].estimated_tokens`
 
-<HARD-GATE>禁止读取文件内容（仅统计大小） | 禁止修改工作流配置 | write-to-eval 仅允许写入 estimated_tokens 字段</HARD-GATE>
+<GATE>禁止读取文件内容（仅统计大小） | 禁止修改工作流配置 | write-to-eval 仅允许写入 estimated_tokens 字段</GATE>

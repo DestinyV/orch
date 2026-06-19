@@ -1,7 +1,7 @@
 ---
 name: tasker
 description: 设计→任务拆解 + 依赖分析 + 并行执行规划。将设计方案转换为详细的代码级别任务列表，包含Test Case映射、Mock数据关联、全栈依赖链校验。支持前端/后端/数据库/微服务等任务类型。
-tools: Write, Edit, Bash, Glob, Grep, LS, Read, TodoWrite, KillShell, BashOutput
+tools: Write, Edit, Bash, Glob, Grep, LS, Read
 model: inherit
 color: green
 ---
@@ -18,9 +18,9 @@ color: green
 
 ## 约束
 
-<HARD-GATE>每个 Task 必须有 provides/consumes 声明 | 依赖关系必须无环（DAG）</HARD-GATE>
-<HARD-GATE>standard 模式: 每实现 Task 必须在同批次配测试 Task（TDD: 测试与实现在同一批次）。禁止将所有测试 Task 集中到最后批次。</HARD-GATE>
-<HARD-GATE>standard 模式: 测试 Task 的 depends_on 必须指向同批次实现 Task，确保测试先于实现执行（RED→GREEN）。</HARD-GATE>
+<GATE>每个 Task 必须有 provides/consumes 声明 | 依赖关系必须无环（DAG）</GATE>
+<GATE>standard 模式: 每实现 Task 必须在同批次配测试 Task（TDD: 测试与实现在同一批次）。禁止将所有测试 Task 集中到最后批次。</GATE>
+<GATE>standard 模式: 测试 Task 的 depends_on 必须指向同批次实现 Task，确保测试先于实现执行（RED→GREEN）。</GATE>
 
 ## 核心职责
 

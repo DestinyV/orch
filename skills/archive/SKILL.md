@@ -30,7 +30,7 @@ description: |
 
 ### 步骤1.5: 归档前验证 — spec vs code 一致性
 
-<HARD-GATE>归档前必须验证规范与最终实现的一致性。不一致时 spec 必须更新为匹配实现（spec 是实现的文档，实现是最终事实来源）。</HARD-GATE>
+<GATE>归档前必须验证规范与最终实现的一致性。不一致时 spec 必须更新为匹配实现（spec 是实现的文档，实现是最终事实来源）。</GATE>
 
 ```bash
 Agent(subagent_type="orch:code-explorer",
@@ -50,7 +50,7 @@ Agent(subagent_type="orch:code-explorer",
 
 ### 步骤2-4: 派遣 archiver Agent 执行合并
 
-<HARD-GATE>必须通过 Agent 派遣 archiver，不允许主上下文直接执行对标和合并。</HARD-GATE>
+<GATE>必须通过 Agent 派遣 archiver，不允许主上下文直接执行对标和合并。</GATE>
 
 ```bash
 Agent(
@@ -87,7 +87,7 @@ Agent(
 
 归档完成后将本需求知识同步到 `orch-spec/context/`，供后续需求复用。
 
-<HARD-GATE>归档完成时必须同步更新 orch-spec/context/。context/ 不存在时先创建目录并初始化 index.json。</HARD-GATE>
+<GATE>归档完成时必须同步更新 orch-spec/context/。context/ 不存在时先创建目录并初始化 index.json。</GATE>
 
 **执行顺序**（每一步使用脚本而非手工 LLM 编辑）：
 
@@ -192,7 +192,7 @@ print(f'[archive] Updated exploration state (SHA: {sha[:8]})')
 
 ## 归档合并协议
 
-<HARD-GATE>归档不是只写 log，必须实际合并 spec 文件到主规范库。log 仅用于审计，不能替代合并。</HARD-GATE>
+<GATE>归档不是只写 log，必须实际合并 spec 文件到主规范库。log 仅用于审计，不能替代合并。</GATE>
 
 1. **场景合并** — 复制 `scenarios/*.md` 到主规范 `orch-spec/spec/scenarios/`。场景ID冲突时追加新Case到末尾（不覆盖），完全重复则跳过。
 2. **数据模型合并** — 新增实体/字段追加到 `orch-spec/spec/data-models.md`。
@@ -207,8 +207,8 @@ print(f'[archive] Updated exploration state (SHA: {sha[:8]})')
 
 ## 关键约束
 
-<HARD-GATE>任何冲突不得静默跳过，必须标记为 DECISION_NEEDED 等待人工确认</HARD-GATE>
-<HARD-GATE>禁止只输出 archive-log.md 而不实际执行文件合并</HARD-GATE>
+<GATE>任何冲突不得静默跳过，必须标记为 DECISION_NEEDED 等待人工确认</GATE>
+<GATE>禁止只输出 archive-log.md 而不实际执行文件合并</GATE>
 
 ✅ 必须：对标比较找重复/新增 | 处理所有冲突 | 一致性检查通过 | 生成归档报告
 ❌ 禁止：随意删除已有规范 | 跳过重复检查 | 忽视冲突直接覆盖 | 不备份直接修改

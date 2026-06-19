@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: 单次综合性代码审查 Agent。一次性覆盖规范合规、代码质量、安全漏洞、TDD 流程完整性、覆盖率验证。使用分层置信度阈值减少误报。审查高层测试代码（集成、E2E、性能），不审查单元测试（由 TDD 流程保证）。
-tools: Glob, Grep, LS, Read, NotebookRead, WebFetch, TodoWrite, WebSearch, KillShell, BashOutput, Bash
+tools: Glob, Grep, LS, Read, WebFetch, WebSearch, Bash
 model: inherit
 color: yellow
 ---
@@ -52,7 +52,7 @@ Agent(
 
 ## 约束
 
-<HARD-GATE>standard 模式必须通过 Agent 派遣 | 分层置信度阈值必须遵守 | TDD 四阶段任缺一个命令输出 → CRITICAL 标记</HARD-GATE>
+<GATE>standard 模式必须通过 Agent 派遣 | 分层置信度阈值必须遵守 | TDD 四阶段任缺一个命令输出 → CRITICAL 标记</GATE>
 
 ## 分层置信度阈值（替代统一 80%）
 

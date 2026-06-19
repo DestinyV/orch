@@ -85,7 +85,7 @@ Agent(
 - **分层清晰**：Unit快速反馈 → Integration验证协作 → E2E保证体验
 - **Mock策略明确**：为什么Mock | Mock什么 | 如何Mock
 
-<HARD-GATE>TEST-VERIFY覆盖率<100%→不允许输出测试规范，必须补充test case直到完全覆盖。</HARD-GATE>
+<GATE>TEST-VERIFY覆盖率<100%→不允许输出测试规范，必须补充test case直到完全覆盖。</GATE>
 
 ## 输出要求
 

@@ -42,7 +42,7 @@ description: |
 
 ## 阈值的设置
 
-<HARD-GATE>必须先加载 config/socratic-config.json 确认阈值，不能使用硬编码默认值。</HARD-GATE>
+<GATE>必须先加载 config/socratic-config.json 确认阈值，不能使用硬编码默认值。</GATE>
 
 1. 读取 `config/socratic-config.json` 中的 `ambiguityThreshold`（默认 0.2）
 2. 阈值可被 `.claude/settings.json` 中的 `socratic.ambiguityThreshold` 覆盖

@@ -106,7 +106,7 @@ description: |
 
 ## 关键约束
 
-<HARD-GATE>冲突项必须 AskUserQuestion 确认后写入，不得静默覆盖</HARD-GATE>
+<GATE>冲突项必须 AskUserQuestion 确认后写入，不得静默覆盖</GATE>
 
 ✅ 必须：扫描全部可导入文件 | 逐条去重 | 字段级合并 | 生成报告
 ❌ 禁止：跳过冲突直接写入 | 文件级简单追加 data-models | 不生成导入报告

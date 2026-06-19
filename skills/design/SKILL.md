@@ -28,7 +28,7 @@ description: |
 
 读取 spec/requirement.md 的模式标签（standard/quick, fullstack/frontend-only/backend-only, needs-database, needs-contract）。
 
-<HARD-GATE>fullstack+contract 时必须执行接口契约流程；needs-database 时必须先完成数据库设计。</HARD-GATE>
+<GATE>fullstack+contract 时必须执行接口契约流程；needs-database 时必须先完成数据库设计。</GATE>
 
 设计顺序：
 | 模式 | 数据库 | 顺序 |
@@ -82,7 +82,7 @@ Agent(
 
 ### 共识式设计审查（standard 模式，新增）
 
-<HARD-GATE>standard 模式必须执行共识审查循环，不允许单次设计直接交付。</HARD-GATE>
+<GATE>standard 模式必须执行共识审查循环，不允许单次设计直接交付。</GATE>
 
 在架构设计后执行多视角审查循环：
 
@@ -157,11 +157,11 @@ Agent(
 4. 用户确认
 5. DDL 生成 → `templates/sql-ddl-template.md`
 
-<HARD-GATE>未完成数据库设计并得到用户确认前，不得进入接口契约和组件设计。</HARD-GATE>
+<GATE>未完成数据库设计并得到用户确认前，不得进入接口契约和组件设计。</GATE>
 
 ### UML 设计图生成（按需）
 
-<HARD-GATE>设计图=全部 或 按需触发阈值达标时，必须生成对应的 UML 图文件到磁盘；快速模式跳过。生成后校验 diagrams/ 目录文件数是否匹配预期图类型数。</HARD-GATE>
+<GATE>设计图=全部 或 按需触发阈值达标时，必须生成对应的 UML 图文件到磁盘；快速模式跳过。生成后校验 diagrams/ 目录文件数是否匹配预期图类型数。</GATE>
 
 读取「设计图」标签，按 `references/diagram-trigger-rules.md` 判断触发条件：
 
@@ -191,7 +191,7 @@ ls -la orch-spec/{req_id}/design/diagrams/
 
 ### 设计系统对齐（frontend/fullstack）
 
-<HARD-GATE>frontend/fullstack 模式必须确定设计系统后才能生成 UI 方案。</HARD-GATE>
+<GATE>frontend/fullstack 模式必须确定设计系统后才能生成 UI 方案。</GATE>
 
 在生成前端设计方案前，确定 UI 风格约束：
 
@@ -218,7 +218,7 @@ ls -la orch-spec/{req_id}/design/diagrams/
 
 **前置**：数据库设计已完成且用户确认。
 
-<HARD-GATE>接口契约未得到双方确认前，不得进入前端组件设计和后端服务设计。</HARD-GATE>
+<GATE>接口契约未得到双方确认前，不得进入前端组件设计和后端服务设计。</GATE>
 
 基于数据库设计，定义API接口。参考项目现有API模式：
 - 路由命名、HTTP Method、前缀与现有保持一致
@@ -238,11 +238,11 @@ ls -la orch-spec/{req_id}/design/diagrams/
 - 后端/全栈：数据库设计✓ | 接口契约✓ | 架构原则✓
 - 前端/全栈：组件拆分✓ | 测试性设计✓
 
-<HARD-GATE>前端/全栈场景中，未完成测试性设计（data-testid策略、可测试交互路径）前，不输出最终方案。</HARD-GATE>
+<GATE>前端/全栈场景中，未完成测试性设计（data-testid策略、可测试交互路径）前，不输出最终方案。</GATE>
 
 输出 design.md，结构：需求分析 → 设计方案（架构/设计模式/分层/组件/数据流） → 参考对比 → 技术方案 → 实现清单 → 决策记录 → 风险。模板见 `templates/design-template.md`。
 
-<HARD-GATE>design.md 生成后必须 AskUserQuestion 确认通过，用户确认前禁止进入 task 阶段。</HARD-GATE>
+<GATE>design.md 生成后必须 AskUserQuestion 确认通过，用户确认前禁止进入 task 阶段。</GATE>
 
 ### 审批与交付
 

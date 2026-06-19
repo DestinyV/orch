@@ -25,7 +25,7 @@ description: |
 
 **工具优先**：使用 `Skill("orch:scripts")` 调用 `scan-exceptions.py` 扫描项目异常类名/错误码/RPC 模式，替代 AI 逐文件 Grep。
 
-<HARD-GATE>必须通过 Agent 派遣 exception 执行异常处理，不允许主上下文直接扫描和生成。</HARD-GATE>
+<GATE>必须通过 Agent 派遣 exception 执行异常处理，不允许主上下文直接扫描和生成。</GATE>
 
 ```bash
 Agent(
@@ -91,7 +91,7 @@ try {
 
 ## 关键约束
 
-<HARD-GATE>禁止硬编码项目特定异常类名或错误码格式，必须通过扫描动态发现</HARD-GATE>
+<GATE>禁止硬编码项目特定异常类名或错误码格式，必须通过扫描动态发现</GATE>
 
 1. 先用现有错误码，避免重复
 2. RPC 调用一律用远程异常
