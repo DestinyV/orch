@@ -1,0 +1,21 @@
+{
+  "_description": "探索状态追踪。每次 archive 步骤后更新，用于跨工作流增量探索决策。",
+  "version": 1,
+  "last_full_exploration": "",
+  "last_incremental_exploration": "",
+  "last_explored_sha": "",
+  "section_freshness": {
+    "tech-stack": {"sha": "", "last_refreshed": "", "dirty": false},
+    "architecture": {"sha": "", "last_refreshed": "", "dirty": false},
+    "conventions": {"sha": "", "last_refreshed": "", "dirty": false},
+    "code-patterns": {"sha": "", "last_refreshed": "", "dirty": false},
+    "file-map": {"sha": "", "last_refreshed": "", "dirty": false},
+    "api-calls": {"sha": "", "last_refreshed": "", "dirty": false},
+    "component-deps": {"sha": "", "last_refreshed": "", "dirty": false}
+  },
+  "inheritance_stats": {
+    "total_requirements": 0,
+    "avg_inheritance_coverage": 0,
+    "requirements_from_scratch": 0
+  }
+}

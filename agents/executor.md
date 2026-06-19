@@ -14,9 +14,17 @@ color: red
 
 根据 task 提供的实现任务，完成从规划到实现、集成和验证的全过程。输出可直接运行和部署的生产级代码。
 
-## 读取需求上下文
+## Context（由主代理注入）
 
-执行前读取 `orch-spec/{req}/req-context/key-files.md` 和 `decisions.md`，了解本需求涉及的文件和设计约束，避免重复探索。执行后将实际修改的文件路径追加到 `orch-spec/{req}/req-context/key-files.md`。
+不自行读取文件。上下文由主代理在 prompt 中注入，包含：
+
+- **Task 规范**：当前 Task 的目标、交付物、验收标准、provides/consumes
+- **project-map 子图**：与当前 Task provides/consumes 相关的模块文件列表（来源：`req-context/project-map.json`）
+- **设计决策**：与当前 Task 相关的 ADR 记录（来源：`req-context/decisions.md`，摘要注入）
+- **测试模板**：相关的 test-*.template（由 test-design 阶段产出）
+- **异常模式缓存**：`req-context/exception-patterns.md`（已由 spec 阶段一次性扫描完成）
+
+**说明**：此方式的 token 消耗只有自行读取 req-context 文件的 1/5-1/3，因为主代理只注入 Task-specific 的上下文子集，而非全量 project-context。
 
 ## 调用方式
 

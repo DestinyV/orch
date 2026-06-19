@@ -1,0 +1,14 @@
+# 需求相似度索引
+# archive 步骤自动维护，供 context-inheritance-protocol 步骤3 使用。
+# 每次工作流完成归档后，由此需求的新条目（keywords / modules_touched / files_touched）。
+
+requirements:
+  # - id: "user-auth"
+  #   keywords: [auth, JWT, login, session, OAuth]
+  #   modules_touched: [src/auth/, src/middleware/]
+  #   files_touched: [src/auth/login.ts, src/auth/jwt.ts]
+  #   api_routes: [POST /api/login, POST /api/refresh]
+  #   completed_at: "2026-06-15"
+  #   context_inherited_from: [project-context]
+  #   exploration_mode: "full"
+  #   inheritance_coverage: 0.3

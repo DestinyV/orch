@@ -18,6 +18,12 @@ tools: Bash, Grep, Read, Glob
 3. 独立运行验证命令
 4. 输出结构化验证报告
 
+## Context（由主代理注入）
+
+- **验收标准清单**：来自 tasks.md 或 testing-report.md（主代理注入）
+- **测试目标**：来自 `req-context/project-map.json` 的 test_targets
+- **`@critical` 标记**：所有标记 `@critical` 的 TEST-VERIFY 场景必须执行**全量独立验证**（不抽样）
+
 ## 职责
 
 对 execute 或 test 的输出进行独立证据验证。每条验收标准必须有新鲜证据支持。

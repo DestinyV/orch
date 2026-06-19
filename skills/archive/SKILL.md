@@ -83,22 +83,108 @@ Agent(
 
 基于 archiver 返回结果，输出到 `orch-spec/spec/archive-log.md`，包含归档内容、合并结果、一致性检查、规范库当前状态。详见 `references/workflow-detail.md`（归档报告模板 + 合并示例）。
 
-### 步骤6: 同步上下文注册中心
+### 步骤6: 同步上下文注册中心（程序化执行）
 
 归档完成后将本需求知识同步到 `orch-spec/context/`，供后续需求复用。
 
 <HARD-GATE>归档完成时必须同步更新 orch-spec/context/。context/ 不存在时先创建目录并初始化 index.json。</HARD-GATE>
 
-| 同步数据 | 来源（提取具体内容） | 写入目标 | 目的 |
-|---------|--------------------|---------|------|
-| 需求摘要 | `{req_id}/spec/scenarios/*.md` → 提取场景标题行<br>`data-models.md` → 提取 `### Table:` 后的实体名<br>`business-rules.md` → 提取每条规则前 20 字 | `context/requirements.yaml` 追加一条（含场景名列表/模型名列表/规则摘要列表） | Layer 1 历史匹配 |
-| API 路由 | `{req_id}/design/design.md` → 提取 HTTP 方法 + 路径 | `context/logic-chains/api-calls.yaml` 追加 `chains[]` | Layer 1 调用链复用 |
-| 模块依赖 | `{req_id}/tasks/tasks.md` → 提取 provides/consumes | `context/logic-chains/component-deps.yaml` 追加 `dependencies[]` | Layer 1 依赖复用 |
-| 文件路径 | `{req_id}/req-context/key-files.md` → 提取涉及文件路径 | `context/file-map.yaml` → `key_files[]` 追加（含实际路径和用途） | Layer 1 文件定位复用 |
-| 架构决策 | `{req_id}/req-context/decisions.md` → 提取 ADR 记录 | `context/learnings.md` → `## 架构决策` 追加 | Layer 1 知识复用 |
-| 标签索引 | 需求描述提取关键词 | `context/index.json` → `sections[]` 追加 + tags 更新 | Layer 1 关键词匹配 |
+**执行顺序**（每一步使用脚本而非手工 LLM 编辑）：
 
-> 归档报告模板: `references/workflow-detail.md`
+```bash
+# 步骤6.1: 提取 API 路由并追加到 api-calls.yaml
+python3 -c "
+import json, os, re
+req = '{requirement_desc_abstract}'
+design_path = f'orch-spec/{req}/design/design.md'
+api_path = 'orch-spec/context/logic-chains/api-calls.yaml'
+if os.path.exists(design_path):
+    with open(design_path) as f: content = f.read()
+    routes = re.findall(r'(GET|POST|PUT|DELETE|PATCH)\s+(/\S+)', content)
+    if routes:
+        existing = []
+        if os.path.exists(api_path):
+            with open(api_path) as f: existing = yaml.safe_load(f).get('chains', [])
+        for method, path in routes:
+            existing.append({'method': method, 'path': path, 'source_req': req})
+        with open(api_path, 'w') as f: yaml.dump({'chains': existing}, f)
+        print(f'[archive] Synced {len(routes)} API routes to api-calls.yaml')
+"
+```
+
+```bash
+# 步骤6.2: 提取 provides/consumes 并追加到 component-deps.yaml
+python3 -c "
+import yaml, os, re
+req = '{requirement_desc_abstract}'
+tasks_path = f'orch-spec/{req}/tasks/tasks.md'
+deps_path = 'orch-spec/context/logic-chains/component-deps.yaml'
+if os.path.exists(tasks_path):
+    with open(tasks_path) as f: content = f.read()
+    deps = re.findall(r'consumes:\s*(\S+)', content)
+    if deps:
+        existing = []
+        if os.path.exists(deps_path):
+            with open(deps_path) as f: existing = yaml.safe_load(f).get('dependencies', [])
+        for dep in deps:
+            existing.append({'provides': 'unknown', 'consumes': dep, 'source_req': req})
+        with open(deps_path, 'w') as f: yaml.dump({'dependencies': existing}, f)
+        print(f'[archive] Synced {len(deps)} dependencies to component-deps.yaml')
+"
+```
+
+```bash
+# 步骤6.3: 更新 requirements.yaml（需求相似度索引）
+python3 -c "
+import yaml, os
+req = '{requirement_desc_abstract}'
+reqs_path = 'orch-spec/context/requirements.yaml'
+# 从 req-context/key-files.md 提取涉及的文件和模块
+keyfiles_path = f'orch-spec/{req}/req-context/key-files.md'
+files = []
+if os.path.exists(keyfiles_path):
+    with open(keyfiles_path) as f:
+        for line in f:
+            if line.startswith('- ') and '/' in line:
+                files.append(line.strip('- ').strip())
+existing = []
+if os.path.exists(reqs_path):
+    with open(reqs_path) as f: existing = yaml.safe_load(f).get('requirements', [])
+existing.append({
+    'id': req,
+    'files_touched': files,
+    'completed_at': '__DATE__'
+})
+with open(reqs_path, 'w') as f: yaml.dump({'requirements': existing}, f)
+print(f'[archive] Updated requirements.yaml with {req}')
+"
+```
+
+```bash
+# 步骤6.4: 更新 .exploration-state.json
+python3 -c "
+import json, os, subprocess
+state_path = 'orch-spec/context/.exploration-state.json'
+# 获取当前 HEAD SHA
+sha = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip()
+state = json.load(open(state_path)) if os.path.exists(state_path) else {}
+state['last_explored_sha'] = sha
+section = '{requirement_desc_abstract}'
+# 标记本需求涉及的 section 为 dirty=false（刚刷新）
+for s in state.get('section_freshness', {}):
+    state['section_freshness'][s]['sha'] = sha
+    state['section_freshness'][s]['last_refreshed'] = '__DATE__'
+state['inheritance_stats']['total_requirements'] = state['inheritance_stats'].get('total_requirements', 0) + 1
+json.dump(state, open(state_path, 'w'), indent=2)
+print(f'[archive] Updated exploration state (SHA: {sha[:8]})')
+"
+```
+
+**验证**：同步后确认以下文件非空：
+- `context/logic-chains/api-calls.yaml` — 有 `chains[]`（或为空数组且注明"无API变更"）
+- `context/logic-chains/component-deps.yaml` — 有 `dependencies[]`
+- `context/requirements.yaml` — 追加了本需求条目
+- `.exploration-state.json` — `last_explored_sha` 更新
 
 ### 可选清理
 

@@ -103,7 +103,9 @@ description: |
 
 - **项目探索**：由 workflow 步骤1 统一调度（文档/历史/代码三路并行）。详见 `skills/workflow/SKILL.md` 步骤1。
 
-**探索结果输出**：标准模式将探索结果写入 `orch-spec/{req_id}/project-context.md`，供下游 design 直接读取，避免重复扫描。
+**探索结果输出**：
+- `orch-spec/{req_id}/project-context.md` — 标准模式：架构探索结果，供 design 复用（已有）
+- `orch-spec/{req_id}/req-context/project-map.json` — **结构化项目地图**：JSON 格式的模块/文件/API/数据模型/测试目标索引。所有下游阶段从此读取文件路径信息，不再自行 grep/glob 探索。
 
 **数据库需求判定**（当需求涉及数据持久化时）：
 ```
@@ -238,6 +240,7 @@ orch-spec/[需求ID]/
 │   ├── sql-ddl.md                  # [needs-database=是]SQL脚本
 │   └── diagrams/                   # [按需]ER图/流程图/决策树
 └── project-context.md              # [标准模式]架构探索结果，供 design 复用
+└── req-context/project-map.json    # [新增]结构化项目地图，JSON 格式，供所有下游阶段复用
 ```
 
 模板见 `templates/` 目录。
