@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "_description": "Goal 模式下回合间状态传递文件。每次 batch 完成后由 goal-evaluator 更新，供 loop-operator 和 adapt_plan 使用。",
+    "mode": "goal",
+    "created_at": "",
+    "max_iterations": 5
+  },
+  "goal_achieved": 0.0,
+  "previous_goal_achieved": 0.0,
+  "consecutive_no_progress": 0,
+  "batches_used": 0,
+  "acceptance_criteria": [],
+  "current_plan": {
+    "pending_tasks": [],
+    "next_batch": [],
+    "adapt_history": []
+  },
+  "batch_history": []
+}

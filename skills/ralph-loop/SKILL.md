@@ -18,8 +18,8 @@ origin: community
 
 ## How It Works
 
-从 4 种循环模式中选择：sequential（顺序执行） / continuous-pr（CI门控） / rfc-dag（DAG拓扑排序） / infinite（探索性并行）。
-每循环有明确退出条件和质量门控。
+从 5 种循环模式中选择：sequential（顺序执行） / continuous-pr（CI门控） / rfc-dag（DAG拓扑排序） / infinite（探索性并行） / **goal（迭代逼近目标型，新增）**。
+每循环有明确退出条件和质量门控。goal 模式详见 [`references/goal-mode-protocol.md`](references/goal-mode-protocol.md)。
 
 ## 循环选择流程
 
@@ -31,6 +31,9 @@ Start
   +-- Need RFC decomposition? -- yes --> rfc-dag
   |
   +-- Need exploratory parallel? -- yes --> infinite
+  |
+  +-- Need goal-driven iteration? -- yes --> goal（迭代逼近）
+  |   （spec 含 @goal-adaptive / 用户明确指定）
   |
   +-- default --> sequential
 ```
@@ -82,6 +85,20 @@ Agent C (方案3) ─┘
 
 **适合**: 探索性研究、多种方案比较、原型验证。
 **质量门控**: eval-harness 评估选择最优。
+
+### Goal（迭代逼近目标型，新增）
+
+适用于目标明确但路径不确定的任务。循环执行 `执行 → 评估 → 调整 → 再执行`，每次迭代计算量化的目标达成度，直到收敛。
+
+```
+Goal Baseline → Execute Batch → Evaluate → Adapt Plan → Loop or Exit
+```
+
+**适合**: 复杂需求需要多轮逼近、实现路径不明确、需要渐进式完善的场景。
+**质量门控**: goal-evaluator 独立评分，@critical 验收标准 HARD-GATE fail-closed。
+**退出条件**: goal_achieved >= 0.95 / max_iterations / consecutive stall。
+
+详见 [`references/goal-mode-protocol.md`](references/goal-mode-protocol.md)。
 
 ## 推荐生产栈
 
