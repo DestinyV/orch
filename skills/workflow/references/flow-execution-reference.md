@@ -21,7 +21,7 @@
 | 6 | test | tester, test-verifier | src/ + tasks.md | tests/ + testing/testing-report.md | 步骤5 done | 串行 |
 | 7 | archive | archiver | spec/ + tests/ | orch-spec/spec/（已合并）+ archive-log.md | 步骤6 done + 全通过 | 串行 |
 | 8 | evaluation | context-budget + cost DB | .workflow-eval.json | 诊断报告（estimated + actual + deviation） | 步骤7 done | 双路并行 |
-| 9 | continuous-learning | knowledge-curator | .workflow-eval.json | orch-spec/patterns/ + orch-spec/user-preferences/ | 步骤8 done | 串行 |
+| 9 | continuous-learning | knowledge-curator + completion-reporter | .workflow-eval.json | orch-spec/patterns/ + orch-spec/user-preferences/ + 完成报告 | 步骤8 done | 串行（knowledge-curator 先，completion-reporter 后） |
 
 ### 辅助技能集成
 
@@ -353,6 +353,7 @@
 **输出契约**（必须）：
 - orch-spec/patterns/ — 模式文件更新
 - orch-spec/user-preferences/preferences.json — always_check[] 更新
+- 完成报告 — completion-reporter Agent 按 completion-table.md 模板生成
 
 **输出契约**（可选）：
 - instincts/ — 新 instinct 文件

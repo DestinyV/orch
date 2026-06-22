@@ -135,6 +135,11 @@ function main() {
     // 校验产出文件
     const outIssues = validateOutputs(currentStage, reqId);
 
+    // 步骤9 learnings 已写入但 completion_report 未生成
+    if (currentStage === '9_knowledge_continuum' && !state.completion_report_generated) {
+      seqIssues.push('GATE: step 9 learnings written but completion_report_generated is not true. Dispatch completion-reporter Agent to generate the final report.');
+    }
+
     const allIssues = [...seqIssues, ...outIssues];
     if (allIssues.length === 0) continue;
 

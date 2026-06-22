@@ -1,6 +1,6 @@
 # orch — Agent 注册表（中文）
 
-SDD+TDD 工作流专用 Agent 注册表。共 24 个 Agents（12 工作流核心 + 12 扩展能力）。
+SDD+TDD 工作流专用 Agent 注册表。共 25 个 Agents（13 工作流核心 + 12 扩展能力）。
 
 ## 工作流核心 Agents
 
@@ -17,6 +17,7 @@ SDD+TDD 工作流专用 Agent 注册表。共 24 个 Agents（12 工作流核心
 | tester | 测试验证和闭环 | 代码审查后 |
 | exception | 异常模式扫描+代码生成 | 后端/全栈编码时 |
 | knowledge-curator | 知识复利执行 | 工作流完成后 |
+| completion-reporter | 工作流完成报告生成（四段：总结/效率/沉淀/建议） | knowledge-curator 完成后 |
 | archiver | 规范归档合并 + context 同步 | 测试通过后 |
 
 ## 扩展能力 Agents
