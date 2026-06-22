@@ -225,14 +225,17 @@ print(f'[eval] {stage_name} stage recorded')
 
 ---
 
-<!-- ⏩ 步骤7 完成后必须立即继续步骤8，禁止停止或声明完成 -->
+<!-- ⏩ 步骤7 出口：切分上下文，步骤8在新对话中执行 -->
 
-<GATE>archive 完成后禁止停止。步骤7 "阶段完成记录" 写入 eval.json 后必须：</GATE>
-<GATE>1. 立即执行步骤8（evaluation），不允许步骤7→8 之间有用户交互或暂停</GATE>
-<GATE>2. 步骤7 产出验证必须在状态描述中注明 "步骤8已自动级联"</GATE>
-<GATE>3. 仅在步骤9 完成报告输出后，才允许标记 status=completed</GATE>
+<GATE>步骤7 "阶段完成记录" 写入后，不内联执行步骤8。</GATE>
 
-<!-- ⏩ 步骤7 完成后必须立即继续步骤8，禁止停止或声明完成 -->
+**步骤7 出口协议**：
+1. archive 完成后执行 compact（释放上下文，避免步骤8被忽略）
+2. 输出信号: `Skill("orch:workflow", args="resume from step 8 for {req_id}")`  
+3. 步骤8（evaluation）在后续独立对话中执行——新对话 = 干净上下文 = 不会因注意力衰减丢失步骤8/9
+4. 校验: PostToolUse hook 检测 `current_stage=7 done` → 输出中必须含 `resume from step 8`，否则警告
+
+<GATE>步骤7 完成后声明"工作流已完成"是错误的。步骤8→9 未执行 = 工作流未完成。</GATE>
 
 ## 步骤8: evaluation
 

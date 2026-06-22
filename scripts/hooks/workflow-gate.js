@@ -62,7 +62,7 @@ function findWorkflowStates() {
 
 function validateSequence(currentStage, doneStages) {
   const cur = STAGE_ORDER[currentStage];
-  if (cur === undefined) return []; // unknown stage, skip
+  if (cur === undefined) return [];
 
   const issues = [];
   const doneNames = new Set(doneStages.map(s => s.stage));
@@ -71,6 +71,15 @@ function validateSequence(currentStage, doneStages) {
     if (order >= cur) break;
     if (order !== 0.5 && !doneNames.has(stageName) && order < cur) {
       issues.push(`GATE: stage "${stageName}" (order ${order}) not completed before "${currentStage}" (${cur})`);
+    }
+  }
+
+  // 步骤7完成但8/9未执行 → 输出警告（上下文切分检测）
+  if (currentStage === '7_spec_archive' && doneNames.has('7_spec_archive')) {
+    const hasEval = doneNames.has('8_evaluation');
+    const hasLearn = doneNames.has('9_knowledge_continuum');
+    if (!hasEval && !hasLearn) {
+      issues.push('GATE: step 7 (archive) complete — steps 8 (evaluation) and 9 (continuous-learning) must execute. Resume from step 8 to continue.');
     }
   }
   return issues;

@@ -104,7 +104,7 @@ done
 | 5 execute                 | tasks.md存在 + TDD出口验证            | src/非空 + execution-report.md + TDD四阶段日志(RED/GREEN/REFACTOR/REVIEW) | stage/batch_stats 写入 eval.json   | 回溯/补测试/拆批次 |
 | 5.5 exception             | 后端/全栈自动                         | 异常代码生成                                                              | —                                  | —                  |
 | 6 test                    | src/存在 + report存在                 | testing-report.md存在 + E2E执行                                           | stage/stats/agent×2 写入 eval.json | 失败回execute      |
-| 7 archive                 | 全部测试通过                          | 主规范已合并 + archive-log.md                                             | stage/stats 写入 eval.json         | 失败回溯           |
+| 7 archive                 | 全部测试通过                          | 主规范已合并 + archive-log.md + **输出 resume from step 8 信号**            | stage/stats 写入 eval.json         | 失败回溯           |
 | 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 诊断报告 + baseline对比 | stages[]为空则回溯 |
 | 9 continuous-learning | evaluation done | orch-spec/patterns/ + preferences.json 更新 + **完成报告生成**（按 completion-table.md 模板从 eval.json 填表） | learnings[] 为空则回溯 |
 
