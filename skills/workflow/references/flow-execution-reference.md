@@ -101,7 +101,7 @@
 - `spec/sql-ddl.md`
 
 **输出契约**（标准模式）：
-- `project-context.md`
+- `orch-spec/project-context.md`
 
 **校验规则**：
 1. requirement.md 头部包含「工作模式: [standard\|quick]」

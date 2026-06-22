@@ -61,7 +61,7 @@ Agent(
 
 ## 约束
 
-<GATE>禁止跳过 project-context.md 直接设计 | 设计必须覆盖所有 spec 场景</GATE>
+<GATE>禁止跳过 orch-spec/project-context.md 直接设计 | 设计必须覆盖所有 spec 场景</GATE>
 
 ## 核心流程
 

@@ -43,7 +43,7 @@ description: |
 
 **优先读取**：
 1. `orch-spec/{req_id}/req-context/project-map.md` — 本需求关键文件清单
-2. `orch-spec/{req_id}/project-context.md` — 项目级探索结果（spec 阶段1）
+2. `orch-spec/project-context.md` — 项目级探索结果（spec 阶段1）
 3. `orch-spec/context/` — 注册中心按关键词匹配
 
 **架构决策**：写入 `orch-spec/{req_id}/req-context/decisions.md`，设计中识别的关键文件追加到 `key-files.md`。
@@ -57,7 +57,7 @@ Agent(
   prompt="
     对需求进行架构蓝图分析：
     - 规范文档: orch-spec/{requirement_desc_abstract}/spec/
-    - 项目上下文: orch-spec/{requirement_desc_abstract}/project-context.md（如存在）
+    - 项目上下文: orch-spec/project-context.md（如存在）
     - 设计图标签: 读取 spec/requirement.md 的「设计图」标签，按 diagram-trigger-rules.md 阈值生成对应 UML 图
     
     执行：

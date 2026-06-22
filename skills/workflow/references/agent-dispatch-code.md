@@ -58,7 +58,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 从项目上下文中提取本需求相关的知识。五步按序检索，前一步匹配即止，不继续探索：
 
-1. **project-context** — 检查 `orch-spec/{req_id}/project-context.md`（由 spec 阶段输出），存在则直接使用
+1. **project-context** — 检查 `orch-spec/project-context.md`（由 spec 阶段输出），存在则直接使用
 2. **历史 spec** — 检查 `orch-spec/spec/` 下归档的规范文档，匹配需求关键词
 3. **req-context** — 检查 `orch-spec/` 下历史需求的 `req-context/`，匹配相似需求继承上下文
 4. **AI 知识库 / 项目 wiki** — 扫描 `docs/`、`wiki/`、`README.md` 等项目文档，以及 AI 知识库（Claude memory、RAG 索引、项目级 `.md` 知识沉淀），提取架构/约定信息

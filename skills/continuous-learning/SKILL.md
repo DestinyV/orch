@@ -54,7 +54,7 @@ description: |
 |------|---------|---------|
 | design ADR 决策记录 | 架构决策 → 下次复用 | `context/learnings.md → ## 架构决策` |
 | exception 阶段异常模式 | 项目异常规范 → 下次直接使用 | `preferences.json → exception_patterns` |
-| project-context.md 技术栈 | 技术栈快照 → 跳过重复探索 | `preferences.json → tech_stack` |
+| orch-spec/project-context.md | 技术栈快照 → 跳过重复探索 | `preferences.json → tech_stack` |
 
 ### 5. 自主进化规则（自动发现，无需预设分类）
 
