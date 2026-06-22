@@ -78,43 +78,13 @@ Agent(
 )
 ```
 
-### 共识式设计审查（standard 模式，新增）
+### 共识式设计审查（standard 模式）
 
 <GATE>standard 模式必须执行共识审查循环，不允许单次设计直接交付。</GATE>
 
-在架构设计后执行多视角审查循环：
+派遣 code-architect 执行架构审查（合理性/依赖方向/完整性/可实施性）→ 修复 → 重新审查 → 最多 3 轮。全部 ACCEPT 后进入下一步。3 轮未通过 → AskUserQuestion。
 
-```bash
-Agent(
-  subagent_type="orch:code-architect",
-  prompt="
-    对设计执行架构审查：
-    - 设计方案: orch-spec/{requirement_desc_abstract}/design/design.md
-    - 规范文档: orch-spec/{requirement_desc_abstract}/spec/
-
-    审查维度：
-    1. 架构合理性：所选模式是否适合当前需求规模
-    2. 依赖方向：是否符合分层约束
-    3. 完整性：是否覆盖所有 spec 场景
-    4. 可实施性：设计是否能直接指导编码
-
-    返回：问题清单 + 置信度 + 修复建议。
-    标记 REJECT / REVISE / ACCEPT。
-  ",
-  run_in_background=false
-)
-```
-
-**循环规则**：
-- 架构师审查 → 发现问题 → 修复设计 → 重新审查 → 最多 3 轮
-- 全部 ACCEPT 后进入下一步
-- 3 轮未通过 → AskUserQuestion（继续/降级/人工介入）
-
-**输出**：在 design.md 中追加 ADR 章节（Architecture Decision Record）：
-
-```markdown
-## ADR 记录
-| 决策 | 选项 | 选择 | 理由 | 后果 |
+审查结果写入 design.md 的 ADR 记录（决策/选项/选择/理由/后果表格）。详见 `references/architecture-review-checklist.md`。
 |------|------|------|------|------|
 | 架构模式 | Layered/Clean/Hexagonal | Clean | 复杂度高需隔离 | 增加初始代码量 |
 | 数据库 | MySQL/PostgreSQL | MySQL | 团队熟悉度 | 无特殊扩展需求 |
