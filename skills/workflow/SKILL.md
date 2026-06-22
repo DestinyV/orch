@@ -105,10 +105,20 @@ done
 | 5.5 exception             | 后端/全栈自动                         | 异常代码生成                                                              | —                                  | —                  |
 | 6 test                    | src/存在 + report存在                 | testing-report.md存在 + E2E执行                                           | stage/stats/agent×2 写入 eval.json | 失败回execute      |
 | 7 archive                 | 全部测试通过                          | 主规范已合并 + archive-log.md                                             | stage/stats 写入 eval.json         | 失败回溯           |
-| 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 汇总诊断报告 | stages[]为空则回溯 |
-| 9 continuous-learning | evaluation done | orch-spec/patterns/ + preferences.json 更新 | — | — |
+| 8 evaluation | archive done + eval.json 含全阶段数据 | diagnosis字段已写入 + context-budget + cost | 诊断报告 + baseline对比 | stages[]为空则回溯 |
+| 9 continuous-learning | evaluation done | orch-spec/patterns/ + preferences.json 更新 + **完成报告生成**（按 completion-table.md 模板从 eval.json 填表） | learnings[] 为空则回溯 |
 
 <GATE>步骤8(evaluation)和步骤9(continuous-learning)不可跳过。archive完成后必须自动执行。</GATE>
+
+<GATE>步骤9 learnings[] 写入后，工作流不可直接结束。必须生成完成报告：</GATE>
+
+**完成报告生成**：
+1. 读取 `.workflow-eval.json` → `stages[]``token_usage``diagnosis`
+2. 读取 `.workflow-baseline.json` → 计算每阶段 deviation
+3. 按 [`templates/completion-table.md`](templates/completion-table.md) 输出完整报告（📋总结/📊效率/🧠沉淀/🔧建议 四段）
+4. 表格必须 13 步全部行，步骤 8/9 不可缺
+5. 报告输出后标记 `.workflow-state.json` → `status: completed` + `completion_report_generated: true`
+6. <GATE>完成报告未输出（13 步不全 / 步骤8/9 缺失）→ 工作流视为未完成，禁止标记 completed</GATE>
 
 ---
 

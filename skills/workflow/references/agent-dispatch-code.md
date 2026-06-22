@@ -227,6 +227,13 @@ print(f'[eval] {stage_name} stage recorded')
 
 <!-- ⏩ 步骤7 完成后必须立即继续步骤8，禁止停止或声明完成 -->
 
+<GATE>archive 完成后禁止停止。步骤7 "阶段完成记录" 写入 eval.json 后必须：</GATE>
+<GATE>1. 立即执行步骤8（evaluation），不允许步骤7→8 之间有用户交互或暂停</GATE>
+<GATE>2. 步骤7 产出验证必须在状态描述中注明 "步骤8已自动级联"</GATE>
+<GATE>3. 仅在步骤9 完成报告输出后，才允许标记 status=completed</GATE>
+
+<!-- ⏩ 步骤7 完成后必须立即继续步骤8，禁止停止或声明完成 -->
+
 ## 步骤8: evaluation
 
 <GATE>archive 完成后禁止跳过 evaluation。不执行则 .workflow-eval.json 无 diagnosis，步骤9 无法提取 learnings。</GATE>
@@ -266,7 +273,21 @@ print(f'[eval] {stage_name} stage recorded')
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
 | knowledge-curator | — | `<GATE> evaluation 后禁止跳过。learnings[] 为空不允许标记 status=completed` |
-| — | 出口 | learnings[] 非空 + `status=completed` + 工作流完成总览已输出 |
+| — | 出口 | learnings[] 非空 + **完成报告已按 completion-table.md 模板输出** + `status=completed` + `completion_report_generated: true` |
+
+### 步骤9 完成：生成报告
+
+<GATE>learnings[] 写入 + optimization.rules[] 更新后，必须生成完成报告。</GATE>
+
+读取 `templates/completion-table.md` 模板，按 4 段输出：
+1. 📋 流程执行总结（从 eval.json → stages[] 填表，13 步必全）
+2. 📊 效率评估（vs baseline，偏差>20% 标注）
+3. 🧠 知识沉淀（learnings + 规则变化）
+4. 🔧 下次优化建议（diagnosis.recommendations[]）
+
+报告输出后 → `.workflow-state.json` → `status: completed` + `completion_report_generated: true`。
+
+<GATE>完成报告未输出（13步表格不全 / 步骤8/9数据缺失）→ 工作流视为未完成。禁止标记 completed。</GATE>
 
 ---
 
