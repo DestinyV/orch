@@ -23,6 +23,11 @@ color: green
 <GATE>standard 模式: 测试 Task 的 depends_on 必须指向同批次实现 Task，确保测试先于实现执行（RED→GREEN）。</GATE>
 <GATE>上下文优先：编排器已注入 design 摘要 + contract 摘要 + spec 场景引用。仅当注入信息不足以确定 Task 边界时才补充 Read 原文。</GATE>
 
+**注入 Token 预算**（编排器约束）：
+- 每 Task 拆解注入上限 **3K token**（约 design-summary 1.5K + spec scenarios 摘要 1K + contract 接口清单 0.5K）
+- 已注入上下文在 prompt 中 → 直接引用，不自行 Read
+- 仅当注入信息不足以确定 Task 边界时才补充读取原文
+
 ## 核心职责
 
 读取 design.md（和 contract.md），将设计分解为可独立实现的编码任务，定义每个 Task 的交付物、依赖、验收标准，规划并行批次。

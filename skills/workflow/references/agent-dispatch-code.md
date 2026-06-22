@@ -178,7 +178,7 @@ print(f'[eval] {stage_name} stage recorded')
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
 | executor ×N | `run_in_background=true`, 每 Task 独立 | `<GATE> 禁止主上下文直接编码。每 Task 必须通过子代理。禁止编造测试结果——RED 必有失败输出，GREEN 必有通过输出，REVIEW 必有 lint/typecheck/coverage 命令输出` |
-| code-reviewer | 批次完成后 | 批次级综合性审查（规范+质量+TDD完整性），默认批次级。批次内 Task 代码行均<200→批次级审查；单 Task >200 行→追加单独审查。仅报告 confidence≥80 的问题 |
+| code-reviewer | 批次完成后 | 批次级综合性审查（规范+质量+TDD完整性），默认批次级。批次内 Task 代码行均<200→批次级审查；单 Task >200 行→追加单独审查。报告阈值：CRITICAL≥50 / WARNING≥60 / INFO≥80 |
 | tdd-guide | 每批次完成 | `<GATE> TDD 四阶段任缺一个命令输出 → 标记 FAILED 驳回` |
 | — | 出口 | 每 Task TDD 日志完整 + src/非空 + execution-report.md 存在 |
 
@@ -276,21 +276,20 @@ print(f'[eval] {stage_name} stage recorded')
 | Agent | 派遣参数 | 约束 |
 |-------|---------|------|
 | knowledge-curator | — | `<GATE> evaluation 后禁止跳过。learnings[] 为空不允许标记 status=completed` |
-| — | 出口 | learnings[] 非空 + **完成报告已按 completion-table.md 模板输出** + `status=completed` + `completion_report_generated: true` |
+| completion-reporter | knowledge-curator 完成后串行 | `<GATE> 完成报告必须生成（13步表格全 + 步骤8/9不缺失），报告未生成禁止标记 completed` |
+| — | 出口 | learnings[] 非空 + `completion_report_generated: true` + `status=completed` |
 
 ### 步骤9 完成：生成报告
 
-<GATE>learnings[] 写入 + optimization.rules[] 更新后，必须生成完成报告。</GATE>
+<GATE>knowledge-curator 完成后，必须派遣 completion-reporter Agent 生成完成报告。</GATE>
 
-读取 `templates/completion-table.md` 模板，按 4 段输出：
-1. 📋 流程执行总结（从 eval.json → stages[] 填表，13 步必全）
-2. 📊 效率评估（vs baseline，偏差>20% 标注）
-3. 🧠 知识沉淀（learnings + 规则变化）
-4. 🔧 下次优化建议（diagnosis.recommendations[]）
+completion-reporter 职责：
+1. 运行 `scripts/generate-completion-data.py` 提取结构化数据
+2. 读取 `templates/completion-table.md` 模板
+3. 按 4 段输出（📋总结/📊效率/🧠沉淀/🔧建议），13 步必全
+4. 标记 `.workflow-state.json` → `completion_report_generated: true` + `status: completed`
 
-报告输出后 → `.workflow-state.json` → `status: completed` + `completion_report_generated: true`。
-
-<GATE>完成报告未输出（13步表格不全 / 步骤8/9数据缺失）→ 工作流视为未完成。禁止标记 completed。</GATE>
+<GATE>completion-reporter 未派遣 → 完成报告未生成 → 工作流视为未完成。</GATE>
 
 ---
 
@@ -307,74 +306,8 @@ print(f'[eval] {stage_name} stage recorded')
 | — | 6 | tester ×3 + test-verifier | 三路并行 → 统一验证 |
 | — | 7 | archiver | 串行 |
 | — | 8 | evaluation | 双路并行 |
-| — | 9 | knowledge-curator | 串行 |
+| — | 9 | knowledge-curator + completion-reporter | knowledge-curator 完成后串行 |
 
 ---
 
-<!-- ⏩ 步骤9 完成后必须输出工作流完成总览，禁止省略。所有步骤执行完毕且 status=completed 是输出前提。 -->
-
-## 工作流完成总览（步骤9 完成后必须输出）
-
-<GATE>全部步骤 0→9 执行完毕且 status=completed 后，必须按此模板输出最终总览。禁止自由格式发挥、禁止合并阶段行、禁止省略任何阶段。</GATE>
-
-### 生成前自检
-
-1. 确认 `.workflow-state.json` 的 `status` = `completed`
-2. 确认 `.workflow-eval.json` 的 `stages[]` 包含全部阶段记录
-3. 检查当前上下文余量 > 15K token（不足则先 `Skill("orch:compact")`）
-
-### 输出模板
-
-```
-🎉 SDD+TDD 工作流完成 — {requirement_desc_abstract}
-
-## 最终交付总览
-
-| # | 阶段 | 关键产物 | 状态 |
-|---|------|---------|------|
-| 0 | 工作流初始化 | .workflow-state.json + .workflow-eval.json | {✅/⚠️} |
-| 0.5 | 需求澄清 | clarification.md（模糊度 {N}%） | {✅/—} |
-| 1 | 规范生成 | {N} 场景 / {N} 测试标准 | {✅/⚠️} |
-| 2 | 测试设计 | {N} 测试模板 + fixtures.json | {✅/⚠️} |
-| 3 | 架构设计 | design.md + {N} ADR | {✅/⚠️} |
-| 3.5 | 接口契约 | contract.md + review-report.md | {✅/—} |
-| 4 | 任务拆解 | {N} 任务 / {N} 批次 | {✅/⚠️} |
-| 5 | 代码执行 | {N}/{N} Task 完成 | {✅/⚠️} |
-| 5.5 | 异常处理 | 异常代码已集成 | {✅/—} |
-| 6 | 测试验证 | 单元{N} 集成{N} E2E{N} | {✅/⚠️} |
-| 7 | 规范归档 | 主规范库已合并 | {✅/⚠️} |
-| 8 | 效果评估 | 诊断报告 + deviation | {✅/⚠️} |
-| 9 | 知识复利 | {N} learnings + {N} 优化规则 | {✅/⚠️} |
-```
-
-### 占位符填充规则
-
-| 占位符 | 数据来源 | 填充方法 |
-|--------|---------|---------|
-| `{requirement_desc_abstract}` | `.workflow-state.json → requirement_id` | 直接取 |
-| `{N} 场景` | 统计 `orch-spec/{req}/spec/scenarios/*.md` 文件数 | Bash `ls | wc -l` |
-| `{N} 测试标准` | 统计 spec scenarios 文件中的 `TEST-VERIFY` 条数 | Grep 计数 |
-| `{N} 测试模板` | 统计 `tests/test-*.template` 文件数 | Bash `ls | wc -l` |
-| `{N} ADR` | 统计 `design/design.md` 中 `### ADR` 出现次数 | Grep 计数 |
-| `{N} 任务` | 从 `tasks/tasks.md` 统计 Task 总数（`### Task` 标题数） | Grep 计数 |
-| `{N} 批次` | 从 `tasks/tasks.md` 统计批次数或从 `workflow-state.json` 读 | 读 state |
-| `{N}/{N} Task 完成` | 从 `execution/execution-report.md` 取完成数/总数 | 读报告 |
-| `单元{N} 集成{N} E2E{N}` | 从 `testing/testing-report.md` 取各层测试通过数 | 读报告 |
-| `{N} learnings` | 统计 `context/learnings.md` 中的段落数 | Bash `grep -c "## "` |
-| `{N} 优化规则` | 读取 `preferences.json → optimization.rules[]` 的 active 规则数 | Python3 脚本 |
-
-### 状态显示规则
-
-| 状态 | 条件 |
-|------|------|
-| ✅ | eval.json 该阶段 `status=done`，所有 GATE 通过 |
-| ⚠️ | eval.json 该阶段有 GATE trigger 或 agent retry |
-| — | 条件触发阶段（0.5/3.5/5.5），本需求未触发 |
-
-### 关键约束
-
-- **禁止合并阶段行** — 即使步骤2-3并行也分开显示；7/8/9 也不合并
-- **禁止省略步骤0 / 5.5 / 8 / 9** — 每个阶段独立一行
-- **产物列从文件系统提取** — 不凭空编造数字（如 `scenarios/*.md` 文件数通过 Bash 统计）
-- **模板文字直接复用** — 不拼接字符串，不动态翻译字母部分
-- **阶段名称固定** — 不简写、不缩写、不改字面
+<!-- ⏩ 步骤9 完成后必须派遣 completion-reporter Agent 生成完成报告。完成报告模板和填充逻辑详见 agents/completion-reporter.md 和 scripts/generate-completion-data.py。工作流完成总览由 completion-reporter 自动生成，不再由主 LLM 内联输出。 -->

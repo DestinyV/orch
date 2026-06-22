@@ -44,7 +44,7 @@
 
 ## 项目概述
 
-**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。22 Skills + 24 Agents + 11 Commands，覆盖从需求到归档的全生命周期。
+**orch**（/ɔːrk/，Orchestra 缩写，意为编排指挥）是一个企业级 Claude Code 插件，提供 AI 辅助开发的完整全栈工作流。22 Skills + 25 Agents + 14 Commands，覆盖从需求到归档的全生命周期。
 
 **核心工作流**：
 ```
@@ -55,7 +55,7 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.9.9 (2026-06-20)
+**版本**：v0.10.0 (2026-06-22)
 
 ## 架构与文件结构
 
@@ -67,7 +67,7 @@ orch/
 │                    #   context-budget/depth/compact/
 │                    #   cost/ralph-loop/clarify/debug/req-change/
 │                    #   spec-migrate）
-├── agents/          # 24个 Agents（12工作流核心 + 12扩展）
+├── agents/          # 25个 Agents（13工作流核心 + 12扩展）
 ├── commands/        # 14个斜杠命令
 ├── rules/           # 语言规则（common/typescript/python/zh）
 ├── scripts/lib/     # 运行时脚本（resolve-root/project-detect/state-store/utils）

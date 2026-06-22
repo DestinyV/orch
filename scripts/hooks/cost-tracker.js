@@ -4,6 +4,7 @@
  *
  * Reads transcript_path from Stop hook stdin, sums token usage across all
  * assistant turns in the session JSONL, and writes to JSONL + SQLite.
+ * Also syncs token data to .workflow-eval.json for workflow reporting.
  *
  * Stop hook stdin: { session_id, transcript_path, cwd, hook_event_name, ... }
  *
@@ -23,8 +24,9 @@ const { readStdinSync } = require('../lib/stdin');
 const { isHookEnabled } = require('../lib/hook-flags');
 const {
   getProjectFromCwd, estimateCost,
-  sumUsageFromTranscript, writeRecord,
+  sumUsageFromTranscript, writeRecord, logError,
 } = require('../lib/cost-db');
+const { getCurrentStage, updateStageTokens } = require('../lib/state-store');
 
 const HOOK_ID = 'stop:cost-tracker';
 
@@ -37,6 +39,7 @@ function main() {
 
   const transcriptPath = input.transcript_path || process.env.CLAUDE_TRANSCRIPT_PATH || null;
   const sessionId = input.session_id || process.env.CLAUDE_SESSION_ID || 'default';
+  const cwd = input.cwd || process.env.PWD || process.cwd();
 
   if (!transcriptPath || !fs.existsSync(transcriptPath)) {
     process.stdout.write(raw);
@@ -48,12 +51,13 @@ function main() {
 
   const { inputTokens, outputTokens, cacheWrite, cacheRead, model } = usage;
   const costUsd = estimateCost(inputTokens, outputTokens, cacheWrite, cacheRead, model);
+  const stage = getCurrentStage(cwd);
 
   writeRecord({
     timestamp:   new Date().toISOString(),
     session_id:  sessionId,
     project:     getProjectFromCwd(),
-    stage:       getCurrentStage(),
+    stage:       stage,
     model:       model,
     input_tokens:  inputTokens,
     output_tokens: outputTokens,
@@ -63,7 +67,27 @@ function main() {
     tool_name:     'session',
   });
 
+  // Bridge: sync token data to .workflow-eval.json
+  if (stage) {
+    try {
+      updateStageTokens(cwd, {
+        input_tokens: inputTokens,
+        output_tokens: outputTokens,
+        cache_write: cacheWrite,
+        cache_read: cacheRead,
+        cost_usd: costUsd,
+        model: model,
+      });
+    } catch (e) {
+      logError('cost-tracker:eval-sync', e);
+    }
+  }
+
   process.stdout.write(raw);
 }
 
-try { main(); } catch (_) { /* fail-open */ }
+try { main(); } catch (e) {
+  // Log error before failing open (was previously silent)
+  try { logError('cost-tracker', e); } catch (_) {}
+  process.stdout.write(require('../lib/stdin').readStdinSync());
+}

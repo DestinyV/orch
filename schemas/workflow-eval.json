@@ -19,6 +19,19 @@
           "tokens_output": { "type": "integer", "description": "本阶段输出 token 数" },
           "completed_at": { "type": "integer", "description": "本阶段耗时（秒）" },
           "agent": { "type": "string", "description": "派遣的 Agent" },
+          "agents": {
+            "type": "array",
+            "description": "本阶段派遣的所有 Agent 及各自 token 消耗",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "description": "Agent 名称" },
+                "tokens_input": { "type": "integer", "description": "该 Agent 输入 token" },
+                "tokens_output": { "type": "integer", "description": "该 Agent 输出 token" },
+                "status": { "type": "string", "enum": ["done", "failed", "retry"], "description": "该 Agent 执行状态" }
+              }
+            }
+          },
           "hard_gates": { "type": "array", "items": { "type": "string" }, "description": "触发的 HARD-GATE" },
           "estimated_tokens": {
             "type": "object",

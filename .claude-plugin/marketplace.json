@@ -7,14 +7,14 @@
     "email": ""
   },
   "metadata": {
-    "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件 — 22 Skills + 24 Agents + 11 Commands"
+    "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件 — 22 Skills + 25 Agents + 14 Commands"
   },
   "plugins": [
     {
       "name": "orch",
-      "version": "0.9.11",
+      "version": "0.10.0",
       "source": "./",
-      "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整13步工作流。包含22个专业Skills（spec、test-design、design、contract、task、execute、exception、test、archive、workflow、scripts、continuous-learning、context-budget、depth、compact、cost、ralph-loop、clarify、debug、req-change、using-orch、spec-migrate），24个Agents，11个Commands，支持前端、后端、数据库、微服务等全类型项目。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。",
+      "description": "企业级SDD+TDD（规范驱动开发）Claude Code插件，提供AI辅助开发的完整13步工作流。包含22个专业Skills（spec、test-design、design、contract、task、execute、exception、test、archive、workflow、scripts、continuous-learning、context-budget、depth、compact、cost、ralph-loop、clarify、debug、req-change、using-orch、spec-migrate），25个Agents，14个Commands，支持前端、后端、数据库、微服务等全类型项目。多平台适配：Cursor/Gemini/OpenCode/Codex/CodeBuddy。",
       "category": "development",
       "homepage": "https://github.com/DestinyV/orch",
       "repository": "https://github.com/DestinyV/orch.git",

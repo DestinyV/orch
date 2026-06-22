@@ -332,6 +332,7 @@ Agent(
 |---------|---------|------|
 | `references/subagent-protocol.md` | 子代理状态协议、并行派遣规则 | 步骤2 |
 | `references/verification-gate.md` | 完成验证门控（IDENTIFY→RUN→READ→VERIFY→CLAIM） | 步骤3.6 |
+| `references/token-efficiency-guide.md` | Token 节省最佳实践（注入信任/摘要优先/浏览器测试批量化） | 步骤3.2-3.6 |
 | `references/quick-reference.md` | Worktree 快速参考卡 | 步骤3.1 |
 | `references/workflow-detail.md` | 完整工作流步骤和示例 | 步骤4 |
 | `prompts/tdd-implementer-prompt.md` | executor Agent TDD实现提示词 | 步骤3.2 |

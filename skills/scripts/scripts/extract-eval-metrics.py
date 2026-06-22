@@ -66,14 +66,22 @@ def diagnose(stages, events, summary):
     if total_ui >= 5:
         d['warnings'].append(f'用户交互 {total_ui} 次，需求可能不够清晰')
 
-    # Agent 诊断
-    agents_dispatched = sum(1 for s in stages if s.get('agent', {}).get('dispatched'))
+    # Agent 诊断（兼容 agent 为 string 或 object）
+    agents_dispatched = 0
+    for s in stages:
+        agent = s.get('agent')
+        if isinstance(agent, dict):
+            if agent.get('dispatched'):
+                agents_dispatched += 1
+        elif isinstance(agent, str) and agent:
+            agents_dispatched += 1
     if agents_dispatched == 0 and len(stages) > 1:
         d['warnings'].append('Agent 派遣=0，主上下文替代 Agent 反模式')
     for s in stages:
         agent = s.get('agent', {})
-        if agent.get('retries', 0) >= 2:
-            d['warnings'].append(f"阶段 {s['stage']} Agent {agent.get('name','?')} 重试 {agent['retries']} 次")
+        if isinstance(agent, dict):
+            if agent.get('retries', 0) >= 2:
+                d['warnings'].append(f"阶段 {s['stage']} Agent {agent.get('name','?')} 重试 {agent['retries']} 次")
 
     # 并行调度诊断
     parallel = [s for s in stages if s.get('stage') in ('test-design', 'design') and s.get('status') == 'done']
@@ -116,9 +124,15 @@ def extract_metrics(eval_file):
     summary = data.get('summary', {})
     events = data.get('events', [])
 
-    # Token 汇总（处理 null/None 值）
-    token_input = sum((s.get('tokens', {}) or {}).get('input', 0) or 0 for s in stages)
-    token_output = sum((s.get('tokens', {}) or {}).get('output', 0) or 0 for s in stages)
+    # Token 汇总 — 优先从 actual_tokens 读取，回退到顶层 tokens_input/tokens_output
+    token_input = 0
+    token_output = 0
+    for s in stages:
+        at = s.get('actual_tokens') or {}
+        ti = at.get('input_tokens') if at.get('input_tokens') is not None else s.get('tokens_input', 0)
+        to = at.get('output_tokens') if at.get('output_tokens') is not None else s.get('tokens_output', 0)
+        token_input += ti or 0
+        token_output += to or 0
 
     metrics = {
         'requirement_id': data.get('requirement_id', ''),
