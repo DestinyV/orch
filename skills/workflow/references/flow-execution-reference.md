@@ -32,7 +32,7 @@
 | context-budget | — | workflow 步骤8 | 效果评估时 |
 | compact | — | workflow 中断恢复 | 检测到上下文过大 |
 | cost | — | workflow 步骤8 | 效果评估时 |
-| tdd-guide | — | execute 启动时 | standard 模式 |
+| tdd-guide（deprecated，由 code-reviewer 维度3 执行） | — | execute 启动时 | standard 模式 |
 
 ---
 

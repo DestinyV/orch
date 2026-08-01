@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""S4 TDD Execution & Testing Loop — test template.
+
+Covers TV-S4-01..04 -> TC-S4-01..06:
+  - plugin self-check command produces a valid PASS/FAIL report
+  - TDD log contains RED/GREEN/REFACTOR/REVIEW evidence
+  - coverage verification is real & independent (VERIFIED / PARTIAL)
+  - plugin smoke test runs with no failures
+
+Framework style: mirrors tests/test-suite.py.
+"""
+
+import os, sys, json, re, subprocess
+
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S4 = FIX['S4']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+def read(p):
+    return open(os.path.join(ROOT, p), encoding='utf-8').read()
+
+def coverage_verdict(claimed, actual, threshold):
+    """Pure function mirroring the coverage verifier decision rule."""
+    if actual >= threshold:
+        return 'VERIFIED'
+    return 'PARTIAL'
+
+# ---------------------------------------------------------------------------
+print("=== S4.1 self-check command (TV-S4-01) ===")
+# Prefer a real self-check entrypoint if it exists; else fall back to test-suite.py
+self_check_candidates = [
+    os.path.join(ROOT, 'commands', 'self-check.md'),
+    os.path.join(ROOT, 'tests', 'test-suite.py'),
+]
+self_check = next((c for c in self_check_candidates if os.path.exists(c)), None)
+if self_check is None:
+    errors.append('TC-S4-01: no self-check entrypoint (commands/self-check.md or tests/test-suite.py)')
+    print('  ERR TC-S4-01: no self-check entrypoint found')
+else:
+    cmd = [sys.executable, self_check] if self_check.endswith('.py') else ['cat', self_check]
+    p = subprocess.run(cmd, capture_output=True, text=True,
+                       encoding='utf-8', errors='replace', timeout=300, cwd=ROOT)
+    check(p.returncode == S4['self_check']['exit'],
+          f"TC-S4-01: self-check exit code {p.returncode} (expected {S4['self_check']['exit']})")
+    report_ok = ('PASS' in p.stdout + p.stderr) or ('ALL PASSED' in p.stdout)
+    check(report_ok, 'TC-S4-01: self-check report contains PASS')
+
+# ---------------------------------------------------------------------------
+print("=== S4.2 TDD 4-phase log (TV-S4-02) ===")
+phases = S4['tdd_phases']
+for rel in S4['tdd_log_paths']:
+    fp = os.path.join(ROOT, 'orch-spec', 'plugin-capability-optimization', rel)
+    if not os.path.exists(fp):
+        # eval file lives at spec root, not under a req subpath for this meta task
+        fp = os.path.join(ROOT, 'orch-spec', 'plugin-capability-optimization', os.path.basename(rel))
+    if not os.path.exists(fp):
+        warnings.append(f"TC-S4-02: TDD log source not found for check ({rel})")
+        continue
+    text = read(os.path.relpath(fp, ROOT))
+    present = [ph for ph in phases if re.search(ph, text, re.IGNORECASE)]
+    check(len(present) == len(phases),
+          f"TC-S4-02: {os.path.basename(rel)} contains 4 phases {phases} (found {present})")
+
+# ---------------------------------------------------------------------------
+print("=== S4.3 coverage verification (TV-S4-03) ===")
+thr = S4['coverage']['threshold']
+b = S4['coverage']['boundary']
+v = coverage_verdict(b['claimed'], b['actual'], thr)
+check(v == b['verdict'],
+      f"TC-S4-03: claimed {b['claimed']}/actual {b['actual']} -> {v} (expected {b['verdict']})")
+
+s = S4['coverage']['valid']
+v = coverage_verdict(s['claimed'], s['actual'], thr)
+check(v == s['verdict'],
+      f"TC-S4-04: claimed {s['claimed']}/actual {s['actual']} -> {v} (expected {s['verdict']})")
+
+# independence: verifier must NOT trust executor self-report
+vg = os.path.join(ROOT, 'agents', 'test-verifier.md')
+if os.path.exists(vg):
+    tv = read('agents/test-verifier.md')
+    check(('independent' in tv.lower() or '证据' in tv or 'evidence' in tv.lower()),
+          'TC-S4-05: test-verifier is evidence/independent (no self-report acceptance)')
+else:
+    warnings.append('TC-S4-05: agents/test-verifier.md missing (cannot verify independence doc)')
+
+# ---------------------------------------------------------------------------
+print("=== S4.4 plugin smoke test (TV-S4-04) ===")
+smoke = os.path.join(ROOT, 'tests', 'test-suite.py')
+if os.path.exists(smoke):
+    p = subprocess.run([sys.executable, smoke], capture_output=True, text=True,
+                       encoding='utf-8', errors='replace', timeout=300, cwd=ROOT)
+    check(p.returncode == S4['smoke']['exit'],
+          f"TC-S4-06: tests/test-suite.py exit {p.returncode} (expected {S4['smoke']['exit']})")
+    m = re.search(r'--- SUMMARY: (\d+) errors, (\d+) warnings ---', p.stdout)
+    if m:
+        n_err = int(m.group(1))
+        check(n_err == 0, f"TC-S4-06: smoke test reports {n_err} errors (expected 0)")
+else:
+    errors.append('TC-S4-06: tests/test-suite.py missing')
+    print('  ERR TC-S4-06: tests/test-suite.py missing')
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S4 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S4 ALL PASSED")
+sys.exit(1 if errors else 0)

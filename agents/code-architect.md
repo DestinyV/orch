@@ -16,7 +16,7 @@ color: green
 
 ## 读取上下文
 
-优先读取 `orch-spec/{req_id}/req-context/project-map.md` 定位本需求关键文件路径。涉及的关键文件追加到 `orch-spec/{req_id}/req-context/key-files.md`，架构决策写入 `decisions.md`。
+优先读取 `orch-spec/{req_id}/req-context/project-map.json` 定位本需求关键文件路径。涉及的关键文件追加到 `orch-spec/{req_id}/req-context/key-files.md`，架构决策写入 `decisions.md`。
 
 **后端/全栈额外**：分析服务依赖 | 设计数据库/中间件方案 | 日志和可观测性 | 上线顺序和回滚 | 监控指标
 **前端/全栈额外**：构建优化（代码分割/压缩） | CDN部署和缓存 | 错误追踪和性能监控 | 用户行为埋点
@@ -78,12 +78,12 @@ standard 模式下，code-architect 不仅输出设计，还参与审查循环�
 
 每轮审查后，修复问题再重新审查，最多 3 轮。每轮输出 ADR 条目追加到 design.md。
 
-### 0. 读取项目上下文
+### 1. 读取项目上下文
 
 优先使用 code-explorer 提供的「项目文档摘要」。如不可用，自行扫描：CLAUDE.md / AGENTS.md / README.md / ARCHITECTURE.md / CONTRIBUTING.md。
 **文档声明的约定优先级高于从代码推断的约定。**
 
-### 1. 代码库模式分析
+### 2. 代码库模式分析
 
 技术栈和框架版本 | 模块边界和抽象层 | 文件组织结构 | 命名约定 | 寻找类似功能理解已有做法。
 **后端额外**：数据库操作模式 | 缓存策略 | 服务间通信 | 日志标准 | 配置管理 | 监控链路 | CI/CD
@@ -91,7 +91,7 @@ standard 模式下，code-architect 不仅输出设计，还参与审查循环�
 
 **输出**：可复用的模式和应遵循的约定
 
-### 2. 架构设计
+### 3. 架构设计
 
 **决策性选择** — 选择一种方法并坚持，不呈现多个选项。
 - **架构模式**：简单CRUD → Layered | 中等复杂度 → Layered+部分Clean | 高复杂度 → Clean/Hexagonal
@@ -101,7 +101,7 @@ standard 模式下，code-architect 不仅输出设计，还参与审查循环�
 
 **输出**：架构决策及权衡分析
 
-### 3. 完整实现蓝图
+### 4. 完整实现蓝图
 
 具体的文件路径和文件清单 | 每个组件的职责和接口 | 依赖关系 | 分阶段实现序列。
 

@@ -1,0 +1,199 @@
+{
+  "$schema": "./fixtures.schema.json",
+  "meta": {
+    "req_id": "plugin-capability-optimization",
+    "version": "1.0",
+    "created": "2026-08-01",
+    "source": "spec/scenarios/S1-S6 (TEST-VERIFY Mock Data)",
+    "note": "有效/边界/特殊三类数据，供 test-*.template 消费。所有 JSON 路径均为相对插件根目录。"
+  },
+  "S1": {
+    "stages_expected": {
+      "valid": { "stage": "6_test", "expected": ["testing-report.md"] },
+      "boundary": { "stage": "9_cl", "expected": ["learnings.md", "completion-report"] },
+      "special": { "stage": "unknown", "expected": "fail-open" },
+      "all_stages": [
+        "0_workflow_control",
+        "1_spec_creation",
+        "3.5_api_contract",
+        "4_code_task",
+        "5_code_execute",
+        "6_code_test",
+        "7_spec_archive",
+        "9_knowledge_continuum"
+      ],
+      "stage_outputs_map": {
+        "3.5_api_contract": ["contract.md", "review-report.md"],
+        "5_code_execute": ["execution-report.md"],
+        "6_code_test": ["testing-report.md"],
+        "9_knowledge_continuum": ["learnings.md", "completion-report"]
+      }
+    },
+    "session_start": {
+      "valid": {
+        "last_done_stage": 5,
+        "next_stage": 6,
+        "prereq_ok": true,
+        "action": "resume-from-6",
+        "mock_state": {
+          "status": "in_progress",
+          "current_stage": "5_code_execute",
+          "stages": [
+            { "stage": "0_workflow_control", "status": "done" },
+            { "stage": "1_spec_creation", "status": "done" },
+            { "stage": "4_code_task", "status": "done" },
+            { "stage": "5_code_execute", "status": "in_progress" }
+          ]
+        }
+      },
+      "prereq_missing": {
+        "last_done_stage": 5,
+        "next_stage": 6,
+        "prereq_ok": false,
+        "action": "list-missing-files",
+        "missing": ["testing-report.md"],
+        "mock_state": {
+          "status": "in_progress",
+          "current_stage": "6_code_test",
+          "stages": [
+            { "stage": "0_workflow_control", "status": "done" },
+            { "stage": "1_spec_creation", "status": "done" },
+            { "stage": "4_code_task", "status": "done" },
+            { "stage": "5_code_execute", "status": "done" },
+            { "stage": "6_code_test", "status": "in_progress" }
+          ]
+        }
+      },
+      "no_workflow": { "status": "none", "action": "no-op" }
+    },
+    "exempt": {
+      "skill_names": [
+        "scripts", "context-budget", "depth", "compact", "cost",
+        "ralph-loop", "using-orch", "debug", "req-change", "spec-migrate"
+      ],
+      "command_names": [
+        "checkpoint", "code-review", "plan", "quality-gate",
+        "session-resume", "session-save", "start-dev"
+      ]
+    },
+    "stdin_timeout_ms": 2000,
+    "gate_fail_open_decision": "allow",
+    "mock_workflow_state_file": ".workflow-state.json"
+  },
+  "S2": {
+    "project_map": {
+      "forbidden_ref": "project-map.md",
+      "required_ref": "project-map.json",
+      "files_to_check": [
+        "agents/code-architect.md",
+        "agents/tasker.md",
+        "skills/design/SKILL.md"
+      ],
+      "whole_scope": ["agents", "skills"]
+    },
+    "tdd_guide": { "agent": "tdd-guide", "status": "deprecated", "registered": true },
+    "agent_count": { "registered": 26, "on_disk": 26, "ignore_files": ["_prompt-defense.md"] },
+    "prompt_defense": { "section": "## Prompt Defense Baseline", "expected_runs": 2, "max_occurrences": 1 },
+    "frontmatter": {
+      "required_keys": ["name", "description", "tools", "model"],
+      "tools_syntax": "comma-separated",
+      "model_value": "inherit",
+      "optional_key": "color",
+      "forbidden_tools_array_syntax": "["
+    },
+    "code_architect": { "file": "agents/code-architect.md", "forbidden_duplicate": "### 0." },
+    "hookify": { "file": "agents/conversation-analyzer.md", "forbidden": "/hookify" }
+  },
+  "S3": {
+    "skill_refs": [
+      {
+        "skill": "execute",
+        "file": "skills/execute/SKILL.md",
+        "old_ref": "context-injection-protocol.md",
+        "new_ref": "context-inheritance-protocol.md"
+      },
+      {
+        "skill": "spec",
+        "file": "skills/spec/SKILL.md",
+        "old_ref": "references/diagram-trigger-rules.md",
+        "new_ref": "../design/references/diagram-trigger-rules.md"
+      }
+    ],
+    "cost": { "skill": "cost", "gate": "<GATE>", "min_gate_count": 1 },
+    "using_orch": { "skill": "using-orch", "indexed": 22, "total_skills": 22 },
+    "observer": {
+      "config_file": "skills/continuous-learning/config.json",
+      "key": ["observer", "enabled"],
+      "documents": ["CLAUDE.md"]
+    },
+    "trigger_keywords": ["TRIGGER when", "TRIGGER WHEN"],
+    "total_skills": 22,
+    "all_skill_names": [
+      "archive", "clarify", "compact", "context-budget", "continuous-learning",
+      "contract", "cost", "debug", "depth", "design", "exception", "execute",
+      "ralph-loop", "req-change", "scripts", "spec", "spec-migrate", "task",
+      "test", "test-design", "using-orch", "workflow"
+    ]
+  },
+  "S4": {
+    "self_check": { "command": "self-check", "exit": 0, "report": "PASS", "blocks": 5 },
+    "tdd_phases": ["RED", "GREEN", "REFACTOR", "REVIEW"],
+    "tdd_log_paths": ["execution/execution-report.md", "tasks/tasks.md", ".workflow-eval.json"],
+    "coverage": {
+      "threshold": 85,
+      "valid": { "claimed": 85, "actual": 87, "verdict": "VERIFIED" },
+      "boundary": { "claimed": 90, "actual": 72, "verdict": "PARTIAL" }
+    },
+    "smoke": { "exit": 0, "errors": 0 }
+  },
+  "S5": {
+    "hooks": {
+      "suggest_compact": {
+        "id": "suggest-compact",
+        "event": "PreToolUse",
+        "matcher": "Edit|Write",
+        "file": "scripts/hooks/suggest-compact.js"
+      },
+      "observe": { "script": "scripts/hooks/observe.sh", "registered": true }
+    },
+    "hooks_file": "hooks/hooks.json",
+    "claude_md_hooks_table": ["session-start.js", "suggest-compact.js", "observe.sh", "pre-compact.js", "session-evaluate.js", "cost-tracker.js", "stage-gate.js", "workflow-gate.js"],
+    "docs_counts": {
+      "README.md": { "skills": 22, "agents": 26, "commands": 14 },
+      ".claude-plugin/README.md": { "skills": 22, "commands": 14 },
+      "AGENTS.md": { "agents": 26 }
+    },
+    "pyc": {
+      "forbidden_ext": [".pyc", "__pycache__"],
+      "gitignore_patterns": ["__pycache__", "*.pyc"],
+      "gitignore_file": ".gitignore"
+    }
+  },
+  "S6": {
+    "self_check": {
+      "blocks": {
+        "orchestration": "PASS",
+        "agents": "PASS",
+        "skills": "PASS",
+        "tdd_loop": "PASS",
+        "commands_hooks": "PASS"
+      },
+      "expected_block_keys": ["orchestration", "agents", "skills", "tdd_loop", "commands_hooks"]
+    },
+    "flow_rate": {
+      "threshold": 80,
+      "boundary": { "value": 83, "pass": true },
+      "special": { "value": 75, "pass": false, "action": "optimize" }
+    },
+    "pass_rate": {
+      "threshold": 90,
+      "boundary": { "value": 90, "pass": true },
+      "special": { "value": 85, "pass": false }
+    },
+    "auto_resolve": {
+      "auto_cases": ["compile failure", "test failure", "missing file", "step retry"],
+      "manual_cases": ["requirement conflict", "acceptance uncertain", "HARD-GATE block", "cross-repo change"],
+      "expected_verdicts": { "auto": "auto-resolve", "manual": "pause-for-human" }
+    }
+  }
+}

@@ -12,8 +12,8 @@
 
 - **Agents**: Auto-discovered from `agents/` — not declared in manifest
 - **Hooks**: Auto-loaded from `hooks/hooks.json` — not declared in manifest
-- **Skills**: 18 skills in `skills/`
-- **Commands**: 12 commands in `commands/`
+- **Skills**: 22 skills in `skills/`
+- **Commands**: 14 commands in `commands/`（另含内部自检命令 `/self-check`）
 
 ## Validation
 

@@ -12,3 +12,48 @@ requirements:
   #   context_inherited_from: [project-context]
   #   exploration_mode: "full"
   #   inheritance_coverage: 0.3
+
+  - id: "plugin-capability-optimization"
+    keywords: [插件本体, 能力优化, 北极星原则, 工作流编排, Agent体系, Skills, TDD闭环, Commands+Hooks, 验证闭环, 元任务]
+    modules_touched: [skills/, agents/, commands/, hooks/, scripts/, tests/, orch-spec/context/, orch-spec/plugin-capability-optimization/]
+    files_touched:
+      - scripts/lib/stage-contracts.js
+      - scripts/hooks/workflow-gate.js
+      - scripts/hooks/stage-gate.js
+      - scripts/hooks/session-start.js
+      - scripts/hooks/observe.js
+      - scripts/hooks/observe.sh
+      - scripts/sync-prompt-defense.py
+      - scripts/lib/verdict.js
+      - scripts/self-check.js
+      - hooks/hooks.json
+      - commands/self-check.md
+      - agents/code-architect.md
+      - agents/tasker.md
+      - agents/conversation-analyzer.md
+      - agents/tdd-guide.md
+      - AGENTS.md
+      - skills/design/SKILL.md
+      - skills/workflow/references/agent-dispatch-code.md
+      - skills/workflow/references/flow-execution-reference.md
+      - skills/execute/SKILL.md
+      - skills/spec/SKILL.md
+      - skills/cost/SKILL.md
+      - skills/using-orch/SKILL.md
+      - skills/continuous-learning/config.json
+      - CLAUDE.md
+      - README.md
+      - .claude-plugin/README.md
+      - orch-spec/context/file-map.yaml
+      - orch-spec/context/index.json
+      - .gitignore
+      - tests/hooks-smoke.test.js
+      - tests/test-suite.py
+      - orch-spec/plugin-capability-optimization/spec/business-rules.md
+      - orch-spec/plugin-capability-optimization/tests/test-spec.md
+      - orch-spec/plugin-capability-optimization/tests/fixtures.json
+    api_routes: []   # 后端插件元任务，无 REST API 路由（见 logic-chains/api-calls.yaml）
+    completed_at: "2026-08-01"
+    context_inherited_from: []   # 首个归档，全量探索从零生成 project-context
+    exploration_mode: "full"
+    inheritance_coverage: 0

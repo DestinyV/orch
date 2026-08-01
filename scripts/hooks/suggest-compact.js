@@ -5,11 +5,16 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { isHookEnabled } = require('../lib/hook-flags');
 
+const HOOK_ID = 'pre:compact';
 const THRESHOLD = 40; // operations before suggesting
 const COUNTER_FILE = path.join(process.cwd(), '.claude', '.compact-counter');
 
 function main() {
+  // 门控：禁用时 no-op（fail-open，保持可关）
+  if (!isHookEnabled(HOOK_ID)) return;
+
   const raw = fs.readFileSync(0, 'utf-8');
 
   let count = 0;

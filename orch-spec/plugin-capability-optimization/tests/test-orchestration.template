@@ -1,0 +1,174 @@
+#!/usr/bin/env python3
+"""S1 Workflow Orchestration — test template.
+
+Covers TV-S1-01..05 -> TC-S1-01..11:
+  - workflow-gate.js STAGE_OUTPUTS coverage (3.5/5/6/9)
+  - session-start.js auto-compensation on in_progress state
+  - north-star GATE audit (no capability-limiting constraints)
+  - stage-gate.js stdin timeout fail-open
+  - EXEMPT_SKILLS / EXEMPT_COMMANDS separation
+
+Framework style: mirrors tests/test-suite.py (plain python, section prints,
+errors/warnings collectors, sys.exit(1 if errors else 0)).
+"""
+
+import os, sys, json, re, subprocess, time, tempfile
+
+# --- root + fixtures resolution (works from spec tests/ or plugin tests/) ---
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S1 = FIX['S1']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+def read(p):
+    return open(os.path.join(ROOT, p), encoding='utf-8').read()
+
+# ---------------------------------------------------------------------------
+print("=== S1.1 workflow-gate STAGE_OUTPUTS (TV-S1-01) ===")
+wg_src = read('scripts/hooks/workflow-gate.js')
+m = re.search(r'const STAGE_OUTPUTS\s*=\s*\{(.*?)\};', wg_src, re.DOTALL)
+check(m is not None, 'TC-S1-01: found const STAGE_OUTPUTS in workflow-gate.js')
+body = m.group(1) if m else ''
+keys = set(re.findall(r"'([^']+)'\s*:", body))
+
+for stage in S1['stages_expected']['all_stages']:
+    check(stage in keys, f"TC-S1-01: STAGE_OUTPUTS covers stage '{stage}'")
+
+for stage, outputs in S1['stages_expected']['stage_outputs_map'].items():
+    for o in outputs:
+        check(o in body, f"TC-S1-02: STAGE_OUTPUTS['{stage}'] includes '{o}'")
+
+# fail-open guard for unknown stage
+check('if (!required) return [];' in wg_src, 'TC-S1-03: unknown stage -> fail-open guard present (validateOutputs)')
+
+# ---------------------------------------------------------------------------
+print("=== S1.2 session-start auto-compensation (TV-S1-02) ===")
+session_js = os.path.join(ROOT, 'scripts', 'hooks', 'session-start.js')
+
+def run_session_start(mock_state, extra_files=None):
+    with tempfile.TemporaryDirectory() as tmp:
+        req = os.path.join(tmp, 'orch-spec', 'mock-req')
+        os.makedirs(req)
+        with open(os.path.join(req, '.workflow-state.json'), 'w', encoding='utf-8') as f:
+            json.dump(mock_state, f)
+        for rel in (extra_files or []):
+            fp = os.path.join(req, rel)
+            os.makedirs(os.path.dirname(fp), exist_ok=True)
+            open(fp, 'w', encoding='utf-8').write('ok')
+        env = dict(os.environ, CLAUDE_PLUGIN_ROOT=tmp)
+        p = subprocess.run(['node', session_js], capture_output=True, text=True,
+                           encoding='utf-8', errors='replace', timeout=15, env=env)
+        return p.stdout, p.stderr
+
+# valid: prereq ok -> resume suggestion
+out, _ = run_session_start(S1['session_start']['valid']['mock_state'])
+check('mock-req' in out, 'TC-S1-04: session-start names the in-progress workflow')
+check(('6' in out or 'resume' in out.lower() or 'start-dev' in out), 'TC-S1-04: session-start outputs resume-from-6 suggestion')
+
+# prereq missing -> list specific missing files
+missing = S1['session_start']['prereq_missing']['missing']
+out, _ = run_session_start(S1['session_start']['prereq_missing']['mock_state'])
+check(all(x in out for x in missing), f"TC-S1-05: session-start lists missing files {missing}")
+
+# no in-progress -> no-op
+with tempfile.TemporaryDirectory() as tmp:
+    env = dict(os.environ, CLAUDE_PLUGIN_ROOT=tmp)
+    p = subprocess.run(['node', session_js], capture_output=True, text=True,
+                       encoding='utf-8', errors='replace', timeout=15, env=env)
+    check(not p.stdout.strip(), 'TC-S1-06: session-start no-op when no in-progress workflow')
+
+# ---------------------------------------------------------------------------
+print("=== S1.3 north-star GATE audit (TV-S1-03) ===")
+wf = read('skills/workflow/SKILL.md')
+gates = re.findall(r'<GATE>([^<]+)</GATE>', wf) + re.findall(r'<HARD-GATE>([^<]+)</HARD-GATE>', wf)
+check(len(gates) >= 3, f"TC-S1-07: workflow has {len(gates)} GATE markers (>=3)")
+# capability-limiting keywords: any that restrict thinking depth / exploration freedom
+cage_keywords = ['禁止思考', '不要思考', '不得探索', '不允许创新', '只能按', '必须按固定模板思考', '禁止提问']
+caged = [g for g in gates if any(k in g for k in cage_keywords)]
+check(len(caged) == 0, f"TC-S1-07: no capability-limiting GATE constraints (found {len(caged)})")
+
+# ---------------------------------------------------------------------------
+print("=== S1.4 stage-gate stdin timeout fail-open (TV-S1-04) ===")
+stage_gate_js = os.path.join(ROOT, 'scripts', 'hooks', 'stage-gate.js')
+timeout_ms = S1['stdin_timeout_ms']
+
+# TC-S1-08: empty stdin (never closed) -> process must exit by itself
+proc = subprocess.Popen(['node', stage_gate_js], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+deadline = time.time() + max(6, timeout_ms / 1000 + 4)
+code = None
+while time.time() < deadline:
+    if proc.poll() is not None:
+        code = proc.returncode
+        break
+    time.sleep(0.1)
+if code is None:
+    proc.kill()
+    errors.append('TC-S1-08: stage-gate.js blocked on empty stdin (no timeout protection)')
+    print('  ERR TC-S1-08: stage-gate.js blocked on empty stdin (no timeout protection)')
+else:
+    raw = proc.stdout.read()
+    out = raw.decode('utf-8', errors='replace').strip()
+    try:
+        decision = json.loads(out).get('decision')
+    except Exception:
+        decision = None
+    check(decision == S1['gate_fail_open_decision'],
+          f"TC-S1-08: empty/delayed stdin -> fail-open allow within {timeout_ms}ms (got {decision})")
+
+# TC-S1-09: valid stdin -> allow/deny decision
+payload = json.dumps({
+    "tool_name": "Skill",
+    "tool_input": 'Skill("orch:execute", "run")',
+    "arguments": {"skill": "execute"}
+})
+p = subprocess.run(['node', stage_gate_js], input=payload, capture_output=True, text=True,
+                   encoding='utf-8', errors='replace', timeout=10)
+out = p.stdout.strip()
+try:
+    decision = json.loads(out).get('decision')
+    check(decision in ('allow', 'deny'), f"TC-S1-09: valid stdin -> decision allow/deny (got {decision})")
+except Exception:
+    errors.append('TC-S1-09: stage-gate did not emit valid JSON decision')
+    print('  ERR TC-S1-09: stage-gate did not emit valid JSON decision')
+
+# ---------------------------------------------------------------------------
+print("=== S1.5 EXEMPT_SKILLS / EXEMPT_COMMANDS separation (TV-S1-05) ===")
+sg_src = read('scripts/hooks/stage-gate.js')
+m = re.search(r'const EXEMPT_SKILLS\s*=\s*\[(.*?)\];', sg_src, re.DOTALL)
+exempt = [x.strip().strip("'\"") for x in (m.group(1).split(',') if m else []) if x.strip()]
+cmd_names = S1['exempt']['command_names']
+bad = [c for c in cmd_names if c in exempt]
+check(len(bad) == 0, f"TC-S1-10: command names removed from EXEMPT_SKILLS (still present: {bad})")
+inter = set(exempt) & set(cmd_names)
+check(len(inter) == 0, f"TC-S1-11: EXEMPT_SKILLS & commands = empty (intersection: {inter})")
+check('EXEMPT_COMMANDS' in sg_src, 'TC-S1-11: EXEMPT_COMMANDS (or equivalent separation) exists in stage-gate.js')
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S1 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S1 ALL PASSED")
+sys.exit(1 if errors else 0)

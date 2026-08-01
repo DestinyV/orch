@@ -8,6 +8,7 @@ description: |
 
   功能：根据规范进行架构和技术设计，生成设计方案。
   核心原则：数据库先行 + 接口契约驱动。
+  TRIGGER when: spec is generated and architecture/technical design needs to be planned.
 ---
 
 # design
@@ -42,7 +43,7 @@ description: |
 ### 需求理解
 
 **优先读取**：
-1. `orch-spec/{req_id}/req-context/project-map.md` — 本需求关键文件清单
+1. `orch-spec/{req_id}/req-context/project-map.json` — 本需求关键文件清单
 2. `orch-spec/project-context.md` — 项目级探索结果（spec 阶段1）
 3. `orch-spec/context/` — 注册中心按关键词匹配
 

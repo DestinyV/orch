@@ -1,6 +1,9 @@
 ---
 name: spec
 description: 需求分析和规范生成。交互式问卷生成 BDD 格式规范文档（scenarios/data-models/business-rules/glossary），含 TEST-VERIFY 和 Mock Data。
+tools: Read
+model: inherit
+color: gray
 ---
 
 ## 角色

@@ -6,6 +6,7 @@ description: |
   仅当脚本无法处理时兜底使用大模型直接读取。减少Token消耗，提升效率。
 
   触发条件：任何Skill需要进行文件搜索、批量处理、内容提取、格式校验时
+  TRIGGER when: file operations should be scripted for efficiency, or a utility script is needed.
 ---
 
 # scripts

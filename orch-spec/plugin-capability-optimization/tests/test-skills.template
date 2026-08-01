@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""S3 Skills Instructions — test template.
+
+Covers TV-S3-01..05 -> TC-S3-01..09:
+  - dangling reference fix in execute/spec (P0 x2)
+  - cross-link validation across skills/**
+  - cost skill <GATE> marker (P1)
+  - using-orch index covers all 22 skills (P1)
+  - observer config consistency (P2)
+  - TRIGGER keywords in core skill descriptions (P2)
+
+Framework style: mirrors tests/test-suite.py.
+"""
+
+import os, sys, json, re, glob
+
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S3 = FIX['S3']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+def read(p):
+    return open(os.path.join(ROOT, p), encoding='utf-8').read()
+
+def resolve(rel):
+    """Return normalized absolute path if exists, else None."""
+    ab = os.path.normpath(os.path.join(ROOT, rel))
+    return ab if os.path.exists(ab) else None
+
+# ---------------------------------------------------------------------------
+print("=== S3.1 dangling refs: execute (TV-S3-01) ===")
+ref0 = S3['skill_refs'][0]
+src = read(ref0['file'])
+check(ref0['new_ref'] in src, f"TC-S3-01: {ref0['file']} references {ref0['new_ref']}")
+check(ref0['old_ref'] not in src, f"TC-S3-01: {ref0['file']} no longer references {ref0['old_ref']}")
+# resolve the new reference relative to the skill dir: skills/execute/ -> ../workflow/references/...
+skill_dir = os.path.dirname(os.path.join(ROOT, ref0['file']))
+m = re.search(r'`([^`]*' + re.escape(ref0['new_ref']) + r')`', src)
+if m:
+    target = os.path.normpath(os.path.join(skill_dir, m.group(1)))
+    check(os.path.exists(target), f"TC-S3-01: resolved target exists: {os.path.relpath(target, ROOT)}")
+
+print("=== S3.1 dangling refs: spec (TV-S3-01) ===")
+ref1 = S3['skill_refs'][1]
+src = read(ref1['file'])
+check(ref1['new_ref'] in src, f"TC-S3-02: {ref1['file']} references {ref1['new_ref']}")
+target = resolve(os.path.normpath(os.path.join('skills/spec', ref1['new_ref'])))
+check(target is not None, f"TC-S3-02: resolved target exists: {ref1['new_ref']}")
+
+print("=== S3.1 cross-link validation skills/** (TV-S3-01) ===")
+dangling = 0
+md_files = glob.glob(os.path.join(ROOT, 'skills', '**', '*.md'), recursive=True)
+for fp in md_files:
+    rel = os.path.relpath(fp, ROOT)
+    text = open(fp, encoding='utf-8').read()
+    base = os.path.dirname(fp)
+    # markdown links to relative .md/.json files
+    for m in re.finditer(r'\]\(([^)#]+?\.(?:md|json))', text):
+        target = os.path.normpath(os.path.join(base, m.group(1)))
+        if not os.path.exists(target):
+            dangling += 1
+            print(f"  DANGLING {rel} -> {m.group(1)}")
+check(dangling == 0, f"TC-S3-03: no dangling relative links in skills/** (found {dangling})")
+
+# ---------------------------------------------------------------------------
+print("=== S3.2 cost skill <GATE> (TV-S3-02) ===")
+cost_src = read(os.path.join('skills', S3['cost']['skill'], 'SKILL.md'))
+n_gate = cost_src.count(S3['cost']['gate'])
+check(n_gate >= S3['cost']['min_gate_count'],
+      f"TC-S3-04: skills/cost/SKILL.md has {n_gate} <GATE> markers (>= {S3['cost']['min_gate_count']})")
+
+# ---------------------------------------------------------------------------
+print("=== S3.3 using-orch index (TV-S3-03) ===")
+uo = read(os.path.join('skills', S3['using_orch']['skill'], 'SKILL.md'))
+disk_skills = sorted(d for d in os.listdir(os.path.join(ROOT, 'skills'))
+                     if os.path.isdir(os.path.join(ROOT, 'skills', d)))
+missing_in_index = [s for s in disk_skills if s not in uo]
+check(len(missing_in_index) == 0,
+      f"TC-S3-05: using-orch covers all {len(disk_skills)} skills (missing from text: {missing_in_index})")
+check(len(disk_skills) == S3['using_orch']['indexed'],
+      f"TC-S3-06: disk skill count == {S3['using_orch']['indexed']} (found {len(disk_skills)})")
+
+# ---------------------------------------------------------------------------
+print("=== S3.4 observer config consistency (TV-S3-04) ===")
+cfg = json.load(open(os.path.join(ROOT, S3['observer']['config_file']), encoding='utf-8'))
+node = cfg
+for k in S3['observer']['key']:
+    node = node.get(k, None) if isinstance(node, dict) else None
+claude = read('CLAUDE.md')
+if node is False:
+    # disabled -> docs must NOT claim enabled active instinct observer
+    claims_enabled = ('instinct 学习' in claude and 'hook 级' in claude)
+    check(not claims_enabled, 'TC-S3-07: observer disabled -> CLAUDE.md does not claim active instinct layer')
+    warnings.append('TC-S3-07: observer.enabled=false (documented as intentionally disabled)')
+elif node is True:
+    check('observe' in claude, 'TC-S3-07: observer enabled -> CLAUDE.md references observe')
+else:
+    errors.append('TC-S3-07: observer.enabled missing/undefined in config.json')
+    print(f'  ERR TC-S3-07: observer.enabled missing in {S3["observer"]["config_file"]}')
+
+# ---------------------------------------------------------------------------
+print("=== S3.5 TRIGGER keywords (TV-S3-05) ===")
+def parse_fm(path):
+    c = open(path, encoding='utf-8').read()
+    if not c.startswith('---'):
+        return None, c
+    p = c.split('---', 2)
+    if len(p) < 3:
+        return None, c
+    fm = {}
+    for l in p[1].strip().split('\n'):
+        m = re.match(r'^(\w+)\s*:\s*(.+)$', l)
+        if m:
+            fm[m.group(1)] = m.group(2).strip()
+    return fm, p[2]
+
+all_skills = S3['all_skill_names']
+for skill in all_skills:
+    fp = os.path.join(ROOT, 'skills', skill, 'SKILL.md')
+    if not os.path.isfile(fp):
+        errors.append(f"TC-S3-09: skills/{skill}/SKILL.md missing")
+        print(f"  ERR skills/{skill}/SKILL.md missing")
+        continue
+    fm, _ = parse_fm(fp)
+    desc = (fm or {}).get('description', '')
+    check(bool(desc.strip()), f"TC-S3-09: skills/{skill}/SKILL.md description non-empty")
+
+core = [s for s in all_skills if s not in ('debug', 'clarify', 'req-change', 'spec-migrate', 'compact', 'ralph-loop')]
+for skill in core:
+    fp = os.path.join(ROOT, 'skills', skill, 'SKILL.md')
+    fm, _ = parse_fm(fp)
+    desc = (fm or {}).get('description', '')
+    has_trig = any(kw in desc for kw in S3['trigger_keywords'])
+    check(has_trig, f"TC-S3-08: skills/{skill}/SKILL.md description has TRIGGER keyword")
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S3 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S3 ALL PASSED")
+sys.exit(1 if errors else 0)

@@ -122,7 +122,7 @@ print(f'[eval] {stage_name} stage recorded')
 
 ### 做什么
 
-基于 spec 架构设计。优先读 `req-context/project-map.md` 定位关键文件，决策写入 `req-context/decisions.md`。
+基于 spec 架构设计。优先读 `req-context/project-map.json` 定位关键文件，决策写入 `req-context/decisions.md`。
 
 ### 为什么
 
@@ -179,7 +179,7 @@ print(f'[eval] {stage_name} stage recorded')
 |-------|---------|------|
 | executor ×N | `run_in_background=true`, 每 Task 独立 | `<GATE> 禁止主上下文直接编码。每 Task 必须通过子代理。禁止编造测试结果——RED 必有失败输出，GREEN 必有通过输出，REVIEW 必有 lint/typecheck/coverage 命令输出` |
 | code-reviewer | 批次完成后 | 批次级综合性审查（规范+质量+TDD完整性），默认批次级。批次内 Task 代码行均<200→批次级审查；单 Task >200 行→追加单独审查。报告阈值：CRITICAL≥50 / WARNING≥60 / INFO≥80 |
-| tdd-guide | 每批次完成 | `<GATE> TDD 四阶段任缺一个命令输出 → 标记 FAILED 驳回` |
+| tdd-guide（deprecated，由 code-reviewer 维度3 执行） | 每批次完成 | `<GATE> TDD 四阶段任缺一个命令输出 → 标记 FAILED 驳回` |
 | — | 出口 | 每 Task TDD 日志完整 + src/非空 + execution-report.md 存在 |
 
 ---

@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""S2 Agent System — test template.
+
+Covers TV-S2-01..06 -> TC-S2-01..09:
+  - project-map.md -> project-map.json reference cleanup (F1)
+  - AGENTS.md registry count == disk count (F2 / tdd-guide)
+  - sync-prompt-defense.py idempotency (F5)
+  - agent frontmatter uniformity (F7)
+  - code-architect heading numbering (F8)
+  - no /hookify residue (F12)
+
+Framework style: mirrors tests/test-suite.py.
+"""
+
+import os, sys, json, re, subprocess
+
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S2 = FIX['S2']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+def read(p):
+    return open(os.path.join(ROOT, p), encoding='utf-8').read()
+
+def parse_fm(path):
+    """Same frontmatter parser as tests/test-suite.py."""
+    c = open(path, encoding='utf-8').read()
+    if not c.startswith('---'):
+        return None, c
+    p = c.split('---', 2)
+    if len(p) < 3:
+        return None, c
+    fm = {}
+    for l in p[1].strip().split('\n'):
+        m = re.match(r'^(\w+)\s*:\s*(.+)$', l)
+        if m:
+            fm[m.group(1)] = m.group(2).strip()
+    return fm, p[2]
+
+def agent_files():
+    d = os.path.join(ROOT, 'agents')
+    return sorted(f for f in os.listdir(d) if f.endswith('.md'))
+
+def walk_files(rootdir):
+    hits = []
+    for dirpath, _, files in os.walk(os.path.join(ROOT, rootdir)):
+        for f in files:
+            if f.endswith('.md'):
+                hits.append(os.path.join(dirpath, f))
+    return hits
+
+# ---------------------------------------------------------------------------
+print("=== S2.1 project-map.md residue (TV-S2-01) ===")
+forbidden = S2['project_map']['forbidden_ref']
+total = 0
+for scope in S2['project_map']['whole_scope']:
+    for fp in walk_files(scope):
+        if forbidden in read(os.path.relpath(fp, ROOT)):
+            total += 1
+            print(f"  HIT {os.path.relpath(fp, ROOT)}")
+check(total == 0, f"TC-S2-01: no '{forbidden}' residue in agents/+skills/ (found {total})")
+
+for rel in S2['project_map']['files_to_check']:
+    check(S2['project_map']['required_ref'] in read(rel), f"TC-S2-02: {rel} references project-map.json")
+
+# ---------------------------------------------------------------------------
+print("=== S2.2 AGENTS.md registry vs disk (TV-S2-02) ===")
+disk_agents = [f[:-3] for f in agent_files() if f not in S2['agent_count']['ignore_files']]
+am = read('AGENTS.md')
+reg_links = re.findall(r'\[([^\]]+)\]\(agents/([^)]+)\)', am)
+reg_names = [os.path.basename(fp)[:-3] for _, fp in reg_links]
+
+check(len(disk_agents) == len(reg_names),
+      f"TC-S2-03: disk agents ({len(disk_agents)}) == registry links ({len(reg_names)})")
+check(len(reg_names) == S2['agent_count']['registered'],
+      f"TC-S2-03: registry count == expected {S2['agent_count']['registered']}")
+
+# every AGENTS.md link resolves to a real file
+for _, fp in reg_links:
+    check(os.path.isfile(os.path.join(ROOT, 'agents', fp)), f"TC-S2-04: AGENTS.md -> agents/{fp} exists")
+
+# every disk agent is registered or explicitly deprecated
+for name in disk_agents:
+    if name not in reg_names:
+        # allow deprecated marker in agent frontmatter
+        fm, _ = parse_fm(os.path.join(ROOT, 'agents', name + '.md'))
+        deprecated = fm and 'deprecated' in (fm.get('status', '') + fm.get('description', '')).lower()
+        check(deprecated, f"TC-S2-04: agent '{name}' registered (or deprecated) in AGENTS.md")
+
+# ---------------------------------------------------------------------------
+print("=== S2.3 prompt-defense idempotency (TV-S2-03) ===")
+sync_script = os.path.join(ROOT, 'scripts', 'sync-prompt-defense.py')
+if not os.path.isfile(sync_script):
+    errors.append('TC-S2-05: scripts/sync-prompt-defense.py missing')
+    print('  ERR TC-S2-05: scripts/sync-prompt-defense.py missing')
+else:
+    section = S2['prompt_defense']['section']
+    def count_sections():
+        counts = {}
+        for f in agent_files():
+            n = read(os.path.join('agents', f)).count(section)
+            if n:
+                counts[f] = n
+        return counts
+    # NOTE: this Act mutates agents/*.md. Run in a disposable worktree or after the
+    # F5 idempotency fix lands; on a pre-fix tree it is RED and modifies files.
+    before = count_sections()
+    subprocess.run([sys.executable, sync_script], capture_output=True, text=True,
+                   encoding='utf-8', errors='replace', timeout=60, cwd=ROOT)
+    after = count_sections()
+    check(after == before, f"TC-S2-05: running sync twice does not increase Prompt Defense sections ({before} -> {after})")
+
+check(all(n <= S2['prompt_defense']['max_occurrences'] for n in count_sections().values()),
+      f"TC-S2-06: each agent has <= {S2['prompt_defense']['max_occurrences']} Prompt Defense section")
+
+# ---------------------------------------------------------------------------
+print("=== S2.4 frontmatter uniformity (TV-S2-04) ===")
+fm_cfg = S2['frontmatter']
+for f in agent_files():
+    if f.startswith('_'):
+        continue  # _prompt-defense.md is a shared template, not an agent
+    rel = os.path.join('agents', f)
+    fm, _ = parse_fm(os.path.join(ROOT, rel))
+    if fm is None:
+        errors.append(f"TC-S2-07: {rel} has no frontmatter")
+        print(f"  ERR {rel}: no frontmatter")
+        continue
+    for k in fm_cfg['required_keys']:
+        if k not in fm:
+            errors.append(f"TC-S2-07: {rel} missing frontmatter key '{k}'")
+            print(f"  ERR {rel}: missing '{k}'")
+    tools = fm.get('tools', '')
+    if tools.startswith(fm_cfg['forbidden_tools_array_syntax']) or ('[' in tools and ']' in tools):
+        errors.append(f"TC-S2-07: {rel} uses array tools syntax (need comma-separated)")
+        print(f"  ERR {rel}: tools array syntax: {tools}")
+    if fm.get('model') != fm_cfg['model_value']:
+        errors.append(f"TC-S2-07: {rel} model != 'inherit'")
+        print(f"  ERR {rel}: model = {fm.get('model')}")
+    if fm_cfg['optional_key'] not in fm:
+        warnings.append(f"{rel}: no color (optional)")
+print("  frontmatter uniformity checks complete (errors listed above)")
+
+# ---------------------------------------------------------------------------
+print("=== S2.5 code-architect numbering (TV-S2-05) ===")
+ca = read(S2['code_architect']['file'])
+dupes = re.findall(r'^### ' + re.escape(S2['code_architect']['forbidden_duplicate']) + r' ', ca, re.MULTILINE)
+check(len(dupes) <= 1, f"TC-S2-08: '{S2['code_architect']['forbidden_duplicate']}' appears <= 1 time (found {len(dupes)})")
+nums = [int(m) for m in re.findall(r'^### (\d+)\. ', ca, re.MULTILINE)]
+check(nums == sorted(nums), f"TC-S2-08: heading numbers ascending (found {nums})")
+check(len(set(nums)) == len(nums), f"TC-S2-08: no duplicate heading numbers")
+
+# ---------------------------------------------------------------------------
+print("=== S2.6 no /hookify residue (TV-S2-06) ===")
+forbidden = S2['hookify']['forbidden']
+hits = 0
+for fp in walk_files('agents'):
+    if forbidden in read(os.path.relpath(fp, ROOT)):
+        hits += 1
+        print(f"  HIT {os.path.relpath(fp, ROOT)}")
+check(hits == 0, f"TC-S2-09: no '{forbidden}' in agents/ (found {hits})")
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S2 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S2 ALL PASSED")
+sys.exit(1 if errors else 0)

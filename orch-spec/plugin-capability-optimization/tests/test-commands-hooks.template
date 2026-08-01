@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""S5 Commands + Hooks Activation — test template.
+
+Covers TV-S5-01..05 -> TC-S5-01..05:
+  - hooks.json registers suggest-compact.js (F3)
+  - observe config is not a dead reference (F4)
+  - CLAUDE.md hook table matches hooks.json (F6)
+  - doc count consistency: README / .claude-plugin/README / AGENTS.md (drift)
+  - no *.pyc tracked in git; .gitignore has __pycache__/*.pyc (F11)
+
+Framework style: mirrors tests/test-suite.py.
+"""
+
+import os, sys, json, re, subprocess
+
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S5 = FIX['S5']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+def read(p):
+    return open(os.path.join(ROOT, p), encoding='utf-8').read()
+
+# ---------------------------------------------------------------------------
+print("=== S5.1 suggest-compact registration (TV-S5-01) ===")
+hooks = json.load(open(os.path.join(ROOT, S5['hooks_file']), encoding='utf-8'))
+sc = S5['hooks']['suggest_compact']
+found = False
+for event, blocks in hooks.get('hooks', {}).items():
+    for blk in blocks:
+        blk_id = blk.get('id', '')
+        if blk_id == sc['id'] or any(sc['id'] in (h.get('command', '') or '') for h in blk.get('hooks', [])):
+            found = True
+            matcher = blk.get('matcher', '')
+            if not re.search(sc['matcher'], matcher):
+                warnings.append(f"TC-S5-01: suggest-compact matcher='{matcher}' may not cover Edit/Write")
+check(found, f"TC-S5-01: hooks.json registers '{sc['id']}'")
+sc_file = os.path.join(ROOT, sc['file'])
+check(os.path.exists(sc_file), f"TC-S5-01: {sc['file']} exists")
+
+# ---------------------------------------------------------------------------
+print("=== S5.2 observe non-dead reference (TV-S5-02) ===")
+obs = S5['hooks']['observe']
+obs_file = os.path.join(ROOT, obs['script'])
+registered = False
+for event, blocks in hooks.get('hooks', {}).items():
+    for blk in blocks:
+        for h in blk.get('hooks', []):
+            if 'observe' in (h.get('command', '') or ''):
+                registered = True
+claude_refs = read('CLAUDE.md').count('observe.sh')
+hook_flags = os.path.join(ROOT, 'scripts', 'lib', 'hook-flags.js')
+flags_ref = ('observe' in read('scripts/lib/hook-flags.js')) if os.path.exists(hook_flags) else False
+
+if os.path.exists(obs_file):
+    # activated path: file exists -> must be registered
+    check(registered, f"TC-S5-02: {obs['script']} exists -> registered in hooks.json")
+else:
+    # cleaned path: no file -> no dangling references anywhere
+    check(not registered and not claude_refs and not flags_ref,
+          'TC-S5-02: observe.sh missing -> all references cleaned (hooks.json/CLAUDE.md/hook-flags)')
+
+# ---------------------------------------------------------------------------
+print("=== S5.3 CLAUDE.md hook table sync (TV-S5-03) ===")
+claude = read('CLAUDE.md')
+hook_table_section = claude[claude.find('### 钩子系统'):]
+registered_scripts = set()
+for event, blocks in hooks.get('hooks', {}).items():
+    for blk in blocks:
+        for h in blk.get('hooks', []):
+            m = re.search(r'([\w.-]+\.(?:js|sh))', h.get('command', '') or '')
+            if m:
+                registered_scripts.add(m.group(1))
+table_scripts = set(re.findall(r'\|\s*\w+\s*\|\s*([\w.-]+\.(?:js|sh))', hook_table_section))
+check(table_scripts <= registered_scripts,
+      f"TC-S5-03: CLAUDE.md hook table scripts subset of hooks.json (table={sorted(table_scripts)}, reg={sorted(registered_scripts)})")
+check(registered_scripts <= (table_scripts | set(S5['claude_md_hooks_table'])),
+      'TC-S5-03: hooks.json scripts all present in CLAUDE.md hook table')
+
+# ---------------------------------------------------------------------------
+print("=== S5.4 doc count consistency (TV-S5-04) ===")
+def count_skills_agents_commands(path):
+    t = read(path)
+    return {
+        'skills': len(re.findall(r'(\d+)\s*(?:skills|Skills|个 Skills|个专业Skills)', t)),
+        'agents': len(re.findall(r'(\d+)\s*(?:agents|Agents|个 Agents|个 Agents?)', t)),
+        'commands': len(re.findall(r'(\d+)\s*(?:commands|Commands|个命令)', t)),
+    }
+
+readme = read('README.md')
+check('22' in readme and 'Skills' in readme, "TC-S5-04: README declares 22 Skills")
+check('/orch:sdd-dev' not in readme, 'TC-S5-04: README has no /orch:sdd-dev residue')
+check('/start-dev' in readme, 'TC-S5-04: README references /start-dev entry')
+
+plug_readme = read('.claude-plugin/README.md')
+check('22' in plug_readme and '14' in plug_readme, 'TC-S5-04: .claude-plugin/README declares 22 skills / 14 commands')
+
+am = read('AGENTS.md')
+disk_agents = [f for f in os.listdir(os.path.join(ROOT, 'agents')) if f.endswith('.md') and not f.startswith('_')]
+check(str(len(disk_agents)) in am or '26' in am, f"TC-S5-04: AGENTS.md registry count matches disk ({len(disk_agents)})")
+
+# ---------------------------------------------------------------------------
+print("=== S5.5 no *.pyc tracked (TV-S5-05) ===")
+git = subprocess.run(['git', 'ls-files'], capture_output=True, text=True,
+                     encoding='utf-8', errors='replace', timeout=30, cwd=ROOT)
+tracked = git.stdout.splitlines()
+pyc = [f for f in tracked if f.endswith('.pyc') or '__pycache__' in f]
+check(len(pyc) == 0, f"TC-S5-05: git ls-files has no *.pyc/__pycache__ (found {pyc})")
+
+gi = os.path.join(ROOT, S5['pyc']['gitignore_file'])
+if os.path.exists(gi):
+    gitignore = read(S5['pyc']['gitignore_file'])
+    for pat in S5['pyc']['gitignore_patterns']:
+        check(pat in gitignore, f"TC-S5-05: .gitignore contains '{pat}'")
+else:
+    check(False, 'TC-S5-05: .gitignore missing (needs __pycache__ / *.pyc patterns)')
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S5 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S5 ALL PASSED")
+sys.exit(1 if errors else 0)

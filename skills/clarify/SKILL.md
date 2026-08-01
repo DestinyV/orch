@@ -6,6 +6,7 @@ description: |
   
   输入：需求描述（文本）
   输出：orch-spec/{req_id}/spec/clarification.md（澄清报告 + 模糊度分数）
+  TRIGGER when: requirement description is ambiguous, open-ended, or lacks concrete acceptance criteria.
 ---
 
 # clarify — 苏格拉底需求澄清

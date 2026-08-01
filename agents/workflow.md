@@ -1,6 +1,9 @@
 ---
 name: workflow
 description: 统一入口 + 流程编排。接收需求后自动编排所有下游 Skill 的执行顺序，支持模式自动检测、HARD-GATE 卡点管控、中断恢复。
+tools: Read
+model: inherit
+color: blue
 ---
 
 # workflow

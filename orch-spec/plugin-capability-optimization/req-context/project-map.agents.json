@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "mode": "full",
+    "inherited_from": [],
+    "requirement_id": "plugin-capability-optimization",
+    "scope": "Agent C contribution - agents/commands/hooks/scripts",
+    "audit_by": "code-explorer (Agent C)",
+    "audit_date": "2026-08-01",
+    "note": "project-map.json is written concurrently by parallel agents; this file preserves Agent C scope for orchestrator merge"
+  },
+  "modules": [
+    {
+      "path": "agents",
+      "name": "Agent 体系",
+      "files": [
+        {"path": "agents/workflow.md", "role": "统一入口+编排(Skill型)", "registry": "core", "referenced_by": "commands/start-dev.md"},
+        {"path": "agents/spec.md", "role": "规范生成(Skill型)", "registry": "core", "referenced_by": "commands/start-dev.md"},
+        {"path": "agents/code-explorer.md", "role": "代码库探索+project-map.json", "registry": "core", "referenced_by": "archive/SKILL.md, workflow/SKILL.md"},
+        {"path": "agents/test-designer.md", "role": "测试规范+fixtures", "registry": "core", "referenced_by": "test-design/SKILL.md"},
+        {"path": "agents/code-architect.md", "role": "架构蓝图", "registry": "core", "referenced_by": "design/SKILL.md", "issues": ["F1 project-map.md误引用", "F8 重复0编号"]},
+        {"path": "agents/tasker.md", "role": "任务拆解+DAG", "registry": "core", "referenced_by": "task/SKILL.md", "issues": ["F1 project-map.md误引用"]},
+        {"path": "agents/executor.md", "role": "TDD实现", "registry": "core", "referenced_by": "workflow agent-dispatch-code.md"},
+        {"path": "agents/code-reviewer.md", "role": "综合审查(吸收tdd-guide)", "registry": "core", "referenced_by": "execute/SKILL.md, test/references/code-reviewer.md, commands/code-review.md"},
+        {"path": "agents/tester.md", "role": "高层测试执行", "registry": "core", "referenced_by": "test/SKILL.md"},
+        {"path": "agents/contract-creator.md", "role": "接口契约+六维审查", "registry": "core", "referenced_by": "contract/SKILL.md"},
+        {"path": "agents/exception.md", "role": "异常模式扫描+生成", "registry": "core", "referenced_by": "exception/SKILL.md"},
+        {"path": "agents/archiver.md", "role": "规范归档合并", "registry": "core", "referenced_by": "archive/SKILL.md"},
+        {"path": "agents/knowledge-curator.md", "role": "知识复利+进化规则", "registry": "core", "referenced_by": "continuous-learning/SKILL.md"},
+        {"path": "agents/completion-reporter.md", "role": "完成报告生成", "registry": "core", "referenced_by": "workflow/SKILL.md:116"},
+        {"path": "agents/clarifier.md", "role": "苏格拉底澄清", "registry": "core", "referenced_by": "clarify/SKILL.md"},
+        {"path": "agents/debug.md", "role": "因果追踪", "registry": "ext", "referenced_by": "debug/SKILL.md"},
+        {"path": "agents/test-verifier.md", "role": "证据验证", "registry": "ext", "referenced_by": "workflow agent-dispatch-code.md"},
+        {"path": "agents/goal-evaluator.md", "role": "目标达成评分", "registry": "ext", "referenced_by": "ralph-loop"},
+        {"path": "agents/e2e-runner.md", "role": "Playwright E2E", "registry": "ext", "referenced_by": "workflow/SKILL.md:146"},
+        {"path": "agents/loop-operator.md", "role": "自主循环", "registry": "ext", "referenced_by": "workflow/SKILL.md:147, ralph-loop"},
+        {"path": "agents/planner.md", "role": "实现规划", "registry": "ext", "referenced_by": "workflow/SKILL.md:148"},
+        {"path": "agents/doc-updater.md", "role": "文档/codemap", "registry": "ext", "referenced_by": null},
+        {"path": "agents/comment-analyzer.md", "role": "注释分析", "registry": "ext", "referenced_by": null},
+        {"path": "agents/conversation-analyzer.md", "role": "会话行为分析", "registry": "ext", "referenced_by": null},
+        {"path": "agents/code-cleaner.md", "role": "代码清理", "registry": "ext", "referenced_by": null},
+        {"path": "agents/tdd-guide.md", "role": "TDD引导(孤立)", "registry": "ORPHAN", "referenced_by": "agent-dispatch-code.md:182", "issues": ["F2 不在AGENTS.md注册表"]},
+        {"path": "agents/_prompt-defense.md", "role": "Prompt Defense模板源(非agent)", "registry": "template", "referenced_by": "scripts/sync-prompt-defense.py"}
+      ],
+      "dependencies": ["skills", "commands"],
+      "api_routes": [],
+      "issues": ["F1", "F2", "F5", "F7", "F8"]
+    },
+    {
+      "path": "commands",
+      "name": "Commands 命令体系",
+      "files": [
+        {"path": "commands/start-dev.md", "role": "SDD+TDD统一入口", "delegates": "Skill(orch:workflow)"},
+        {"path": "commands/checkpoint.md", "role": "检查点 create/verify/list", "delegates": "shell"},
+        {"path": "commands/context-budget.md", "role": "上下文Token审计", "delegates": "manual"},
+        {"path": "commands/code-review.md", "role": "两阶段审查", "delegates": "Agent(orch:code-reviewer)"},
+        {"path": "commands/plan.md", "role": "实施计划生成", "delegates": "manual/planner"},
+        {"path": "commands/quality-gate.md", "role": "HARD-GATE质量管道", "delegates": "shell"},
+        {"path": "commands/req-change.md", "role": "需求变更管理", "delegates": "Skill(orch:req-change)"},
+        {"path": "commands/session-resume.md", "role": "人工恢复", "delegates": "manual"},
+        {"path": "commands/session-save.md", "role": "会话保存", "delegates": "manual"},
+        {"path": "commands/spec-migrate.md", "role": "规范迁移", "delegates": "Skill(orch:spec-migrate)"},
+        {"path": "commands/cost-report.md", "role": "成本报告(薄包装)", "delegates": "Skill(orch:cost)"},
+        {"path": "commands/instinct-export.md", "role": "规则导出", "delegates": "manual"},
+        {"path": "commands/instinct-import.md", "role": "规则导入", "delegates": "manual"},
+        {"path": "commands/instinct-status.md", "role": "规则状态", "delegates": "manual"}
+      ],
+      "dependencies": ["skills", "agents"],
+      "api_routes": []
+    },
+    {
+      "path": "hooks",
+      "name": "Hooks 钩子系统",
+      "files": [
+        {"path": "hooks/hooks.json", "role": "钩子注册表", "registrations": ["session:init", "pretool:stage-gate", "posttool:hard-gate", "precompact:state", "stop:evaluate", "stop:cost-tracker"], "issues": ["F3 suggest-compact未注册", "F4 observe.sh缺失", "F6 CLAUDE.md钩子表脱节"]}
+      ],
+      "dependencies": ["scripts/hooks"],
+      "api_routes": []
+    },
+    {
+      "path": "scripts/lib",
+      "name": "运行时库",
+      "files": [
+        {"path": "scripts/lib/resolve-root.js", "role": "插件根目录解析"},
+        {"path": "scripts/lib/project-detect.js", "role": "技术栈检测"},
+        {"path": "scripts/lib/state-store.js", "role": "工作流状态读写"},
+        {"path": "scripts/lib/utils.js", "role": "工具函数"},
+        {"path": "scripts/lib/hook-runner.js", "role": "安全hook执行器"},
+        {"path": "scripts/lib/stdin.js", "role": "安全stdin读取"},
+        {"path": "scripts/lib/hook-flags.js", "role": "hook profile门控", "issues": ["F4 pre:observe/post:observe死id"]},
+        {"path": "scripts/lib/cost-db.js", "role": "成本库JSONL+SQLite", "external_deps": ["sqlite3", "git"]}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    },
+    {
+      "path": "scripts/hooks",
+      "name": "Hook 脚本",
+      "files": [
+        {"path": "scripts/hooks/session-start.js", "role": "SessionStart状态恢复"},
+        {"path": "scripts/hooks/stage-gate.js", "role": "PreToolUse阶段阻断", "issues": ["F9 EXEMPT_SKILLS混命令名"]},
+        {"path": "scripts/hooks/workflow-gate.js", "role": "PostToolUse HARD-GATE校验", "issues": ["F10 STAGE_OUTPUTS不全"]},
+        {"path": "scripts/hooks/pre-compact.js", "role": "PreCompact状态保存"},
+        {"path": "scripts/hooks/session-evaluate.js", "role": "Stop会话评估"},
+        {"path": "scripts/hooks/cost-tracker.js", "role": "Stop成本追踪"},
+        {"path": "scripts/hooks/suggest-compact.js", "role": "compact建议", "issues": ["F3 已实现未注册"]}
+      ],
+      "dependencies": ["scripts/lib"],
+      "api_routes": []
+    },
+    {
+      "path": "scripts",
+      "name": "根级脚本",
+      "files": [
+        {"path": "scripts/generate-completion-data.py", "role": "完成报告数据提取", "used_by": "agents/completion-reporter.md"},
+        {"path": "scripts/sync-prompt-defense.py", "role": "Prompt Defense同步", "issues": ["F5 重复插入bug"]},
+        {"path": "scripts/__pycache__/generate-completion-data.cpython-312.pyc", "role": "编译缓存", "issues": ["F11 已提交git"]}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    }
+  ],
+  "api_routes": [],
+  "data_models": [],
+  "test_targets": []
+}

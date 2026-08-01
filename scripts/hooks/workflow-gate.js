@@ -18,30 +18,9 @@ const path = require('path');
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || process.cwd();
 
-// 阶段序号映射：用于校验顺序
-const STAGE_ORDER = {
-  '0_workflow_control': 0,
-  '0.5_socratic_clarify': 0.5,
-  '1_spec_creation': 1,
-  '2_test_design': 2,
-  '3_code_design': 3,
-  '3.5_api_contract': 3.5,
-  '4_code_task': 4,
-  '5_code_execute': 5,
-  '5.5_exception_handler': 5.5,
-  '6_code_test': 6,
-  '7_spec_archive': 7,
-  '8_evaluation': 8,
-  '9_knowledge_continuum': 9,
-};
-
-// 各阶段必须的产出文件（相对 orch-spec/{req_id}/）
-const STAGE_OUTPUTS = {
-  '0_workflow_control': ['.workflow-state.json', '.workflow-eval.json'],
-  '1_spec_creation': ['spec/requirement.md', 'spec/scenarios'],
-  '4_code_task': ['tasks/tasks.md'],
-  '7_spec_archive': ['archive-log.md'],
-};
+// 阶段契约单一事实源（STAGE_ORDER / STAGE_OUTPUTS / SKILL_PREREQUISITES / EXEMPT_*）
+const { STAGE_ORDER, STAGE_OUTPUTS } = require('../lib/stage-contracts');
+const { readStdin, TIMEOUT_MS } = require('../lib/stdin');
 
 function findWorkflowStates() {
   const specDir = path.join(PLUGIN_ROOT, 'orch-spec');
@@ -85,11 +64,19 @@ function validateSequence(currentStage, doneStages) {
   return issues;
 }
 
-function validateOutputs(stageName, reqId) {
+function validateOutputs(stageName, reqId, state) {
   const required = STAGE_OUTPUTS[stageName];
   if (!required) return [];
   const issues = [];
   for (const out of required) {
+    // 'completion-report' 为状态标志伪产出：校验 state.completion_report_generated 而非文件存在
+    if (out === 'completion-report') {
+      if (!state || state.completion_report_generated !== true) {
+        issues.push('GATE: required output missing: completion-report (completion_report_generated != true)');
+      }
+      continue;
+    }
+    // '..' 相对路径由 path.join 天然归一化（如 ../context/learnings.md → orch-spec/context/learnings.md）
     const outPath = path.join(PLUGIN_ROOT, 'orch-spec', reqId, out);
     if (!fs.existsSync(outPath)) {
       issues.push(`GATE: required output missing: ${out}`);
@@ -108,8 +95,10 @@ function appendEvalEvent(reqId, event) {
   } catch (_) { /* fail-open: skip if eval file unavailable */ }
 }
 
-function main() {
-  const stdin = fs.readFileSync(process.stdin.fd, 'utf8').trim();
+async function main() {
+  // 安全读取 stdin（2s 超时 fail-open，避免 hook 挂起阻塞模型调用）
+  const raw = await readStdin(TIMEOUT_MS);
+  const stdin = raw.trim();
   if (!stdin) return;
 
   let input;
@@ -132,8 +121,8 @@ function main() {
 
     // 校验阶段顺序
     const seqIssues = validateSequence(currentStage, doneStages);
-    // 校验产出文件
-    const outIssues = validateOutputs(currentStage, reqId);
+    // 校验产出文件（completion-report 状态标志由 state 判断）
+    const outIssues = validateOutputs(currentStage, reqId, state);
 
     // 步骤9 learnings 已写入但 completion_report 未生成
     if (currentStage === '9_knowledge_continuum' && !state.completion_report_generated) {
@@ -201,4 +190,5 @@ function main() {
   }
 }
 
-main();
+// fail-open: on any error, allow the call (避免钩子自身故障阻断工作)
+main().catch(() => {});

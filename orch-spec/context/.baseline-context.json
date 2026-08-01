@@ -1,0 +1,23 @@
+{
+  "baseline_id": "bsl-2026-08-01-001",
+  "created_at": "2026-08-01T08:00:00Z",
+  "mode": "full",
+  "requirement": "plugin-capability-optimization",
+  "exploration_mode": "full",
+  "rationale": "首次运行：last_explored_sha 为空，project-context.md 缺失，无历史 req-context 可继承",
+  "keywords": [
+    {"text": "插件", "weight": 0.2, "type": "non-technical"},
+    {"text": "优化", "weight": 0.2, "type": "non-technical"},
+    {"text": "能力", "weight": 0.2, "type": "non-technical"},
+    {"text": "skills", "weight": 0.5, "type": "verb"},
+    {"text": "agents", "weight": 0.5, "type": "verb"},
+    {"text": "commands", "weight": 0.5, "type": "verb"}
+  ],
+  "sections": {},
+  "inherited_requirements": [],
+  "target": {
+    "scope": "orch-plugin-self",
+    "modules": ["skills/", "agents/", "commands/", "hooks/", "scripts/", "references/", "config/", "schemas/"],
+    "focus": "capability optimization, not token optimization"
+  }
+}

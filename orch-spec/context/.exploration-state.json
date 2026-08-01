@@ -1,9 +1,9 @@
 {
   "_description": "探索状态追踪。每次 archive 步骤后更新，用于跨工作流增量探索决策。",
   "version": 1,
-  "last_full_exploration": "",
+  "last_full_exploration": "2026-08-01",
   "last_incremental_exploration": "",
-  "last_explored_sha": "",
+  "last_explored_sha": "f07a553bfcfc3e0bef7de3e0c80a51b3a79f4310",
   "section_freshness": {
     "tech-stack": {"sha": "", "last_refreshed": "", "dirty": false},
     "architecture": {"sha": "", "last_refreshed": "", "dirty": false},
@@ -14,8 +14,8 @@
     "component-deps": {"sha": "", "last_refreshed": "", "dirty": false}
   },
   "inheritance_stats": {
-    "total_requirements": 0,
+    "total_requirements": 1,
     "avg_inheritance_coverage": 0,
-    "requirements_from_scratch": 0
+    "requirements_from_scratch": 1
   }
 }

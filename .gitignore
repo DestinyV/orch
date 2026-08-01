@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# Claude Code
+.claude/worktrees/
+.claude/.compact-counter
+
+# 本地环境
+*.local
+.env
+.env.local

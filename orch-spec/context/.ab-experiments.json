@@ -2,19 +2,41 @@
   "_description": "A/B 实验跟踪。knowledge-curator 创建新规则时自动生成实验，对比注入/不注入的效果偏差。",
   "_meta": {
     "version": 1,
-    "updated_at": ""
+    "updated_at": "2026-08-01T14:12:35Z"
   },
   "experiments": [
     {
       "id": "exp-001",
       "rule_id": "opt-001",
-      "created_at": "",
-      "status": "running|completed|aborted",
+      "created_at": "2026-08-01T14:12:35Z",
+      "status": "running",
       "control_batches": [],
-      "treatment_batches": [],
+      "treatment_batches": ["plugin-capability-optimization-next-round"],
       "control_deviation_avg": 0,
       "treatment_deviation_avg": 0,
-      "conclusion": ""
+      "conclusion": "self-check 回归规则注入 review_prompt，观察下一轮插件变更的回归缺陷数"
+    },
+    {
+      "id": "exp-002",
+      "rule_id": "opt-002",
+      "created_at": "2026-08-01T14:12:35Z",
+      "status": "running",
+      "control_batches": [],
+      "treatment_batches": ["plugin-capability-optimization-next-round"],
+      "control_deviation_avg": 0,
+      "treatment_deviation_avg": 0,
+      "conclusion": "北极星原则审查注入 spec_prompt，观察新约束中 cage 的数量是否减少"
+    },
+    {
+      "id": "exp-003",
+      "rule_id": "opt-003",
+      "created_at": "2026-08-01T14:12:35Z",
+      "status": "running",
+      "control_batches": [],
+      "treatment_batches": ["plugin-capability-optimization-next-round"],
+      "control_deviation_avg": 0,
+      "treatment_deviation_avg": 0,
+      "conclusion": "stage-contracts 集中化注入 design_prompt，观察阶段映射漂移缺陷是否减少"
     }
   ]
 }

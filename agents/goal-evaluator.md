@@ -2,7 +2,8 @@
 name: goal-evaluator
 description: 目标达成度评估 Agent。独立运行验证命令，逐项评分 spec 验收标准的达成度（0-100），不接受 executor 的自我报告。
 model: inherit
-tools: [Bash, Grep, Read, Glob]
+color: purple
+tools: Bash, Grep, Read, Glob
 ---
 
 # Goal Evaluator

@@ -10,6 +10,7 @@ description: |
   采用git-worktree隔离每个Task，支持全栈开发的各类代码实现。
 
   核心特性：每Task独立git-worktree | 模式标签遵循 | 测试环境预检 | 子代理强制 | TDD四阶段追踪 | 两阶段审查 | 执行自检
+  TRIGGER when: task list is defined and TDD code implementation with two-phase review is needed.
 ---
 
 # execute
@@ -53,7 +54,7 @@ spec 标注 `模式: quick` 时：直接读取 spec → 自主拆解 → 单阶�
 - design 上下文注入摘要（≤500 字），不注入完整 design.md 章节
 - 对比自行读取 10K-25K，注入模式目标 ≤4K/task
 
-> 上下文注入格式详见 `../workflow/references/context-injection-protocol.md`
+> 上下文注入格式详见 `../workflow/references/context-inheritance-protocol.md`
 
 ### 批次上下文缓存（Batch Context Cache）
 

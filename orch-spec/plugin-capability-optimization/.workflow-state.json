@@ -1,0 +1,136 @@
+{
+  "workflow": "orch",
+  "requirement_id": "plugin-capability-optimization",
+  "requirement_desc": "全方位优化该插件（orch 插件本体），不需要再关注token消耗方面，重点关注其能力优化",
+  "project_mode": "backend",
+  "mode": "standard",
+  "needs_database": false,
+  "started_at": "2026-08-01T08:00:00Z",
+  "stages": {
+    "spec": {
+      "status": "done",
+      "completed_at": "2026-08-01T08:20:00Z",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "clarify": {
+      "status": "done",
+      "completed_at": "2026-08-01T08:15:00Z",
+      "final_ambiguity": 0.2,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "test-design": {
+      "status": "done",
+      "completed_at": "2026-08-01T08:30:00Z",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "design": {
+      "status": "done",
+      "completed_at": "2026-08-01T08:30:00Z",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "contract": {
+      "status": "not_applicable",
+      "completed_at": "",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "task": {
+      "status": "done",
+      "completed_at": "2026-08-01T08:40:00Z",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "execute": {
+      "status": "done",
+      "completed_at": "2026-08-01T09:30:00Z",
+      "progress": {
+        "completed": 49,
+        "total": 49,
+        "current_batch": 7,
+        "checkpoint_reason": "all-batches-completed"
+      },
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "test": {
+      "status": "pending",
+      "completed_at": "",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "archive": {
+      "status": "pending",
+      "completed_at": "",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "evaluation": {
+      "status": "pending",
+      "completed_at": "",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    },
+    "continuous-learning": {
+      "status": "done",
+      "completed_at": "2026-08-01T14:12:35Z",
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "total": 0
+      }
+    }
+  },
+  "token_summary": {
+    "total_input": 0,
+    "total_output": 0,
+    "grand_total": 0,
+    "estimated_cost_usd": 0.0
+  },
+  "injected_optimizations": [],
+  "execution_context": {
+    "source": "/orch:start-dev",
+    "meta_task": "plugin-self-optimization",
+    "constraints": [
+      "不关注 token 消耗",
+      "重点关注能力优化",
+      "北极星原则: 约束最大化发挥模型能力，不因约束限制模型能力"
+    ]
+  },
+  "completion_report_generated": true,
+  "status": "completed",
+  "completion_report_path": "orch-spec/plugin-capability-optimization/completion-report.md"
+}

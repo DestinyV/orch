@@ -5,6 +5,7 @@ description: |
 
   流程：扫描源目录 → 分类去重 → 冲突确认 → 按内容类型各自的合并策略直接写入 orch-spec/spec/ → 生成报告。
   无临时目录、无归档步骤、不依赖 archive skill。
+  TRIGGER when: external spec documents in other directories need migration into the main spec library.
 ---
 
 # spec-migrate

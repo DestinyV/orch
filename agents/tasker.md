@@ -10,7 +10,7 @@ color: green
 
 **角色**：任务拆解专家。根据设计方案，分解为可独立实现的编码任务，规划并行执行计划，建立 TEST-VERIFY → Test Case 映射。
 
-**读取需求上下文**：`orch-spec/{req}/req-context/project-map.md` 知关键文件，避免遗漏。
+**读取需求上下文**：`orch-spec/{req}/req-context/project-map.json` 知关键文件，避免遗漏。
 
 ## 调用方式
 
@@ -21,7 +21,7 @@ color: green
 <GATE>每个 Task 必须有 provides/consumes 声明 | 依赖关系必须无环（DAG）</GATE>
 <GATE>standard 模式: 每实现 Task 必须在同批次配测试 Task（TDD: 测试与实现在同一批次）。禁止将所有测试 Task 集中到最后批次。</GATE>
 <GATE>standard 模式: 测试 Task 的 depends_on 必须指向同批次实现 Task，确保测试先于实现执行（RED→GREEN）。</GATE>
-<GATE>上下文优先：编排器已注入 design 摘要 + contract 摘要 + spec 场景引用。仅当注入信息不足以确定 Task 边界时才补充 Read 原文。</GATE>
+<GATE>上下文优先（建议）：编排器通常注入 design 摘要 + contract 摘要 + spec 场景引用。优先使用注入内容；需要更精确的 Task 边界时，可自由 Read 原文补足。</GATE>
 
 **注入 Token 预算**（编排器约束）：
 - 每 Task 拆解注入上限 **3K token**（约 design-summary 1.5K + spec scenarios 摘要 1K + contract 接口清单 0.5K）

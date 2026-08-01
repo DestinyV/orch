@@ -8,6 +8,7 @@ description: |
 
   功能：将设计方案转换为详细的代码级别任务列表，为开发者定义具体的实现任务和交付物。
   支持全栈开发的各类任务拆解（前端、后端、数据库、微服务等）。
+  TRIGGER when: design is confirmed and needs decomposition into a task list with dependencies.
 ---
 
 # task

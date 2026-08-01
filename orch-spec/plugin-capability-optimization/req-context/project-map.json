@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "created_by": "code-explorer (Agent A)",
+    "requirement": "plugin-capability-optimization",
+    "mode": "full",
+    "inherited_from": [],
+    "scope": "orch-plugin-self",
+    "focus": "capability optimization, not token optimization"
+  },
+  "modules": [
+    {
+      "path": "skills/workflow",
+      "files": [
+        {"path": "skills/workflow/SKILL.md", "exports": ["workflow skill"], "test": ""},
+        {"path": "skills/workflow/references/flow-execution-reference.md", "exports": ["stage contracts"], "test": ""},
+        {"path": "skills/workflow/references/agent-dispatch-code.md", "exports": ["agent dispatch"], "test": ""},
+        {"path": "skills/workflow/references/context-inheritance-protocol.md", "exports": ["context reuse"], "test": ""},
+        {"path": "skills/workflow/references/intra-workflow-adaptation.md", "exports": ["micro-evolution"], "test": ""},
+        {"path": "skills/workflow/templates/completion-table.md", "exports": ["report template"], "test": ""}
+      ],
+      "dependencies": ["agents", "commands/start-dev.md", "scripts/hooks", "schemas"],
+      "api_routes": []
+    },
+    {
+      "path": "skills/core-workflow",
+      "files": [
+        {"path": "skills/spec/SKILL.md", "exports": ["spec"], "test": ""},
+        {"path": "skills/test-design/SKILL.md", "exports": ["test-design"], "test": ""},
+        {"path": "skills/design/SKILL.md", "exports": ["design"], "test": ""},
+        {"path": "skills/contract/SKILL.md", "exports": ["contract"], "test": ""},
+        {"path": "skills/task/SKILL.md", "exports": ["task"], "test": ""},
+        {"path": "skills/execute/SKILL.md", "exports": ["execute"], "test": ""},
+        {"path": "skills/exception/SKILL.md", "exports": ["exception"], "test": ""},
+        {"path": "skills/test/SKILL.md", "exports": ["test"], "test": ""},
+        {"path": "skills/archive/SKILL.md", "exports": ["archive"], "test": ""},
+        {"path": "skills/clarify/SKILL.md", "exports": ["clarify"], "test": ""},
+        {"path": "skills/continuous-learning/SKILL.md", "exports": ["continuous-learning"], "test": ""}
+      ],
+      "dependencies": ["agents", "skills/workflow"],
+      "api_routes": []
+    },
+    {
+      "path": "skills/utility-and-extension",
+      "files": [
+        {"path": "skills/scripts/SKILL.md", "exports": ["scripts"], "test": ""},
+        {"path": "skills/spec-migrate/SKILL.md", "exports": ["spec-migrate"], "test": ""},
+        {"path": "skills/using-orch/SKILL.md", "exports": ["using-orch"], "test": ""},
+        {"path": "skills/context-budget/SKILL.md", "exports": ["context-budget"], "test": ""},
+        {"path": "skills/cost/SKILL.md", "exports": ["cost"], "test": ""},
+        {"path": "skills/depth/SKILL.md", "exports": ["depth"], "test": ""},
+        {"path": "skills/compact/SKILL.md", "exports": ["compact"], "test": ""},
+        {"path": "skills/ralph-loop/SKILL.md", "exports": ["ralph-loop"], "test": ""},
+        {"path": "skills/debug/SKILL.md", "exports": ["debug"], "test": ""},
+        {"path": "skills/req-change/SKILL.md", "exports": ["req-change"], "test": ""}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    },
+    {
+      "path": "agents",
+      "files": [
+        {"path": "agents/workflow.md", "exports": ["workflow agent"], "test": ""},
+        {"path": "agents/spec.md", "exports": ["spec agent"], "test": ""},
+        {"path": "agents/code-explorer.md", "exports": ["code-explorer"], "test": ""},
+        {"path": "agents/test-designer.md", "exports": ["test-designer"], "test": ""},
+        {"path": "agents/code-architect.md", "exports": ["code-architect"], "test": ""},
+        {"path": "agents/tasker.md", "exports": ["tasker"], "test": ""},
+        {"path": "agents/executor.md", "exports": ["executor"], "test": ""},
+        {"path": "agents/code-reviewer.md", "exports": ["code-reviewer"], "test": ""},
+        {"path": "agents/tester.md", "exports": ["tester"], "test": ""},
+        {"path": "agents/exception.md", "exports": ["exception"], "test": ""},
+        {"path": "agents/knowledge-curator.md", "exports": ["knowledge-curator"], "test": ""},
+        {"path": "agents/completion-reporter.md", "exports": ["completion-reporter"], "test": ""},
+        {"path": "agents/archiver.md", "exports": ["archiver"], "test": ""},
+        {"path": "agents/tdd-guide.md", "exports": ["tdd-guide"], "test": ""},
+        {"path": "agents/test-verifier.md", "exports": ["test-verifier"], "test": ""},
+        {"path": "agents/goal-evaluator.md", "exports": ["goal-evaluator"], "test": ""}
+      ],
+      "dependencies": ["skills/workflow"],
+      "api_routes": []
+    },
+    {
+      "path": "commands",
+      "files": [
+        {"path": "commands/start-dev.md", "exports": ["/start-dev"], "test": ""},
+        {"path": "commands/plan.md", "exports": ["/plan"], "test": ""},
+        {"path": "commands/code-review.md", "exports": ["/code-review"], "test": ""},
+        {"path": "commands/checkpoint.md", "exports": ["/checkpoint"], "test": ""},
+        {"path": "commands/quality-gate.md", "exports": ["/quality-gate"], "test": ""},
+        {"path": "commands/req-change.md", "exports": ["/req-change"], "test": ""},
+        {"path": "commands/session-save.md", "exports": ["/session-save"], "test": ""},
+        {"path": "commands/session-resume.md", "exports": ["/session-resume"], "test": ""},
+        {"path": "commands/spec-migrate.md", "exports": ["/spec-migrate"], "test": ""},
+        {"path": "commands/instinct-status.md", "exports": ["/instinct-status"], "test": ""},
+        {"path": "commands/instinct-export.md", "exports": ["/instinct-export"], "test": ""},
+        {"path": "commands/instinct-import.md", "exports": ["/instinct-import"], "test": ""},
+        {"path": "commands/context-budget.md", "exports": ["/context-budget"], "test": ""},
+        {"path": "commands/cost-report.md", "exports": ["/cost-report"], "test": ""}
+      ],
+      "dependencies": ["skills", "agents"],
+      "api_routes": []
+    },
+    {
+      "path": "scripts",
+      "files": [
+        {"path": "scripts/hooks/session-start.js", "exports": ["session:init"], "test": ""},
+        {"path": "scripts/hooks/stage-gate.js", "exports": ["pretool:stage-gate"], "test": ""},
+        {"path": "scripts/hooks/workflow-gate.js", "exports": ["posttool:hard-gate"], "test": ""},
+        {"path": "scripts/hooks/pre-compact.js", "exports": ["precompact:state"], "test": ""},
+        {"path": "scripts/hooks/session-evaluate.js", "exports": ["stop:evaluate"], "test": ""},
+        {"path": "scripts/hooks/cost-tracker.js", "exports": ["stop:cost-tracker"], "test": ""},
+        {"path": "scripts/hooks/suggest-compact.js", "exports": ["compact suggestion"], "test": ""},
+        {"path": "scripts/lib/cost-db.js", "exports": ["writeRecord", "sumUsageFromTranscript", "estimateCost"], "test": ""},
+        {"path": "scripts/lib/state-store.js", "exports": ["readState", "writeState", "appendStage", "updateStageTokens"], "test": ""},
+        {"path": "scripts/lib/hook-runner.js", "exports": ["runHook", "resolveRoot"], "test": ""},
+        {"path": "scripts/lib/hook-flags.js", "exports": ["isHookEnabled", "resolveProfile"], "test": ""},
+        {"path": "scripts/lib/stdin.js", "exports": ["readStdinSync"], "test": ""},
+        {"path": "scripts/lib/utils.js", "exports": ["ensureDir"], "test": ""},
+        {"path": "scripts/generate-completion-data.py", "exports": ["completion extractor"], "test": ""},
+        {"path": "scripts/sync-prompt-defense.py", "exports": ["prompt defense sync"], "test": ""}
+      ],
+      "dependencies": ["hooks/hooks.json", "schemas"],
+      "api_routes": []
+    },
+    {
+      "path": "config-and-schemas",
+      "files": [
+        {"path": "config/platforms.json", "exports": ["platform mapping"], "test": ""},
+        {"path": "config/stacks.json", "exports": ["tech stacks"], "test": ""},
+        {"path": "config/socratic-config.json", "exports": ["clarify params"], "test": ""},
+        {"path": "schemas/workflow-state.json", "exports": ["state schema"], "test": ""},
+        {"path": "schemas/workflow-eval.json", "exports": ["eval schema"], "test": ""},
+        {"path": "schemas/deliverables.json", "exports": ["deliverable schema"], "test": ""},
+        {"path": "hooks/hooks.json", "exports": ["hook registry"], "test": ""}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    },
+    {
+      "path": "plugin-metadata",
+      "files": [
+        {"path": ".claude-plugin/plugin.json", "exports": ["manifest"], "test": ""},
+        {"path": ".claude-plugin/marketplace.json", "exports": ["marketplace listing"], "test": ""},
+        {"path": ".claude-plugin/PLUGIN_SCHEMA_NOTES.md", "exports": ["schema constraints"], "test": ""},
+        {"path": "CLAUDE.md", "exports": ["project instructions"], "test": ""},
+        {"path": "AGENTS.md", "exports": ["agent registry"], "test": ""},
+        {"path": "README.md", "exports": ["overview"], "test": ""}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    },
+    {
+      "path": "rules",
+      "files": [
+        {"path": "rules/common/coding-style.md", "exports": ["common style"], "test": ""},
+        {"path": "rules/common/git-workflow.md", "exports": ["git workflow"], "test": ""},
+        {"path": "rules/common/testing.md", "exports": ["testing"], "test": ""},
+        {"path": "rules/typescript/coding-style.md", "exports": ["TS style"], "test": ""},
+        {"path": "rules/python/coding-style.md", "exports": ["Python style"], "test": ""},
+        {"path": "rules/zh/coding-style.md", "exports": ["Chinese rules"], "test": ""}
+      ],
+      "dependencies": [],
+      "api_routes": []
+    }
+  ],
+  "api_routes": [],
+  "data_models": [
+    {"name": "WorkflowState", "fields": ["status", "current_stage", "stages", "heartbeat"], "file": "schemas/workflow-state.json"},
+    {"name": "WorkflowEval", "fields": ["stages", "events", "token_usage", "diagnosis", "learnings"], "file": "schemas/workflow-eval.json"},
+    {"name": "Deliverables", "fields": ["stages", "requiredFiles", "requiredChecks"], "file": "schemas/deliverables.json"},
+    {"name": "CostUsage", "fields": ["session_id", "project", "stage", "model", "input_tokens", "output_tokens", "cost_usd"], "file": "scripts/lib/cost-db.js"},
+    {"name": "OptimizationRule", "fields": ["id", "status", "injection_point", "observation", "evolution"], "file": "orch-spec/user-preferences/preferences.json"}
+  ],
+  "test_targets": [
+    {"module": "tests", "test_files": ["tests/test-suite.py"]},
+    {"module": "tests/pressure-scenarios", "test_files": ["tests/pressure-scenarios/run-all.sh"]}
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "_description": ".workflow-eval.json — 每阶段完成后追加 stage 数据",
+  "req_id": "plugin-capability-optimization",
+  "status": "in_progress",
+  "project_mode": "backend",
+  "mode": "standard",
+  "started_at": "2026-08-01T08:00:00Z",
+  "completed_at": "",
+  "updated_at": "2026-08-01T14:12:35Z",
+  "token_usage": {
+    "total_input": 0,
+    "total_output": 0,
+    "by_stage": {}
+  },
+  "stages": [
+    {
+      "stage": "0_workflow_control",
+      "skill": "workflow",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "user_interactions": 3,
+      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "0.5_socratic_clarify",
+      "skill": "clarify",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "clarifier", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "1_spec_creation",
+      "skill": "spec",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "code-explorer", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "2_test_design",
+      "skill": "test-design",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "test-designer", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "3_code_design",
+      "skill": "design",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "code-architect", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "3.5_api_contract",
+      "skill": "contract",
+      "status": "not_applicable",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "contract-creator", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "4_code_task",
+      "skill": "task",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "tasker", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "5_code_execute",
+      "skill": "execute",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agents": [
+        { "name": "executor", "dispatched": true, "count": 49, "status": "done", "retries": 0 },
+        { "name": "code-reviewer", "dispatched": true, "count": 7, "status": "done", "retries": 0 }
+      ]
+    },
+    {
+      "stage": "5.5_exception_handler",
+      "skill": "exception",
+      "status": "skipped",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "agent": { "name": "exception", "dispatched": false, "status": "skipped", "retries": 0 }
+    },
+    {
+      "stage": "6_code_test",
+      "skill": "test",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agents": [
+        { "name": "tester", "dispatched": true, "status": "done", "retries": 0 },
+        { "name": "test-verifier", "dispatched": true, "status": "done", "retries": 0 }
+      ]
+    },
+    {
+      "stage": "7_spec_archive",
+      "skill": "archive",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "hard_gate_triggers": 0,
+      "agent": { "name": "archiver", "dispatched": true, "status": "done", "retries": 0 }
+    },
+    {
+      "stage": "8_evaluation",
+      "skill": "evaluation",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "agent": { "name": "—", "dispatched": false, "status": "", "retries": 0 }
+    },
+    {
+      "stage": "9_knowledge_continuum",
+      "skill": "continuous-learning",
+      "status": "done",
+      "tokens_input": 0,
+      "tokens_output": 0,
+      "completed_at": 0,
+      "agent": { "name": "knowledge-curator", "dispatched": true, "status": "done", "retries": 0 }
+    }
+  ],
+  "summary": {
+    "stages_total": 13,
+    "stages_done": 11,
+    "stages_failed": 0,
+    "stages_skipped": 1,
+    "agents_dispatched": 11,
+    "agents_success": 11,
+    "agents_failed": 0,
+    "hard_gates_total": 0,
+    "user_interactions_total": 3
+  },
+  "events": [
+    { "type": "workflow_init", "detail": "plugin self-optimization meta-task started", "at": "2026-08-01T08:00:00Z" },
+    { "type": "user_intervention", "stage": "0_workflow_control", "detail": "AskUserQuestion 确认：拓扑全量优化 5 大块（workflow/agent/skills/tdd/commands+hooks）", "at": "2026-08-01T08:05:00Z" },
+    { "type": "user_intervention", "stage": "0_workflow_control", "detail": "AskUserQuestion 确认：模式 standard + needs_database=false", "at": "2026-08-01T08:08:00Z" },
+    { "type": "user_intervention", "stage": "0.5_socratic_clarify", "detail": "AskUserQuestion 确认：智能 gate 机制（规则自决+白名单人工）+ 北极星原则（护栏非牢笼）", "at": "2026-08-01T08:15:00Z" }
+  ],
+  "applied_optimizations": [],
+  "learnings": [
+    {
+      "source": "用户关键决策",
+      "phase": "0_workflow_control",
+      "trigger": "AskUserQuestion 确认拓扑全量优化 5 大块 + standard 模式 + 不需要数据库 + 智能gate机制 + 北极星原则",
+      "action": "preferences.always_check 追加：审查任何新约束是否符合北极星原则；插件变更后运行 self-check 回归",
+      "ts": "2026-08-01T14:12:35Z"
+    },
+    {
+      "source": "质量模式",
+      "phase": "6_code_test",
+      "trigger": "47 TC 全 PASS（29 TV 中 28 VERIFIED + 1 PARTIAL）、18 项薄弱环节闭环、self-check 5 块 PASS",
+      "action": "模式：插件变更后必须以 node scripts/self-check.js + test-suite.py 做回归，判定函数以实测为准不接受自我报告",
+      "ts": "2026-08-01T14:12:35Z"
+    },
+    {
+      "source": "项目约定",
+      "phase": "3_code_design",
+      "trigger": "ADR-002 stage-contracts 集中化（STAGE_ORDER/STAGE_OUTPUTS/SKILL_PREREQUISITES/EXEMPT_* 单源）+ ADR-008 verdict.js 判定函数",
+      "action": "后续插件迭代复用 stage-contracts 集中化模式，阶段映射单一来源避免漂移",
+      "ts": "2026-08-01T14:12:35Z"
+    },
+    {
+      "source": "项目约定",
+      "phase": "3_code_design",
+      "trigger": "ADR-001 tdd-guide 标记 deprecated 并注册 AGENTS.md，划清与 code-reviewer 边界",
+      "action": "弃用组件保留注册 + deprecated 标记，不硬删除",
+      "ts": "2026-08-01T14:12:35Z"
+    },
+    {
+      "source": "北极星原则审查",
+      "phase": "1_spec_creation",
+      "trigger": "NSP-001~007 审查结论：2 降级（start-dev.md:12 禁止调用前探索、tasker.md:24 上下文优先限制 Read）+ 5 保留",
+      "action": "约束 = 护栏非牢笼。任何削弱模型思考深度/探索自由/创造性的约束一律降级为建议；仅约束流程顺序/产出存在的保留",
+      "ts": "2026-08-01T14:12:35Z"
+    }
+  ],
+  "diagnosis": {
+    "bottlenecks": [
+      "sync-prompt-defense.py 重写 agent 文件时会重排 DEPRECATED 横幅位置（已修复幂等，横幅内容不丢）",
+      "test-suite.py 的 HARD-GATE 计数用 <HARD-GATE> 但实际 SKILL.md 用 <GATE>（检查过时，非缺陷）"
+    ],
+    "warnings": [
+      "TV-S6-02 自动流转率原值 83% 为执行自述数字，判定函数已独立验证，活体实测需完整编排工作流复测"
+    ],
+    "recommendations": [
+      "持续运行 node scripts/self-check.js 作为插件变更回归护栏",
+      "observe 观察层激活后，连续运行 N 个工作流积累 observations.jsonl 供 continuous-learning 分析",
+      "后续需求可继承本需求的 stage-contracts 集中化模式（ADR-002）"
+    ],
+    "deviation": { "estimated_total": 0, "actual_input": 0, "actual_output": 0, "deviation_rate": 0 }
+  }
+}

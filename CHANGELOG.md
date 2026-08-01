@@ -2,6 +2,35 @@
 
 所有重要的项目更新将在此文档中记录。
 
+## [0.11.0] - 2026-08-01
+
+### 新增 - 插件本体全方位能力优化（元任务）
+
+#### 核心原则
+- **北极星原则**：约束 = 护栏（防坠落）非牢笼（限奔跑）。在最大化发挥模型自身能力的前提下提供流程约束，绝不因约束限制模型能力。NSP-001~007 审查：2 项 token 时代残留的探索限制约束降级为建议，5 项流程纪律保留。
+- 明确"不关注 token 消耗"，专注能力优化。
+
+#### 新增能力
+| 文件 | 说明 |
+|------|------|
+| `scripts/self-check.js` + `commands/self-check.md` | 插件 5 块自检命令（orchestration/agents/skills/tdd_loop/commands_hooks），`node scripts/self-check.js` |
+| `scripts/lib/stage-contracts.js` | 阶段契约单一事实源（STAGE_ORDER/STAGE_OUTPUTS/SKILL_PREREQUISITES/EXEMPT_*），消除多处维护漂移 |
+| `scripts/lib/verdict.js` | 判定函数库（judgeCoverage/judgeRate/judgeAutoResolve），覆盖率以实测为准 |
+| `scripts/hooks/observe.js` + `observe.sh` | instinct 观察层激活（fail-open），注册 pre/post:observe |
+| `tests/hooks-smoke.test.js` | hooks 基础设施冒烟测试 |
+| `tests/meta-b1~b6-*.py`（14 个） | 各批次 TDD 聚焦测试 |
+
+#### 修复（18 项薄弱环节闭环）
+- **P0**：execute/spec 悬空引用修复
+- **P1**：cost 补 GATE 硬约束、using-orch 索引 6→22
+- **P2**：observer.enabled 激活、16 核心 skill 补 TRIGGER when
+- **F1-F12**：project-map.md 引用统一 ×4、tdd-guide 注册+deprecated、Prompt Defense 幂等修复、frontmatter 统一、code-architect 编号、/hookify 清理、suggest-compact 注册激活、CLAUDE.md 钩子表同步、文档数量口径 22/26/14、file-map/index 同步、__pycache__ 清理 + .gitignore、EXEMPT 命令名分离
+
+#### 版本更新
+- plugin.json → 0.11.0
+- marketplace.json → 0.11.0（Agents 口径 25→26）
+- CLAUDE.md → v0.11.0
+
 ## [2.11.0] - 2026-04-30
 
 ### 新增 - 代码设计与编写能力全面增强

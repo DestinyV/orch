@@ -5,6 +5,7 @@ description: |
   
   输入：bug 描述 + 相关文件路径
   输出：根因分析 + 修复建议
+  TRIGGER when: a bug, test failure, or unexpected behavior needs evidence-driven root cause analysis.
 ---
 
 # trace — 因果追踪

@@ -6,6 +6,7 @@ description: |
 
   输入：.workflow-eval.json
   输出：orch-spec/context/learnings.md + orch-spec/user-preferences/preferences.json + optimization rules
+  TRIGGER when: workflow is complete (after step 8 evaluation) and knowledge/optimization rules need extraction.
 ---
 
 # continuous-learning — 知识复利引擎

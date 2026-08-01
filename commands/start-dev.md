@@ -9,7 +9,9 @@ argument-hint: 可选：需求描述
 
 > **流程执行参考（Source of Truth）**: 各阶段的输入/输出契约、校验规则、失败纠正、Agent 派遣详见 [`skills/workflow/references/flow-execution-reference.md`](skills/workflow/references/flow-execution-reference.md)。
 
-<GATE>收到指令后立即调用 Skill("orch:workflow")，禁止在调用前执行任何代码探索、文件读取、目录扫描或项目分析</GATE>
+> **建议**（北极星原则：约束=护栏非牢笼）：收到指令后建议直接调用 Skill("orch:workflow")，步骤0 会注入 baseline context 并编排流程。若需预了解项目，交由 workflow 的 code-explorer 处理，无需在调用前自行探索——但这不是禁令，模型可按需自主决定是否先做轻量预读。
+
+<GATE>工作流阶段必须按序执行，禁止跳过任何阶段。PreToolUse hook 会在跳过阶段时阻断 Skill 调用。</GATE>
 
 ## 入口
 
@@ -24,7 +26,7 @@ argument-hint: 可选：需求描述
 
 ## 强制规则
 
-1. <GATE>禁止在调用 Skill("orch:workflow") 之前执行任何代码探索/文件读取/目录扫描。收到指令后唯一允许的动作就是调用 Skill("orch:workflow")。project-mode 由 workflow 内部让用户自主选择，不通过读项目推断。</GATE>
+1. <GATE>建议直接调用 Skill("orch:workflow")（步骤0 会注入 baseline context 并编排流程）。project-mode 由 workflow 内部让用户自主选择，不通过读项目推断。这不是探索禁令——如需预了解项目，交由 workflow 的 code-explorer 处理，模型可按需自主决定。</GATE>
 2. <GATE>禁止跳过阶段。必须从阶段0 开始，由状态检测决定中断恢复。</GATE>
 
 ## 流程步骤

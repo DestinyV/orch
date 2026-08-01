@@ -176,6 +176,8 @@ DB 不存在时：
 
 ## 约束
 
+<GATE>禁止跨行直接 SUM(cost_usd)——必须每 session 取最新快照（MAX(rowid) GROUP BY session_id）| 禁止硬编码模型定价</GATE>
+
 - 优先使用 `cost_usd` 列（source of truth），不手动计算价格
 - **跨行查询必须先取每 session 最新快照（`MAX(rowid) GROUP BY session_id`），禁止直接 SUM 全表**
 - 数据库不存在时不编造数据

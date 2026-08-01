@@ -55,7 +55,7 @@
 
 **TDD 数据链路**：`spec (TEST-VERIFY) → test-designer (test-spec + fixtures) → execute (RED-GREEN-REFACTOR-REVIEW)`
 
-**版本**：v0.10.0 (2026-06-22)
+**版本**：v0.11.0 (2026-08-01)
 
 ## 架构与文件结构
 
@@ -206,12 +206,15 @@ orch/
 ### 钩子系统
 | 事件 | 钩子 | 用途 |
 |------|------|------|
-| SessionStart | session-start.js | 未完成工作流检测 + 状态恢复 |
-| PreToolUse | observe.sh | Instinct 学习观察 |
-| PreToolUse (Edit/Write) | suggest-compact.js | 逻辑边界 compact 建议 |
-| PostToolUse | observe.sh | 观察完成 |
+| SessionStart | session-start.js | 未完成工作流检测 + 状态恢复 + 自动补偿建议 |
+| PreToolUse (Skill) | stage-gate.js | 阶段门控：前置未完成阻断 Skill 调用 |
+| PreToolUse (Edit/Write) | suggest-compact.js | 逻辑边界 compact 建议（40 次 Edit/Write 后） |
+| PreToolUse | observe.sh | Instinct 学习观察（fail-open） |
+| PostToolUse (Skill/Agent) | workflow-gate.js | HARD-GATE 校验（阶段顺序/产出/状态） |
+| PostToolUse | observe.sh | 观察完成（fail-open） |
 | PreCompact | pre-compact.js | Compact 前保存工作流状态 |
 | Stop | session-evaluate.js | 会话评估 + 工作流持续化检测 |
+| Stop | cost-tracker.js | Token/成本追踪（JSONL+SQLite 双写） |
 
 ### 状态持久化
 - `.workflow-state.json` — 各阶段状态追踪

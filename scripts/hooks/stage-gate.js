@@ -22,86 +22,14 @@ const path = require('path');
 
 const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || process.cwd();
 
-// Skill → 前置阶段映射
-// 格式: "skill-name": { stage: "前置阶段key", name: "中文名", outputs: ["必要产物"] }
-const SKILL_PREREQUISITES = {
-  'spec': {
-    stage: '0_workflow_control',
-    name: '工作流初始化(步骤0)',
-    outputs: ['.workflow-state.json'],
-  },
-  'clarify': null, // 无前置，在 workflow 步骤0.5 内触发
-  'test-design': {
-    stage: '1_spec_creation',
-    name: '规范生成(步骤1)',
-    outputs: ['spec/requirement.md'],
-  },
-  'design': {
-    stage: '1_spec_creation',
-    name: '规范生成(步骤1)',
-    outputs: ['spec/requirement.md'],
-  },
-  'contract': {
-    stage: '3_code_design',
-    name: '架构设计(步骤3)',
-    outputs: ['design/design.md'],
-  },
-  'task': {
-    stage: '3_code_design',
-    name: '架构设计(步骤3)',
-    outputs: ['design/design.md'],
-  },
-  'execute': {
-    stage: '4_code_task',
-    name: '任务拆解(步骤4)',
-    outputs: ['tasks/tasks.md'],
-  },
-  'exception': {
-    stage: '5_code_execute',
-    name: '代码执行(步骤5)',
-    outputs: [], // exception 是 execute 子过程，产出在 execute 中
-  },
-  'test': {
-    stage: '5_code_execute',
-    name: '代码执行(步骤5)',
-    outputs: ['execution/execution-report.md'],
-  },
-  'archive': {
-    stage: '6_code_test',
-    name: '测试验证(步骤6)',
-    outputs: ['testing/testing-report.md'],
-  },
-  'continuous-learning': {
-    stage: '8_evaluation',
-    name: '效果评估(步骤8)',
-    outputs: ['.workflow-eval.json'],
-  },
-};
+// 阶段契约单一事实源（EXEMPT_SKILLS / EXEMPT_COMMANDS / SKILL_PREREQUISITES / STAGE_ORDER）
+const { SKILL_PREREQUISITES, STAGE_ORDER, EXEMPT_SKILLS, EXEMPT_COMMANDS } = require('../lib/stage-contracts');
+const { readStdin, TIMEOUT_MS } = require('../lib/stdin');
 
-// 阶段 key → 序号
-const STAGE_ORDER = {
-  '0_workflow_control': 0,
-  '0.5_socratic_clarify': 0.5,
-  '1_spec_creation': 1,
-  '2_test_design': 2,
-  '3_code_design': 3,
-  '3.5_api_contract': 3.5,
-  '4_code_task': 4,
-  '5_code_execute': 5,
-  '5.5_exception_handler': 5.5,
-  '6_code_test': 6,
-  '7_spec_archive': 7,
-  '8_evaluation': 8,
-  '9_knowledge_continuum': 9,
-};
-
-// 这些 Skill 不参与阶段门控（工具类/辅助类 Skill）
-const EXEMPT_SKILLS = [
-  'scripts', 'context-budget', 'depth', 'compact', 'cost',
-  'ralph-loop', 'using-orch', 'debug', 'req-change', 'spec-migrate',
-  'checkpoint', 'code-review', 'cost-report', 'plan', 'quality-gate',
-  'session-resume', 'session-save', 'start-dev',
-];
+// SKILL_PREREQUISITES / STAGE_ORDER / EXEMPT_SKILLS / EXEMPT_COMMANDS 已集中到
+// scripts/lib/stage-contracts.js（单一事实源）。此处直接消费，避免阶段映射漂移（F10）。
+// EXEMPT_COMMANDS（命令名）与 EXEMPT_SKILLS（Skill 名）命名空间分离：
+// PreToolUse matcher=Skill 时命令名本不会进入门控分支，EXEMPT_COMMANDS 作文档化分离 + 防御。
 
 function findInProgressWorkflows() {
   const specDir = path.join(PLUGIN_ROOT, 'orch-spec');
@@ -160,17 +88,11 @@ function checkOutputsExist(reqId, outputs) {
   return missing;
 }
 
-function main() {
+async function main() {
+  // 安全读取 stdin（2s 超时 fail-open，杜绝 hook 挂起阻塞模型调用）
   let raw = '';
   try {
-    const chunks = [];
-    const fd = process.stdin.fd;
-    let chunk;
-    while ((chunk = fs.readFileSync(fd, 'utf8', 4096))) {
-      chunks.push(chunk);
-      if (chunks.length > 10) break; // safety limit
-    }
-    raw = chunks.join('');
+    raw = await readStdin(TIMEOUT_MS);
   } catch (_) {
     // fallback: try reading from /dev/stdin
     try { raw = fs.readFileSync('/dev/stdin', 'utf8'); } catch (e) { /* ignore */ }
@@ -266,7 +188,7 @@ function main() {
   process.stdout.write(JSON.stringify({ decision: 'allow' }));
 }
 
-try { main(); } catch (e) {
-  // fail-open: on any error, allow the call (避免钩子自身故障阻断工作)
+// fail-open: on any error, allow the call (避免钩子自身故障阻断工作)
+main().catch(() => {
   process.stdout.write(JSON.stringify({ decision: 'allow' }));
-}
+});

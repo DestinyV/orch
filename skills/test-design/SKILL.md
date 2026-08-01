@@ -7,6 +7,7 @@ description: |
   输出：orch-spec/{requirement_desc_abstract}/tests/test-spec.md + fixtures.json + test-*.template
 
   功能：将规范中的TEST-VERIFY和Mock数据转换为详细测试规范和框架代码。
+  TRIGGER when: spec contains TEST-VERIFY and test specifications + fixtures need generation.
 ---
 
 # test-design

@@ -6,6 +6,7 @@ description: |
   避免硬编码项目特定内容。
 
   触发条件：后端/全栈项目，代码中存在可能失败的操作
+  TRIGGER when: backend or fullstack coding may fail on DB queries, RPC calls, JSON parsing, or type conversion.
 ---
 
 # exception

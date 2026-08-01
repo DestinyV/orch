@@ -4,6 +4,7 @@ description: |
   需求变更管理。在规范/设计/编码完成后需求发生变更时，进行影响分析和增量调整。
   输入：变更描述 + 目标需求 ID
   输出：orch-spec/{req_id}/changelogs/change-{ts}.md + 更新后的 spec/design/tasks
+  TRIGGER when: requirement changes after spec/design/code are complete, needing impact analysis.
 ---
 
 # req-change — 需求变更管理

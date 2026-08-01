@@ -8,6 +8,7 @@ description: |
 
   功能：对execute生成的代码进行高层测试（集成、E2E、性能），执行闭环验证。
   单元测试由execute的TDD流程保证，此处不重复。
+  TRIGGER when: code implementation is complete and integration/E2E/performance testing is needed.
 ---
 
 # test

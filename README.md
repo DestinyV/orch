@@ -16,7 +16,7 @@
 
 ## 📌 Overview
 
-**orch** is an enterprise-grade Claude Code plugin providing a **complete full-stack development workflow** with AI assistance. Through 11 professional skills covering the full lifecycle from requirements to archive, it helps teams quickly establish specification frameworks, conduct design planning, define test standards, decompose tasks, generate code with exception handling, verify functionality, and archive specifications. Supports frontend, backend, database, mobile, microservices, and other project types.
+**orch** is an enterprise-grade Claude Code plugin providing a **complete full-stack development workflow** with AI assistance. Through 22 professional skills covering the full lifecycle from requirements to archive, it helps teams quickly establish specification frameworks, conduct design planning, define test standards, decompose tasks, generate code with exception handling, verify functionality, and archive specifications. Supports frontend, backend, database, mobile, microservices, and other project types.
 
 **Workflow**:
 ```
@@ -59,7 +59,7 @@
 
 ---
 
-## 📦 Included 11 Skills
+## 📦 Included 22 Skills
 
 | Skill | Stage | Function | Output |
 |-------|-------|----------|--------|
@@ -74,12 +74,23 @@
 | **exception** | Exception | Exception scene recognition + project convention scanning + exception code generation (backend/fullstack, zero hardcoding) | src/** (with exception handling) |
 | **test** | Test | High-level testing (Integration/E2E/Performance) and closed-loop verification | tests/ + orch-spec/{requirement_desc_abstract}/testing/testing-report.md |
 | **archive** | Archive | Spec archiving and optimization, merges requirement specs into main spec library through scenario splitting | orch-spec/spec/ (merged main spec) |
+| **clarify** | Pre-Spec | Socratic requirement clarification with mathematical ambiguity scoring | orch-spec/{req}/spec/clarification.md |
+| **using-orch** | Utility | Usage guide and skill trigger rules (multi-platform tool mapping) | 索引说明 |
+| **context-budget** | Utility | Context window occupancy audit | 报告 + .workflow-eval.json |
+| **depth** | Utility | Response depth control (25/50/75/100%) | 响应本身 |
+| **compact** | Utility | Logical boundary compact suggestions | 建议提示 |
+| **cost** | Utility | Token usage/cost query (SQLite) | 查询结果 |
+| **ralph-loop** | Utility | Autonomous agent loop mode selection | 循环执行结果 |
+| **debug** | Utility | Evidence-driven causal tracing for root cause analysis | orch-spec/{req}/testing/debug-report.md |
+| **req-change** | Utility | Requirement change impact analysis and incremental adjustment | orch-spec/{req}/changelogs/ |
+| **spec-migrate** | Utility | External spec migration and integration into main library | orch-spec/spec/ + import-log.md |
+| **continuous-learning** | Knowledge | Knowledge compounding + autonomous evolution rules | orch-spec/context/learnings.md + preferences.json |
 
 Detailed documentation: [View skills documentation](./skills/README_EN.md)
 
 ## 🤖 Core Agents
 
-orch includes 9 professional Agents that collaborate across various Skills:
+orch includes 26 professional Agents that collaborate across various Skills:
 
 | Agent | Responsibility | Use Cases |
 |-------|---------------|-----------|
@@ -155,7 +166,7 @@ For detailed tool mappings, see the `skills/using-superpowers/references/` direc
 #### Step 0: Enter Plugin (User Action)
 
 ```bash
-/orch:sdd-dev
+/start-dev
 
 Enter requirements as prompted
 ```
@@ -264,7 +275,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 ```bash
 # 0. Enter plugin
-/orch:sdd-dev
+/start-dev
 # Input requirements: Need to add order form to order management system, supporting search, sort, pagination, batch operations
 
 # 1. Analyze requirements and generate spec
@@ -292,7 +303,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 ```bash
 # 0. Enter plugin
-/orch:sdd-dev
+/start-dev
 # Input requirements: Need to create data dashboard supporting real-time data, multi-chart display, custom panels
 
 # 1. Analyze requirements and generate spec
@@ -322,7 +333,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  Step 0: /orch:sdd-dev Enter plugin            │
+│  Step 0: /start-dev Enter plugin            │
 │  - Enter requirements as prompted                        │
 └────────────────┬─────────────────────────────────────────┘
                  │
@@ -406,7 +417,7 @@ Total time: Specification stage depends on user interaction, subsequent full wor
 ## 📊 Core Principles
 
 ### ✅ Must Do
-- Step 0: Use `/orch:sdd-dev` to enter plugin and input requirements
+- Step 0: Use `/start-dev` to enter plugin and input requirements
 - Step 1: Run spec for requirements analysis and spec generation
 - Step 2: Assign code-architect for architecture design in design stage
 - Step 3: Conduct task decomposition and definition in task stage
@@ -509,7 +520,7 @@ Modify test SKILL.md:
 ### Beginner
 1. Read this README.md to understand the entire workflow
 2. View [Usage Guide](./docs/USAGE_EN.md)
-3. Execute `/orch:sdd-dev` to enter plugin
+3. Execute `/start-dev` to enter plugin
 4. Enter requirements as prompted
 5. Step through spec → design → test-design → task → execute → test → archive
 6. Choose a small feature for complete workflow trial run

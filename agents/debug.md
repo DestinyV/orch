@@ -2,6 +2,7 @@
 name: debug
 description: 证据驱动的因果追踪 Agent。生成竞争假设，收集正反证据，按证据强度排序，执行反驳回合。
 model: inherit
+color: red
 tools: Grep, Glob, Read, Bash
 ---
 

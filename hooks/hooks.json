@@ -27,6 +27,30 @@
           }
         ],
         "id": "pretool:stage-gate"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/suggest-compact.js\"",
+            "description": "Suggest /compact at logical boundaries after 40 Edit/Write ops",
+            "timeout": 5
+          }
+        ],
+        "id": "pre:compact"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/observe.sh\"",
+            "description": "Observe tool calls for instinct learning (fail-open, non-blocking)",
+            "timeout": 5
+          }
+        ],
+        "id": "pre:observe"
       }
     ],
     "PostToolUse": [
@@ -41,6 +65,18 @@
           }
         ],
         "id": "posttool:hard-gate"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/observe.sh\"",
+            "description": "Observe tool calls for instinct learning (fail-open, non-blocking)",
+            "timeout": 5
+          }
+        ],
+        "id": "post:observe"
       }
     ],
     "PreCompact": [

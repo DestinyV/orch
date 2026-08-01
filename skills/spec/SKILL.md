@@ -26,6 +26,7 @@ description: |
   - project-context.md（标准模式，位于 orch-spec/ 根目录，跨需求共享，增量维护）
 
   输出供 test-design 和 design 并行消费。
+  TRIGGER when: a new requirement description is received and BDD specification generation is needed.
 ---
 
 # spec
@@ -191,7 +192,7 @@ description: |
 
 <GATE>设计图=全部 或 按需触发阈值达标时，生成对应图供用户确认。快速模式跳过。</GATE>
 
-读取 `requirement.md` 中的「设计图」标签，按 `references/diagram-trigger-rules.md`（引用自 design）判断触发条件：
+读取 `requirement.md` 中的「设计图」标签，按 `../design/references/diagram-trigger-rules.md`（引用自 design）判断触发条件：
 
 | 图类型 | 触发条件 | 确认对象 |
 |--------|---------|---------|

@@ -9,6 +9,7 @@ description: |
   功能：将设计阶段的接口清单转化为正式的接口契约文档，进行审查。
   确保前后端接口定义一致、命名规范、类型匹配、错误处理完整。
   仅在 project-mode: fullstack 时触发。
+  TRIGGER when: fullstack project, design is complete, and frontend/backend API contracts need definition and review.
 ---
 
 # API Contract

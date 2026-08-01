@@ -1,0 +1,136 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-08-01T14:12:35Z",
+  "preferences": {
+    "default_project_mode": "backend",
+    "default_needs_database": false,
+    "default_sql_dialect": "mysql",
+    "default_mode": "standard",
+    "diagram_preferences": {
+      "use_case": true,
+      "class_diagram": true,
+      "sequence_diagram": false,
+      "state_diagram": false,
+      "component_diagram": true,
+      "deployment_diagram": false
+    },
+    "common_pitfalls": [
+      "插件类元任务：修改插件本体文件后必须运行 node scripts/self-check.js 回归，防止悬空引用/注册表漂移/文档脱节"
+    ],
+    "always_check": [
+      "异常处理是否完整",
+      "列表分页和排序是否支持",
+      "表单防重复提交",
+      "后端二次校验",
+      "审查任何新约束是否符合北极星原则（护栏非牢笼，不限制模型能力）",
+      "插件变更后运行 self-check 回归"
+    ],
+    "preference_history": []
+  },
+  "bottlenecks": [
+    "sync-prompt-defense.py 重写 agent 文件时会重排 DEPRECATED 横幅位置（已修复幂等，横幅内容不丢）",
+    "test-suite.py 的 HARD-GATE 计数用 <HARD-GATE> 但实际 SKILL.md 用 <GATE>（检查过时，非缺陷）",
+    "knowledge-distill.sh / knowledge-refresh.sh 脚本缺失（插件缺口，与 skills/package.json 缺失同类问题）"
+  ],
+  "warnings": [
+    "TV-S6-02 自动流转率原值 83% 为执行自述数字，判定函数已独立验证，活体实测需完整编排工作流复测",
+    "preferences.json 文档约定位置为 orch-spec/user-preferences/，但实际存在文件在 skills/continuous-learning/user-preferences/（文档/代码不一致，已按约定写入新位置）"
+  ],
+  "optimization": {
+    "rules": [
+      {
+        "id": "opt-001",
+        "status": "trial",
+        "created_at": "2026-08-01T14:12:35Z",
+        "last_updated": "2026-08-01T14:12:35Z",
+        "observation": {
+          "source": "user_intervention",
+          "metric": "plugin_change_regression",
+          "baseline": 0,
+          "actual": 1,
+          "deviation": 0
+        },
+        "hypothesis": {
+          "problem": "插件本体修改缺乏回归验证护栏，18 项薄弱环节（悬空引用/注册表漂移/文档脱节）正是缺自检导致",
+          "root_cause": "无 self-check 回归机制，修改插件文件后无自动校验"
+        },
+        "action": {
+          "type": "prompt_injection",
+          "target": "review_prompt",
+          "payload": "插件变更后必须运行 node scripts/self-check.js 回归验证（5 大块 + test-suite.py + hooks-smoke）",
+          "injection_point": "review_prompt"
+        },
+        "evolution": {
+          "confidence": 30,
+          "applied_count": 0,
+          "effective_count": 0,
+          "ineffective_count": 0,
+          "effectiveness_history": [],
+          "last_effectiveness": 0
+        }
+      },
+      {
+        "id": "opt-002",
+        "status": "trial",
+        "created_at": "2026-08-01T14:12:35Z",
+        "last_updated": "2026-08-01T14:12:35Z",
+        "observation": {
+          "source": "user_intervention",
+          "metric": "north_star_guardrail_vs_cage",
+          "baseline": 0,
+          "actual": 2,
+          "deviation": 0
+        },
+        "hypothesis": {
+          "problem": "新增约束可能演变为 cage（限制模型能力），如 start-dev.md:12 / tasker.md:24 为 token 时代残留",
+          "root_cause": "约束设计未以护栏非牢笼原则审查，限制探索自由"
+        },
+        "action": {
+          "type": "prompt_injection",
+          "target": "spec_prompt",
+          "payload": "审查任何新约束是否符合北极星原则（护栏非牢笼，不限制模型能力）；削弱思考深度/探索自由/创造性的约束降级为建议",
+          "injection_point": "spec_prompt"
+        },
+        "evolution": {
+          "confidence": 30,
+          "applied_count": 0,
+          "effective_count": 0,
+          "ineffective_count": 0,
+          "effectiveness_history": [],
+          "last_effectiveness": 0
+        }
+      },
+      {
+        "id": "opt-003",
+        "status": "trial",
+        "created_at": "2026-08-01T14:12:35Z",
+        "last_updated": "2026-08-01T14:12:35Z",
+        "observation": {
+          "source": "user_intervention",
+          "metric": "stage_contract_centralization",
+          "baseline": 0,
+          "actual": 1,
+          "deviation": 0
+        },
+        "hypothesis": {
+          "problem": "阶段映射多处独立维护导致漂移（STAGE_OUTPUTS 缺 3.5/5/6/9，F10 根因）",
+          "root_cause": "阶段契约无单一来源"
+        },
+        "action": {
+          "type": "prompt_injection",
+          "target": "design_prompt",
+          "payload": "插件架构中阶段映射/判定函数收敛到单源文件（如 scripts/lib/stage-contracts.js），避免多处维护漂移",
+          "injection_point": "design_prompt"
+        },
+        "evolution": {
+          "confidence": 30,
+          "applied_count": 0,
+          "effective_count": 0,
+          "ineffective_count": 0,
+          "effectiveness_history": [],
+          "last_effectiveness": 0
+        }
+      }
+    ]
+  }
+}

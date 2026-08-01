@@ -6,6 +6,7 @@ description: |
   输出：完整工作流执行 + .workflow-state.json（状态追踪）+ .workflow-eval.json（效果评估+Token用量）
   功能：SDD+TDD工作流的唯一入口，接收需求后自动编排所有下游Skill的执行顺序，
   支持模式自动检测、并行分支调度、HARD-GATE卡点管控、自动补偿、中断恢复、效果评估与Token追踪。
+  TRIGGER when: a new requirement enters and the full 13-step SDD+TDD workflow needs orchestration.
 ---
 
 # workflow — 流程编排引擎

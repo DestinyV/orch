@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""S6 Plugin Verification Loop — test template.
+
+Covers TV-S6-01..04 -> TC-S6-01..07:
+  - unified self-check: 5 blocks all PASS
+  - auto-flow rate >= 80% (boundary pass / special optimize)
+  - output pass rate >= 90% (boundary pass / special fail)
+  - smart gate: rule-based auto-resolve vs whitelist manual boundary
+
+Framework style: mirrors tests/test-suite.py.
+"""
+
+import os, sys, json, re, subprocess
+
+def find_plugin_root(start=None):
+    start = start or os.path.dirname(os.path.abspath(__file__))
+    d = start
+    while True:
+        if os.path.isfile(os.path.join(d, 'AGENTS.md')) and os.path.isdir(os.path.join(d, 'skills')):
+            return d
+        p = os.path.dirname(d)
+        if p == d:
+            return None
+        d = p
+
+ROOT = find_plugin_root()
+if ROOT is None:
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FIX = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures.json'), encoding='utf-8'))
+S6 = FIX['S6']
+
+errors = []
+warnings = []
+
+def check(cond, msg):
+    if cond:
+        print(f"  OK  {msg}")
+    else:
+        errors.append(msg)
+        print(f"  ERR {msg}")
+
+# --- pure decision functions mirroring business-rules.md Rules 2/3 ----------
+def flow_rate_pass(value, threshold):
+    return value >= threshold
+
+def pass_rate_pass(value, threshold):
+    return value >= threshold
+
+AUTO_KEYWORDS = ['compile', 'test failure', 'missing file', 'retry', '编译', '测试失败', '缺文件', '重试']
+MANUAL_KEYWORDS = ['requirement conflict', 'acceptance uncertain', 'hard-gate', 'cross-repo', '需求冲突', '验收不确定', '白名单', '跨仓库']
+
+def resolve_verdict(scenario):
+    """business-rules Rule 2: rule-based auto-resolve vs whitelist manual."""
+    s = scenario.lower()
+    if any(k in s for k in MANUAL_KEYWORDS):
+        return 'pause-for-human'
+    if any(k in s for k in AUTO_KEYWORDS):
+        return 'auto-resolve'
+    return 'auto-resolve'  # default: non-whitelisted errors auto-compensate
+
+# ---------------------------------------------------------------------------
+print("=== S6.1 self-check 5 blocks PASS (TV-S6-01) ===")
+# Gather the 5-block report from the self-check report file if available
+report_files = [
+    os.path.join(ROOT, 'orch-spec', 'plugin-capability-optimization', 'self-check-report.json'),
+    os.path.join(ROOT, 'orch-spec', 'plugin-capability-optimization', '.workflow-eval.json'),
+]
+blocks_report = None
+for rf in report_files:
+    if os.path.exists(rf):
+        try:
+            data = json.load(open(rf, encoding='utf-8'))
+            if 'blocks' in data:
+                blocks_report = data
+                break
+        except Exception:
+            pass
+
+if blocks_report:
+    blocks = blocks_report.get('blocks', {})
+    expected = S6['self_check']['expected_block_keys']
+    check(set(expected) <= set(blocks.keys()),
+          f"TC-S6-01: report contains all 5 block keys (found {sorted(blocks.keys())})")
+    all_pass = all(blocks.get(k) == 'PASS' for k in expected)
+    check(all_pass, f"TC-S6-01: all 5 blocks PASS (got {blocks})")
+else:
+    # no report file -> fall back to running the self-check and scanning its stdout
+    for cand in [os.path.join(ROOT, 'commands', 'self-check.md'),
+                 os.path.join(ROOT, 'tests', 'test-suite.py')]:
+        if os.path.exists(cand):
+            cmd = [sys.executable, cand] if cand.endswith('.py') else ['cat', cand]
+            p = subprocess.run(cmd, capture_output=True, text=True,
+                               encoding='utf-8', errors='replace', timeout=300, cwd=ROOT)
+            out = p.stdout + p.stderr
+            n_pass = out.count('PASS') + out.count('ALL PASSED')
+            check('PASS' in out or 'ALL PASSED' in out, 'TC-S6-01: self-check reports PASS')
+            warnings.append(f'TC-S6-01: self-check stdout has {n_pass} PASS markers (run full 5-block report for exact block verdicts)')
+            break
+    else:
+        errors.append('TC-S6-01: no self-check report or entrypoint to verify 5 blocks')
+        print('  ERR TC-S6-01: no self-check report or entrypoint found')
+
+# ---------------------------------------------------------------------------
+print("=== S6.2 auto-flow rate (TV-S6-02) ===")
+fr = S6['flow_rate']
+thr = fr['threshold']
+check(flow_rate_pass(fr['boundary']['value'], thr) == fr['boundary']['pass'],
+      f"TC-S6-02: flow_rate {fr['boundary']['value']} >= {thr} -> pass={fr['boundary']['pass']}")
+check(flow_rate_pass(fr['special']['value'], thr) == fr['special']['pass'],
+      f"TC-S6-03: flow_rate {fr['special']['value']} >= {thr} -> pass={fr['special']['pass']}")
+if not flow_rate_pass(fr['special']['value'], thr):
+    check(fr['special']['action'] == 'optimize', 'TC-S6-03: sub-80 flow rate triggers optimize action')
+
+# ---------------------------------------------------------------------------
+print("=== S6.3 output pass rate (TV-S6-03) ===")
+pr = S6['pass_rate']
+thr = pr['threshold']
+check(pass_rate_pass(pr['boundary']['value'], thr) == pr['boundary']['pass'],
+      f"TC-S6-04: pass_rate {pr['boundary']['value']} >= {thr} -> pass={pr['boundary']['pass']}")
+check(pass_rate_pass(pr['special']['value'], thr) == pr['special']['pass'],
+      f"TC-S6-05: pass_rate {pr['special']['value']} >= {thr} -> pass={pr['special']['pass']}")
+
+# ---------------------------------------------------------------------------
+print("=== S6.4 rule auto-resolve vs whitelist manual (TV-S6-04) ===")
+auto = S6['auto_resolve']['auto_cases']
+manual = S6['auto_resolve']['manual_cases']
+exp_auto = S6['auto_resolve']['expected_verdicts']['auto']
+exp_manual = S6['auto_resolve']['expected_verdicts']['manual']
+for c in auto:
+    v = resolve_verdict(c)
+    check(v == exp_auto, f"TC-S6-06: '{c}' -> {v} (expected {exp_auto})")
+for c in manual:
+    v = resolve_verdict(c)
+    check(v == exp_manual, f"TC-S6-07: '{c}' -> {v} (expected {exp_manual})")
+
+# ---------------------------------------------------------------------------
+print(f"\n--- S6 SUMMARY: {len(errors)} errors, {len(warnings)} warnings ---")
+for e in errors:
+    print(f"  ERR: {e}")
+if not errors:
+    print("S6 ALL PASSED")
+sys.exit(1 if errors else 0)

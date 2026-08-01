@@ -7,6 +7,7 @@ description: |
   输出：orch-spec/spec/（已合并的主规范）
 
   功能：在测试通过后，将需求的规范文档合并集成到主规范中，建立企业级规范库。
+  TRIGGER when: tests pass and need to merge requirement specs into the main spec library, or after step 6 (test) completes.
 ---
 
 # archive
