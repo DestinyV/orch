@@ -61,16 +61,18 @@ Agent(
 
 <GATE>禁止在主上下文直接编码。必须通过 worktree 或至少子代理隔离执行。</GATE>
 
-worktree 创建按标准协议执行（详见 `skills/execute/references/git-worktrees-guide.md`），降级优先级：
-1. 标准 worktree 创建
-2. 清理冲突后重试
-3. 从 HEAD 新分支创建
-4. prune 后重试
+worktree 创建用脚本封装（5 步重试自动执行，详见 `skills/execute/references/git-worktrees-guide.md`），降级优先级：
+1. 脚本创建（`node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" create {task-id} {branch} --json`）
+2. 清理冲突后重试（脚本内部已处理）
+3. 从 HEAD 新分支创建（脚本内部已处理）
+4. prune 后重试（脚本内部已处理）
 5. 降级到隔离目录（禁止降级到主上下文串行）
 
 快速参考：
 ```bash
-git worktree add .claude/worktrees/{task-id}-{name} HEAD
+node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" create {task-id} {branch}   # 创建
+node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" merge {task-id} {target}    # 合并
+node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" cleanup                     # 清理
 ```
 
 ### 1. 任务理解与上下文建立

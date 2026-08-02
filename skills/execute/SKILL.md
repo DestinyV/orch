@@ -87,30 +87,17 @@ Task 的并行/批次调度由 workflow 步骤5 统一管理。本 skill 关注�
 
 <GATE>standard 模式必须使用子代理 + worktree 隔离执行。worktree 创建失败时必须执行修复协议，不允许直接降级为主上下文串行编码。</GATE>
 
-**worktree 创建协议**（顺序尝试，直到成功）：
+**worktree 创建协议**（脚本化，`scripts/worktree.js` 封装 5 步重试）：
 
 ```bash
-# 尝试 1: 标准创建
-git worktree add .claude/worktrees/{task-id}-{name} {branch} 2>/dev/null ||
-
-# 尝试 2: 目录有残留 → 清理后重试
-(rm -rf .claude/worktrees/{task-id}-{name} &&
- git worktree add .claude/worktrees/{task-id}-{name} {branch}) 2>/dev/null ||
-
-# 尝试 3: 分支被占用 → 从 HEAD 创建新分支
-(rm -rf .claude/worktrees/{task-id}-{name} &&
- git worktree add -b {task-id}-{name} .claude/worktrees/{task-id}-{name} HEAD) 2>/dev/null ||
-
-# 尝试 4: 清理所有已知冲突后最后一次尝试
-(git worktree prune &&
- rm -rf .claude/worktrees/{task-id}-{name} &&
- git worktree add -b {task-id}-{name} .claude/worktrees/{task-id}-{name} HEAD) 2>/dev/null ||
-
-# 尝试 5: 无 worktree 但有子代理（降级但不串行）
-echo "[WARN] worktree 创建失败，子代理在同目录工作（仍保持并行）"
+node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" create {task-id} {branch} --json
+# 返回码 0 = 创建成功；返回码 1 + [WARN] = worktree 创建失败（5 步重试均失败）
+#   → 降级：子代理在同目录工作（仍保持并行），禁止降级到主上下文串行
+# 返回码 2 = 用法错误（task-id/branch 非法）
 ```
 
 **降级优先级**：worktree → 子代理同目录 → cp -r 隔离目录。禁止降级到主上下文串行。
+**北极星**：脚本是护栏（自动化 5 步重试），模型仍可自由使用原生 `git worktree` 命令——脚本仅作辅助与兜底。
 
 详见：`references/git-worktrees-guide.md` | `references/worktree-confirmation-protocol.md`
 
@@ -273,11 +260,20 @@ Agent(
 ### Worktree 合并和清理
 
 所有 Task 完成后：
-1. **合并**：将每个 worktree 的 commit cherry-pick 到目标分支（按依赖顺序）
+1. **合并**：用脚本将每个 worktree 的 commit cherry-pick 到目标分支（按依赖顺序）：
+   ```bash
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" merge {task-id} {target-branch}
+   # 返回码 0 = 合并成功/up-to-date；返回码 1 = 冲突（保留 CHERRY_PICK_HEAD 供解决）
+   # merge 会恢复原分支；主工作区有已跟踪修改时拒绝（先 commit/stash）
+   ```
 2. **验证**：运行全量测试确认合并成功
-3. **删除**：`git worktree remove .claude/worktrees/{task-id}-{name}`
-4. **清理孤立**：`git worktree list` 检查并 `git worktree prune` 删除遗留 worktree
-5. **更新需求上下文**：将实际修改的文件清单追加到 `orch-spec/{req}/req-context/key-files.md` 的 `## execute 阶段`，全栈时跨仓库修改追加到 `cross-repo.md`
+3. **删除 + 清理孤立**：脚本自动清理孤儿 worktree 与残留分支：
+   ```bash
+   node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" cleanup
+   # 孤儿 worktree + 已合并分支自动清理；未合并项警示（--force 强制）
+   ```
+   > 模型仍可用原生 `git worktree remove .claude/worktrees/{task-id}-{name}` 手动删除。
+4. **更新需求上下文**：将实际修改的文件清单追加到 `orch-spec/{req}/req-context/key-files.md` 的 `## execute 阶段`，全栈时跨仓库修改追加到 `cross-repo.md`
 
 ### 生成执行报告
 

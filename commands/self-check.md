@@ -21,7 +21,7 @@ node scripts/self-check.js --json
 
 | 块 | 验证项 |
 |----|--------|
-| orchestration | stage-contracts 8 阶段 / EXEMPT 分离 / stdin 超时 / completion-report / session-start 补偿 |
+| orchestration | stage-contracts 8 阶段 / EXEMPT 分离 / stdin 超时 / completion-report / session-start 补偿 / worktree 健康 |
 | agents | project-map 引用 / 注册表 26 / Prompt Defense ≤1 / frontmatter / 编号 / 无 hookify |
 | skills | 引用完整性 / cost GATE / using-orch 22 / observer / TRIGGER |
 | tdd_loop | self-check 存在 / verdict 判定函数 / 覆盖率实测 |

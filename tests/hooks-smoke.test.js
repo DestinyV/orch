@@ -85,5 +85,20 @@ test('judgeAutoResolve 规则自决 + 白名单人工', () => {
   assert.strictEqual(v.judgeAutoResolve('requirement conflict'), 'pause-for-human');
 });
 
+// 5. worktree.js
+console.log('=== worktree.js ===');
+test('worktree.js 导出 5 子命令函数 + parseWorktreePorcelain', () => {
+  const w = require(path.join(ROOT, 'scripts/worktree.js'));
+  for (const fn of ['create', 'merge', 'cleanup', 'list', 'status']) {
+    assert.strictEqual(typeof w[fn], 'function', `缺导出 ${fn}`);
+  }
+  assert.strictEqual(typeof w.parseWorktreePorcelain, 'function', '缺导出 parseWorktreePorcelain');
+});
+test('无参运行返回码 2 + Usage 提示', () => {
+  const r = spawnSync('node', [path.join(ROOT, 'scripts/worktree.js')], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 2, `exit ${r.status}`);
+  assert.ok(/Usage/i.test(r.stdout + r.stderr), '含 Usage');
+});
+
 console.log(`\nSummary: ${passed} passed, ${failed} failed`);
 process.exit(failed > 0 ? 1 : 0);

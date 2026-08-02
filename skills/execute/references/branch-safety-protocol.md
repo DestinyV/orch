@@ -18,6 +18,9 @@
 
 ## 合并策略
 
-- **推荐**：`git cherry-pick` 将 worktree 的 commit 逐个复制到目标分支
+- **推荐**（脚本）：`node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" merge {task-id} {target-branch}`
+  - 自动 cherry-pick commit 序列（旧→新）到目标分支，合并后恢复原分支
+  - 冲突时保留 `CHERRY_PICK_HEAD` 供继续/中止
 - **可选**：`git merge --squash` 将 worktree 所有 commit 合并为单个
 - **禁止**：直接在 worktree 中切换到其他分支后提交
+- **清理**：`node "${CLAUDE_PLUGIN_ROOT}/scripts/worktree.js" cleanup` 自动清理孤儿 worktree 与残留分支（未合并项警示，`--force` 强制）

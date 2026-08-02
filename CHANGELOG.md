@@ -2,6 +2,33 @@
 
 所有重要的项目更新将在此文档中记录。
 
+## [0.11.1] - 2026-08-03
+
+### 优化 - Git Worktree 生命周期管理脚本化
+
+#### 新增
+- `scripts/worktree.js` — worktree 生命周期管理 CLI，5 个子命令：
+  - `create {task-id} {branch}` — 封装 5 步创建重试协议（清理残留/分支占用/从 HEAD 兜底），返回码 0=成功/1=降级/2=用法错误
+  - `merge {task-id} {target-branch}` — cherry-pick commit 序列到目标分支，合并后恢复原分支；冲突保留 CHERRY_PICK_HEAD
+  - `cleanup [--target] [--dry-run] [--force]` — 自动清理孤儿 worktree + 已合并分支；未合并项警示（--force 强制）
+  - `list` / `status` — 列出 worktree 状态（含孤儿标记），供自检与排查
+  - 安全：`execFileSync('git', [...])` 无 shell 防注入；task-id 校验防路径穿越；Windows 兼容
+
+#### 集成
+- `scripts/self-check.js` orchestration 块新增 2 项检查：worktree.js 子命令分发存在 + 无孤儿 worktree
+- `tests/meta-b7-worktree.py`（新建，14 用例）— 在隔离临时 git 仓库测试全部子命令，不污染主仓库
+- `tests/hooks-smoke.test.js` 新增 worktree.js 模块导出断言
+
+#### 文档
+- `skills/execute/SKILL.md` 创建协议 + 合并清理改为脚本调用（消除 16+ 处散落 git 命令）
+- 4 个 references 文档（git-worktrees-guide / worktree-confirmation-protocol / branch-safety-protocol / quick-reference）指向脚本，注明脚本是护栏（北极星）
+- `agents/executor.md` 工作环境准备指向脚本
+
+#### 版本更新
+- plugin.json → 0.11.1
+- marketplace.json → 0.11.1
+- CLAUDE.md → v0.11.1
+
 ## [0.11.0] - 2026-08-01
 
 ### 新增 - 插件本体全方位能力优化（元任务）

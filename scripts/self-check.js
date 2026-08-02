@@ -66,6 +66,22 @@ function checkOrchestration() {
   const ss = readFile(O('scripts/hooks/session-start.js'));
   results.push(record(block, ss.includes('resume-from') || ss.includes('nextStage'), 'session-start 含自动补偿建议', 'scripts/hooks/session-start.js'));
 
+  // 6. worktree.js 存在且含子命令分发
+  const wt = readFile(O('scripts/worktree.js'));
+  const wtOk = wt.includes("case 'create'") && wt.includes("case 'cleanup'") && wt.includes("case 'merge'");
+  results.push(record(block, wtOk, 'worktree.js 含 create/merge/cleanup 子命令分发', 'scripts/worktree.js'));
+
+  // 7. 无孤儿 worktree（本仓库健康；git 不可用时跳过）
+  try {
+    const out = execSync('git worktree list --porcelain', { cwd: ROOT, encoding: 'utf8' });
+    const paths = out.split(/\r?\n/).filter(l => l.startsWith('worktree '))
+                     .map(l => l.slice(9).trim());
+    const orphans = paths.filter(p => !fs.existsSync(p));
+    results.push(record(block, orphans.length === 0,
+      `无孤儿 worktree（注册 ${paths.length}，孤儿 ${orphans.length}）`,
+      'scripts/worktree.js', 'git worktree prune'));
+  } catch (_) { /* 非 git 仓库时跳过 */ }
+
   return results;
 }
 
